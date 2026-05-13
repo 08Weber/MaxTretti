@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="sv">
 <head>
   <meta charset="UTF-8"/>
@@ -18,235 +19,530 @@
     :root {
       --bg: #f5f5f7;
       --white: #ffffff;
-      --sheet-bg: #ffffff;
+      --surface: rgba(255,255,255,0.92);
       --border: rgba(0,0,0,0.08);
       --accent: #FF3B30;
-      --accent-soft: rgba(255,59,48,0.10);
+      --accent-soft: rgba(255,59,48,0.1);
       --blue: #007AFF;
+      --green: #34C759;
       --text: #1c1c1e;
       --text2: #3a3a3c;
       --muted: #8e8e93;
-      --handle: #d1d1d6;
-      --card-bg: #f5f5f7;
-      --stat-bg: #ffffff;
-      --chip-bg: #f5f5f7;
-      --r: 16px; --r-sm: 12px;
+      --r: 16px;
+      --r-sm: 12px;
       --safe-top: env(safe-area-inset-top, 44px);
       --safe-bottom: env(safe-area-inset-bottom, 20px);
     }
-    [data-theme="dark"] {
-      --bg: #1c1c1e;
-      --white: #2c2c2e;
-      --sheet-bg: #1c1c1e;
-      --border: rgba(255,255,255,0.10);
-      --accent: #FF453A;
-      --accent-soft: rgba(255,69,58,0.15);
-      --blue: #0A84FF;
-      --text: #f2f2f7;
-      --text2: #ebebf5;
-      --muted: #8e8e93;
-      --handle: #48484a;
-      --card-bg: #2c2c2e;
-      --stat-bg: #3a3a3c;
-      --chip-bg: #2c2c2e;
-    }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
     html, body {
-      height: 100%; width: 100%; overflow: hidden;
+      height: 100%; width: 100%;
+      overflow: hidden;
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       -webkit-font-smoothing: antialiased;
-      background: var(--bg); color: var(--text);
-      transition: background 0.25s, color 0.25s;
+      background: var(--bg);
     }
-    #app { display: flex; flex-direction: column; height: 100dvh; position: relative; }
 
-    /* MAP */
-    #map { flex: 1; z-index: 0; position: relative; }
-    .leaflet-container { background: #e8ecf0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .leaflet-control-attribution { font-size: 9px; opacity: 0.5; }
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      position: relative;
+    }
 
-    /* TOP BAR */
-    #topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 1000; padding-top: var(--safe-top); pointer-events: none; }
-    .topbar-inner { display: flex; align-items: center; gap: 10px; padding: 10px 14px 0; }
+    #map {
+      flex: 1;
+      z-index: 0;
+      position: relative;
+    }
+
+    .leaflet-container {
+      background: #e8ecf0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .leaflet-control-attribution {
+      font-size: 9px;
+      opacity: 0.5;
+    }
+
+    #topbar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding-top: var(--safe-top);
+      pointer-events: none;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px 0;
+    }
+
     #search-box {
-      flex: 1; background: var(--white); border-radius: var(--r);
-      box-shadow: 0 2px 20px rgba(0,0,0,0.14), 0 1px 4px rgba(0,0,0,0.07);
-      overflow: hidden; pointer-events: all; transition: background 0.25s;
+      flex: 1;
+      background: var(--white);
+      border-radius: var(--r);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06);
+      overflow: hidden;
+      pointer-events: all;
     }
-    #search-inner { display: flex; align-items: center; padding: 0 14px; height: 50px; gap: 10px; }
+
+    #search-inner {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      height: 50px;
+      gap: 10px;
+    }
+
     .search-icon { color: var(--muted); font-size: 15px; flex-shrink: 0; }
+
     #search-input {
-      flex: 1; border: none; outline: none; font-family: inherit;
-      font-size: 16px; font-weight: 500; color: var(--text);
-      background: transparent; -webkit-appearance: none;
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      background: transparent;
+      -webkit-appearance: none;
     }
     #search-input::placeholder { color: var(--muted); font-weight: 400; }
+
     #clear-btn {
-      width: 22px; height: 22px; background: var(--muted); border-radius: 50%;
-      display: none; align-items: center; justify-content: center;
-      cursor: pointer; flex-shrink: 0; color: white; font-size: 11px; font-weight: 700;
+      width: 22px; height: 22px;
+      background: var(--muted);
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
     }
     #clear-btn.show { display: flex; }
-    #suggestions { display: none; border-top: 1px solid var(--border); max-height: 240px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+    #suggestions {
+      display: none;
+      border-top: 1px solid var(--border);
+      max-height: 240px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
     #suggestions.show { display: block; }
+
     .sug-item {
-      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-      cursor: pointer; border-bottom: 1px solid var(--border); background: var(--white); transition: background 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
     }
     .sug-item:last-child { border-bottom: none; }
     .sug-item:active { background: var(--bg); }
-    .sug-pin { width: 32px; height: 32px; background: var(--accent-soft); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+
+    .sug-pin {
+      width: 32px; height: 32px;
+      background: var(--accent-soft);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
     .sug-texts { flex: 1; min-width: 0; }
     .sug-main { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .sug-sub { font-size: 12px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* VEHICLE PILL */
     #vehicle-pill {
-      background: var(--white); border-radius: 14px; box-shadow: 0 2px 16px rgba(0,0,0,0.12);
-      padding: 8px 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;
-      cursor: pointer; pointer-events: all; flex-shrink: 0; min-width: 58px;
-      transition: transform 0.15s, background 0.25s;
+      background: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      pointer-events: all;
+      flex-shrink: 0;
+      min-width: 58px;
+      transition: transform 0.15s;
     }
     #vehicle-pill:active { transform: scale(0.93); }
     .vp-icon { font-size: 20px; line-height: 1; }
     .vp-speed { font-size: 11px; font-weight: 700; color: var(--accent); }
 
-    /* FLOATING BUTTONS */
-    .fab {
-      position: absolute; right: 14px; z-index: 999;
-      width: 44px; height: 44px; background: var(--white); border-radius: 12px;
+    #locate-btn {
+      position: absolute;
+      right: 14px;
+      bottom: 220px;
+      z-index: 999;
+      width: 44px; height: 44px;
+      background: var(--white);
+      border-radius: 12px;
       box-shadow: 0 2px 16px rgba(0,0,0,0.12);
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 20px;
-      transition: transform 0.15s, background 0.25s, bottom 0.38s cubic-bezier(0.32,0.72,0,1);
+      cursor: pointer;
+      font-size: 18px;
+      transition: transform 0.15s;
     }
-    .fab:active { transform: scale(0.92); }
-    #theme-btn { font-size: 20px; }
-    #locate-btn { font-size: 18px; }
+    #locate-btn:active { transform: scale(0.92); }
 
-    /* BOTTOM SHEET */
     #bottom-sheet {
-      position: absolute; left: 0; right: 0; bottom: 0;
-      background: var(--sheet-bg); border-radius: 24px 24px 0 0;
-      box-shadow: 0 -4px 30px rgba(0,0,0,0.10); z-index: 500;
-      transition: transform 0.38s cubic-bezier(0.32,0.72,0,1), background 0.25s;
-      will-change: transform;
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -4px 30px rgba(0,0,0,0.08);
+      padding: 0 16px;
+      padding-bottom: calc(var(--safe-bottom) + 8px);
+      z-index: 500;
+      flex-shrink: 0;
     }
-    #bottom-sheet.collapsed { transform: translateY(var(--collapse-y, 0px)); }
 
-    /* handle area — always visible */
-    #sheet-handle-area {
-      width: 100%; padding: 10px 0 6px;
-      display: flex; justify-content: center;
-      cursor: grab; user-select: none; touch-action: none;
+    .sheet-handle {
+      width: 36px; height: 4px;
+      background: #d1d1d6;
+      border-radius: 2px;
+      margin: 10px auto 14px;
     }
-    #sheet-handle-area:active { cursor: grabbing; }
-    .sheet-handle { width: 36px; height: 4px; background: var(--handle); border-radius: 2px; transition: background 0.25s; }
 
-    /* collapsible content */
-    #sheet-content {
-      overflow: hidden;
-      transition: max-height 0.38s cubic-bezier(0.32,0.72,0,1), opacity 0.25s;
+    #vehicle-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
     }
-    #bottom-sheet.collapsed #sheet-content { max-height: 0 !important; opacity: 0; pointer-events: none; }
 
-    .sheet-inner { padding: 0 16px; padding-bottom: calc(var(--safe-bottom) + 8px); }
-
-    /* VEHICLE ROW */
-    #vehicle-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
     .v-chip {
-      background: var(--chip-bg); border: 1.5px solid transparent; border-radius: var(--r-sm);
-      padding: 10px 4px; text-align: center; cursor: pointer; transition: all 0.18s; user-select: none;
+      background: var(--bg);
+      border: 1.5px solid transparent;
+      border-radius: var(--r-sm);
+      padding: 10px 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.18s;
+      user-select: none;
     }
-    .v-chip.active { background: var(--accent-soft); border-color: var(--accent); }
+    .v-chip.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
     .v-chip .vc-icon { font-size: 20px; margin-bottom: 3px; }
     .v-chip .vc-label { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
     .v-chip.active .vc-label { color: var(--accent); }
     .v-chip .vc-speed { font-size: 11px; font-weight: 700; color: var(--text2); margin-top: 1px; }
     .v-chip.active .vc-speed { color: var(--accent); }
 
-    /* AVOID TAGS */
-    #avoid-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-    .avoid-tag { background: var(--accent-soft); border-radius: 100px; padding: 5px 10px; font-size: 11px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 4px; }
+    #avoid-row {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .avoid-tag {
+      background: rgba(255,59,48,0.07);
+      border-radius: 100px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      display: flex; align-items: center; gap: 4px;
+    }
 
-    /* ROUTE CARD */
-    #route-card { display: none; background: var(--card-bg); border-radius: var(--r); padding: 14px 16px; margin-bottom: 12px; transition: background 0.25s; }
+    #route-card {
+      display: none;
+      background: var(--bg);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
     #route-card.show { display: block; }
-    .route-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-    .route-dest { flex: 1; font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .route-close { width: 28px; height: 28px; background: rgba(128,128,128,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: var(--muted); flex-shrink: 0; }
-    .route-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-    .r-stat { background: var(--stat-bg); border-radius: var(--r-sm); padding: 10px; text-align: center; transition: background 0.25s; }
-    .r-stat .rv { font-size: 20px; font-weight: 800; color: var(--text); line-height: 1; }
+
+    .route-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .route-dest {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .route-close {
+      width: 28px; height: 28px;
+      background: rgba(0,0,0,0.06);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .route-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .r-stat {
+      background: var(--white);
+      border-radius: var(--r-sm);
+      padding: 10px 10px;
+      text-align: center;
+    }
+    .r-stat .rv {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
     .r-stat .ru { font-size: 11px; color: var(--muted); font-weight: 500; }
     .r-stat .rl { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
-    .route-info-line { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; margin-bottom: 12px; }
+
+    .route-info-line {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex; align-items: center; gap: 5px;
+      margin-bottom: 12px;
+    }
     .route-info-line span { color: var(--accent); font-weight: 600; }
-    .btn-go { width: 100%; background: var(--blue); color: white; border: none; border-radius: var(--r-sm); padding: 15px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.15s, transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+    .btn-go {
+      width: 100%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: var(--r-sm);
+      padding: 15px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+      letter-spacing: 0.01em;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
     .btn-go:active { opacity: 0.85; transform: scale(0.98); }
 
-    /* STEPS PANEL */
-    #steps-panel { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); overflow: hidden; transition: background 0.25s; }
+    #steps-panel {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+      overflow: hidden;
+    }
     #steps-panel.show { display: flex; }
-    .steps-header { background: var(--white); padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-    .back-btn { width: 36px; height: 36px; background: var(--chip-bg); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: var(--blue); flex-shrink: 0; }
+
+    .steps-header {
+      background: var(--white);
+      padding: 14px 16px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .back-btn {
+      width: 36px; height: 36px;
+      background: var(--bg);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
     .steps-title { font-size: 16px; font-weight: 700; color: var(--text); flex: 1; }
     .steps-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
     .steps-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .step-row { display: flex; gap: 14px; padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--white); margin-bottom: 1px; align-items: flex-start; transition: background 0.25s; }
-    .step-icon-wrap { width: 36px; height: 36px; background: var(--accent-soft); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+
+    .step-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+      margin-bottom: 1px;
+      align-items: flex-start;
+    }
+    .step-icon-wrap {
+      width: 36px; height: 36px;
+      background: var(--accent-soft);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
     .step-body { flex: 1; }
     .step-instr { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; }
     .step-d { font-size: 12px; color: var(--muted); margin-top: 3px; }
-    .open-maps-btn { margin: 16px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); padding: 15px; text-align: center; font-size: 15px; font-weight: 700; color: var(--blue); cursor: pointer; transition: background 0.15s; }
+
+    .open-maps-btn {
+      margin: 16px;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 15px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--blue);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
     .open-maps-btn:active { background: var(--bg); }
 
-    /* VEHICLE MODAL */
-    #v-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 3000; display: none; align-items: flex-end; }
+    #v-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 3000;
+      display: none;
+      align-items: flex-end;
+    }
     #v-modal.show { display: flex; }
-    .v-sheet { width: 100%; background: var(--sheet-bg); border-radius: 24px 24px 0 0; padding: 0 20px; padding-bottom: calc(var(--safe-bottom) + 20px); animation: su 0.28s cubic-bezier(0.32,0.72,0,1); transition: background 0.25s; }
+
+    .v-sheet {
+      width: 100%;
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      padding: 0 20px;
+      padding-bottom: calc(var(--safe-bottom) + 20px);
+      animation: su 0.28s cubic-bezier(0.32,0.72,0,1);
+    }
     @keyframes su { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    .v-sheet-handle { width: 36px; height: 4px; background: var(--handle); border-radius: 2px; margin: 12px auto 18px; }
+
+    .v-sheet-handle {
+      width: 36px; height: 4px;
+      background: #d1d1d6;
+      border-radius: 2px;
+      margin: 12px auto 18px;
+    }
     .v-sheet-title { font-size: 19px; font-weight: 800; margin-bottom: 4px; color: var(--text); }
     .v-sheet-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
-    .v-opt { background: var(--chip-bg); border: 1.5px solid transparent; border-radius: var(--r); padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.18s; }
+
+    .v-opt {
+      background: var(--bg);
+      border: 1.5px solid transparent;
+      border-radius: var(--r);
+      padding: 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
     .v-opt.sel { background: var(--accent-soft); border-color: var(--accent); }
     .v-opt-icon { font-size: 26px; flex-shrink: 0; }
     .v-opt-info { flex: 1; }
     .v-opt-speed { font-size: 20px; font-weight: 800; color: var(--text); }
     .v-opt.sel .v-opt-speed { color: var(--accent); }
     .v-opt-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .v-opt-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--handle); display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.18s; }
-    .v-opt.sel .v-opt-check { background: var(--accent); border-color: var(--accent); color: white; }
-    .btn-confirm { width: 100%; background: var(--blue); color: white; border: none; border-radius: var(--r-sm); padding: 16px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 14px; transition: opacity 0.15s; }
+    .v-opt-check {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid #d1d1d6;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      transition: all 0.18s;
+    }
+    .v-opt.sel .v-opt-check {
+      background: var(--accent); border-color: var(--accent); color: white;
+    }
+
+    .btn-confirm {
+      width: 100%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: var(--r-sm);
+      padding: 16px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 14px;
+      transition: opacity 0.15s;
+    }
     .btn-confirm:active { opacity: 0.85; }
 
-    /* LOADING */
-    #loading { position: absolute; inset: 0; background: rgba(255,255,255,0.75); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 900; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
-    [data-theme="dark"] #loading { background: rgba(0,0,0,0.65); }
+    #loading {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 900;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
     #loading.show { display: flex; }
-    .spin { width: 32px; height: 32px; border: 3px solid var(--handle); border-top-color: var(--blue); border-radius: 50%; animation: rot 0.7s linear infinite; }
+    .spin {
+      width: 32px; height: 32px;
+      border: 3px solid #e5e5ea;
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: rot 0.7s linear infinite;
+    }
     @keyframes rot { to { transform: rotate(360deg); } }
     .load-txt { font-size: 13px; font-weight: 600; color: var(--muted); }
 
-    /* TOAST */
-    #toast { position: fixed; top: calc(var(--safe-top) + 70px); left: 50%; transform: translateX(-50%) translateY(-10px); background: rgba(28,28,30,0.9); color: white; padding: 10px 18px; border-radius: 100px; font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 9999; }
+    #toast {
+      position: fixed;
+      top: calc(var(--safe-top) + 70px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      background: rgba(28,28,30,0.88);
+      color: white;
+      padding: 10px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s;
+      z-index: 9999;
+    }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
+
 </head>
 <body>
 <div id="app">
-  <div id="map"></div>
-  <div id="loading"><div class="spin"></div><div class="load-txt" id="load-txt">Beräknar rutt…</div></div>
 
-  <!-- TOP BAR -->
+  <div id="map"></div>
+
+  <div id="loading">
+    <div class="spin"></div>
+    <div class="load-txt" id="load-txt">Beräknar rutt…</div>
+  </div>
+
   <div id="topbar">
     <div class="topbar-inner">
       <div id="search-box">
         <div id="search-inner">
           <span class="search-icon">🔍</span>
-          <input id="search-input" type="text" placeholder="Sök destination…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="onInput()" onfocus="onFocus()"/>
+          <input id="search-input" type="text" placeholder="Sök destination…"
+            autocomplete="off" autocorrect="off" spellcheck="false"
+            oninput="onInput()" onfocus="onFocus()"/>
           <div id="clear-btn" onclick="clearAll()">✕</div>
         </div>
         <div id="suggestions"></div>
@@ -258,377 +554,670 @@
     </div>
   </div>
 
-  <!-- FLOATING BTNS -->
-  <div class="fab" id="theme-btn" onclick="toggleTheme()">🌙</div>
-  <div class="fab" id="locate-btn" onclick="locateMe()">📍</div>
+  <div id="locate-btn" onclick="locateMe()">📍</div>
 
-  <!-- BOTTOM SHEET -->
   <div id="bottom-sheet">
-    <div id="sheet-handle-area"><div class="sheet-handle"></div></div>
-    <div id="sheet-content">
-      <div class="sheet-inner">
-        <div id="route-card">
-          <div class="route-top">
-            <div class="route-dest" id="route-dest-label">—</div>
-            <div class="route-close" onclick="clearAll()">✕</div>
-          </div>
-          <div class="route-stats">
-            <div class="r-stat"><div class="rv" id="stat-time">—</div><div class="rl">Restid</div></div>
-            <div class="r-stat"><div class="rv" id="stat-dist">—</div><div class="rl">Sträcka</div></div>
-            <div class="r-stat"><div class="rv" id="stat-speed">—</div><div class="ru">km/h</div><div class="rl">Max</div></div>
-          </div>
-          <div class="route-info-line"><span>🚫 Motorväg &amp; motortrafikled undviks alltid</span></div>
-          <button class="btn-go" onclick="openSteps()"><span>Vägbeskrivning</span><span>›</span></button>
-        </div>
-        <div id="avoid-row">
-          <div class="avoid-tag">🚫 Motorväg</div>
-          <div class="avoid-tag">🚫 Motortrafikled</div>
-        </div>
-        <div id="vehicle-row">
-          <div class="v-chip active" data-speed="45" data-icon="🛵" onclick="pickVehicle(this)"><div class="vc-icon">🛵</div><div class="vc-label">EU-moped</div><div class="vc-speed">45 km/h</div></div>
-          <div class="v-chip" data-speed="45" data-icon="🚗" onclick="pickVehicle(this)"><div class="vc-icon">🚗</div><div class="vc-label">Mopedbil</div><div class="vc-speed">45 km/h</div></div>
-          <div class="v-chip" data-speed="30" data-icon="🚜" onclick="pickVehicle(this)"><div class="vc-icon">🚜</div><div class="vc-label">A-traktor</div><div class="vc-speed">30 km/h</div></div>
-          <div class="v-chip" data-speed="30" data-icon="🛺" onclick="pickVehicle(this)"><div class="vc-icon">🛺</div><div class="vc-label">Moped II</div><div class="vc-speed">30 km/h</div></div>
-        </div>
-      </div>
+    <div class="sheet-handle"></div>
+
+```
+<div id="route-card">
+  <div class="route-top">
+    <div class="route-dest" id="route-dest-label">—</div>
+    <div class="route-close" onclick="clearAll()">✕</div>
+  </div>
+  <div class="route-stats">
+    <div class="r-stat">
+      <div class="rv" id="stat-time">—</div>
+      <div class="rl">Restid</div>
     </div>
+    <div class="r-stat">
+      <div class="rv" id="stat-dist">—</div>
+      <div class="rl">Sträcka</div>
+    </div>
+    <div class="r-stat">
+      <div class="rv" id="stat-speed">—</div>
+      <div class="ru">km/h</div>
+      <div class="rl">Max</div>
+    </div>
+  </div>
+  <div class="route-info-line">
+    <span>🚫 Motorväg undviks</span> — anpassad rutt för ditt fordon
+  </div>
+  <button class="btn-go" onclick="openSteps()">
+    <span>Vägbeskrivning</span> <span>›</span>
+  </button>
+</div>
+
+<div id="avoid-row">
+  <div class="avoid-tag">🚫 Motorväg</div>
+  <div class="avoid-tag">🚫 Motortrafikled</div>
+</div>
+
+<div id="vehicle-row">
+  <div class="v-chip active" data-speed="45" data-icon="🛵" data-name="EU-moped" onclick="pickVehicle(this)">
+    <div class="vc-icon">🛵</div>
+    <div class="vc-label">EU-moped</div>
+    <div class="vc-speed">45 km/h</div>
+  </div>
+  <div class="v-chip" data-speed="45" data-icon="🚗" data-name="Mopedbil" onclick="pickVehicle(this)">
+    <div class="vc-icon">🚗</div>
+    <div class="vc-label">Mopedbil</div>
+    <div class="vc-speed">45 km/h</div>
+  </div>
+  <div class="v-chip" data-speed="30" data-icon="🚜" data-name="A-traktor" onclick="pickVehicle(this)">
+    <div class="vc-icon">🚜</div>
+    <div class="vc-label">A-traktor</div>
+    <div class="vc-speed">30 km/h</div>
+  </div>
+  <div class="v-chip" data-speed="30" data-icon="🛺" data-name="Moped II" onclick="pickVehicle(this)">
+    <div class="vc-icon">🛺</div>
+    <div class="vc-label">Moped II</div>
+    <div class="vc-speed">30 km/h</div>
+  </div>
+</div>
+```
+
   </div>
 </div>
 
-<!-- STEPS PANEL -->
 <div id="steps-panel">
   <div class="steps-header">
     <div class="back-btn" onclick="closeSteps()">‹</div>
-    <div><div class="steps-title" id="steps-title">Vägbeskrivning</div><div class="steps-sub" id="steps-sub"></div></div>
+    <div>
+      <div class="steps-title" id="steps-title">Vägbeskrivning</div>
+      <div class="steps-sub" id="steps-sub"></div>
+    </div>
   </div>
-  <div class="steps-scroll"><div id="steps-list"></div><div class="open-maps-btn" onclick="openInMaps()">Öppna i Apple Maps / Google Maps →</div></div>
+  <div class="steps-scroll">
+    <div id="steps-list"></div>
+    <div class="open-maps-btn" onclick="openInMaps()">Öppna i Apple Maps / Google Maps →</div>
+  </div>
 </div>
 
-<!-- VEHICLE MODAL -->
 <div id="v-modal" onclick="closeVModal(event)">
   <div class="v-sheet">
     <div class="v-sheet-handle"></div>
     <div class="v-sheet-title">Välj fordon</div>
-    <div class="v-sheet-sub">Motorvägar och motortrafiksleder undviks alltid — oavsett fordon.</div>
-    <div class="v-opt sel" id="vm-45" onclick="vmSelect(45)">
-      <span class="v-opt-icon">🛵</span>
-      <div class="v-opt-info"><div class="v-opt-speed">45 km/h</div><div class="v-opt-desc">EU-moped · Mopedbil · Moped klass I</div></div>
-      <div class="v-opt-check">✓</div>
-    </div>
-    <div class="v-opt" id="vm-30" onclick="vmSelect(30)">
-      <span class="v-opt-icon">🚜</span>
-      <div class="v-opt-info"><div class="v-opt-speed">30 km/h</div><div class="v-opt-desc">A-traktor · EPA-traktor · Moped klass II</div></div>
-      <div class="v-opt-check"></div>
-    </div>
-    <button class="btn-confirm" onclick="closeVModalOk()">Bekräfta</button>
+    <div class="v-sheet-sub">Rutten anpassas — motorvägar och olämpliga vägar undviks automatiskt.</div>
+
+```
+<div class="v-opt sel" id="vm-45" onclick="vmSelect(45)">
+  <span class="v-opt-icon">🛵</span>
+  <div class="v-opt-info">
+    <div class="v-opt-speed">45 km/h</div>
+    <div class="v-opt-desc">EU-moped · Mopedbil · Moped klass I</div>
+  </div>
+  <div class="v-opt-check">✓</div>
+</div>
+
+<div class="v-opt" id="vm-30" onclick="vmSelect(30)">
+  <span class="v-opt-icon">🚜</span>
+  <div class="v-opt-info">
+    <div class="v-opt-speed">30 km/h</div>
+    <div class="v-opt-desc">A-traktor · EPA-traktor · Moped klass II</div>
+  </div>
+  <div class="v-opt-check"></div>
+</div>
+
+<button class="btn-confirm" onclick="closeVModalOk()">Bekräfta</button>
+```
+
   </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
+// ── STATE ────────────────────────────────────────────
 const S = {
-  speed: 45, icon: '🛵', origin: null, destCoords: null, destName: '',
-  route: null, routeLayer: null, shadowLayer: null,
-  markers: [], userDot: null, userAccCircle: null, watchId: null,
-  theme: 'light', sheetCollapsed: false, didInitialCenter: false
+  speed: 45,
+  icon: '🛵',
+  origin: null,
+  destCoords: null,
+  destName: '',
+  route: null,
+  routeLayer: null,
+  markers: [],
+  userDot: null,
+  userAccCircle: null,
+  watchId: null
 };
 
-// ── MAP ──────────────────────────────────────────────
-const map = L.map('map', { zoomControl: false }).setView([62.5, 16.5], 5);
-const tileLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19 });
-const tileDark  = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',  { attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19 });
-tileLight.addTo(map);
+// ── MAP INIT ─────────────────────────────────────────
+const map = L.map('map', {
+  zoomControl: false,
+  attributionControl: true
+}).setView([62.5, 16.5], 5);
 
-// ── THEME ─────────────────────────────────────────────
-function toggleTheme() { S.theme = S.theme === 'light' ? 'dark' : 'light'; applyTheme(); }
-function applyTheme() {
-  document.documentElement.setAttribute('data-theme', S.theme);
-  document.getElementById('theme-btn').textContent = S.theme === 'dark' ? '☀️' : '🌙';
-  if (S.theme === 'dark') { map.removeLayer(tileLight); tileDark.addTo(map); }
-  else { map.removeLayer(tileDark); tileLight.addTo(map); }
-  try { localStorage.setItem('mt-theme', S.theme); } catch(_) {}
-}
-try { const sv = localStorage.getItem('mt-theme'); if (sv === 'dark') { S.theme = 'dark'; applyTheme(); } } catch(_) {}
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap © CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
 
-// ── BOTTOM SHEET ──────────────────────────────────────
-const sheetEl      = document.getElementById('bottom-sheet');
-const contentEl    = document.getElementById('sheet-content');
-const handleArea   = document.getElementById('sheet-handle-area');
-
-function measureContent() {
-  // temporarily uncollapse to measure real height
-  const was = S.sheetCollapsed;
-  if (was) { sheetEl.classList.remove('collapsed'); contentEl.style.maxHeight = ''; }
-  const h = contentEl.scrollHeight;
-  if (was) { sheetEl.classList.add('collapsed'); contentEl.style.maxHeight = '0'; }
-  return h;
-}
-
-function setCollapseVar() {
-  // The sheet should translate so only the handle (28px) peeks
-  const handleH = handleArea.offsetHeight; // ~28px
-  const totalH  = sheetEl.offsetHeight;
-  const dy = totalH - handleH;
-  sheetEl.style.setProperty('--collapse-y', dy + 'px');
-}
-
-function collapseSheet() {
-  S.sheetCollapsed = true;
-  setCollapseVar();
-  sheetEl.classList.add('collapsed');
-  updateFabPositions();
-}
-function expandSheet() {
-  S.sheetCollapsed = false;
-  sheetEl.classList.remove('collapsed');
-  sheetEl.style.transform = '';
-  setTimeout(updateFabPositions, 400);
-}
-
-// FAB positioning
-function updateFabPositions() {
-  const sheetH = S.sheetCollapsed ? handleArea.offsetHeight : sheetEl.offsetHeight;
-  const base   = sheetH + 10;
-  document.getElementById('locate-btn').style.bottom = base + 'px';
-  document.getElementById('theme-btn').style.bottom  = (base + 54) + 'px';
-}
-
-// Drag gesture
-let drag = { on: false, startY: 0, startT: 0 };
-
-function dragStart(y) {
-  drag.on = true; drag.startY = y; drag.startT = 0;
-  sheetEl.style.transition = 'none';
-}
-function dragMove(y) {
-  if (!drag.on) return;
-  const dy = y - drag.startY;
-  drag.startT = dy;
-  const handleH = handleArea.offsetHeight;
-  const totalH  = sheetEl.offsetHeight;
-  const maxDy   = totalH - handleH;
-  const clamp   = Math.max(0, Math.min(dy + (S.sheetCollapsed ? maxDy : 0), maxDy));
-  sheetEl.style.transform = `translateY(${clamp}px)`;
-}
-function dragEnd() {
-  if (!drag.on) return;
-  drag.on = false;
-  sheetEl.style.transition = '';
-  sheetEl.style.transform  = '';
-  const mat = new DOMMatrix(getComputedStyle(sheetEl).transform);
-  const cur = mat.m42 || 0;
-  const totalH  = sheetEl.offsetHeight;
-  const handleH = handleArea.offsetHeight;
-  const thresh  = (totalH - handleH) * 0.38;
-  if (cur > thresh) collapseSheet(); else expandSheet();
-}
-
-// Touch
-handleArea.addEventListener('touchstart', e => dragStart(e.touches[0].clientY), { passive: true });
-document.addEventListener('touchmove',  e => { if (drag.on) dragMove(e.touches[0].clientY); }, { passive: true });
-document.addEventListener('touchend',   dragEnd);
-
-// Mouse (desktop)
-handleArea.addEventListener('mousedown', e => { dragStart(e.clientY); e.preventDefault(); });
-document.addEventListener('mousemove', e => dragMove(e.clientY));
-document.addEventListener('mouseup',   dragEnd);
-
-// Tap handle to toggle when fully collapsed
-handleArea.addEventListener('click', () => { if (S.sheetCollapsed) expandSheet(); });
-
-window.addEventListener('resize', () => { if (!S.sheetCollapsed) updateFabPositions(); else collapseSheet(); });
-
-// Initial
-setTimeout(updateFabPositions, 50);
-
-// ── DEST ICON ────────────────────────────────────────
+// ── DEST PIN ICON ─────────────────────────────────────
 function makeDestIcon() {
-  return L.divIcon({ html: `<div style="width:28px;height:36px;display:flex;flex-direction:column;align-items:center;"><div style="width:28px;height:28px;background:#FF3B30;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);box-shadow:0 3px 12px rgba(255,59,48,0.5);border:2.5px solid white;"></div></div>`, className: '', iconSize: [28,36], iconAnchor: [14,36] });
+  return L.divIcon({
+    html: `<div style="width:28px;height:36px;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:28px;height:28px;background:#FF3B30;border-radius:50% 50% 50% 4px;
+        transform:rotate(-45deg);box-shadow:0 3px 12px rgba(255,59,48,0.5);border:2.5px solid white;"></div>
+    </div>`,
+    className: '',
+    iconSize: [28, 36],
+    iconAnchor: [14, 36]
+  });
 }
 
-// ── USER DOT ─────────────────────────────────────────
-function placeUserDot(lat, lon, acc) {
+// ── BLUE GPS DOT ──────────────────────────────────────
+function placeUserDot(lat, lon, accuracy) {
   if (S.userAccCircle) { map.removeLayer(S.userAccCircle); S.userAccCircle = null; }
-  if (S.userDot)       { map.removeLayer(S.userDot);       S.userDot = null; }
-  S.userAccCircle = L.circle([lat,lon], { radius: Math.min(acc||30,150), color:'#007AFF', fillColor:'#007AFF', fillOpacity:0.1, weight:1, opacity:0.25 }).addTo(map);
-  S.userDot = L.marker([lat,lon], { icon: L.divIcon({ html:`<div style="width:18px;height:18px;background:#007AFF;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,122,255,0.55);"></div>`, className:'', iconSize:[18,18], iconAnchor:[9,9] }), zIndexOffset:1000, interactive:false }).addTo(map);
+  if (S.userDot) { map.removeLayer(S.userDot); S.userDot = null; }
+
+  S.userAccCircle = L.circle([lat, lon], {
+    radius: Math.min(accuracy || 30, 150),
+    color: '#007AFF', fillColor: '#007AFF',
+    fillOpacity: 0.1, weight: 1, opacity: 0.25
+  }).addTo(map);
+
+  S.userDot = L.marker([lat, lon], {
+    icon: L.divIcon({
+      html: `<div style="width:18px;height:18px;background:#007AFF;border-radius:50%;
+        border:3px solid white;box-shadow:0 2px 8px rgba(0,122,255,0.55);"></div>`,
+      className: '',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    }),
+    zIndexOffset: 1000,
+    interactive: false
+  }).addTo(map);
 }
 
-// ── GPS ───────────────────────────────────────────────
+// ── LIVE POSITION WATCH ───────────────────────────────
 function startWatch() {
   if (!navigator.geolocation || S.watchId != null) return;
   S.watchId = navigator.geolocation.watchPosition(
-    p => { const {latitude:lat,longitude:lon,accuracy:acc} = p.coords; S.origin={lat,lon}; if(!S.didInitialCenter){S.didInitialCenter=true;map.setView([lat,lon],14);} placeUserDot(lat,lon,acc); },
-    ()=>{}, { enableHighAccuracy:true, maximumAge:4000, timeout:10000 }
+    p => {
+      const { latitude: lat, longitude: lon, accuracy } = p.coords;
+      if (!S.origin) {
+        S.origin = { lat, lon };
+        map.setView([lat, lon], 14);
+      } else {
+        S.origin = { lat, lon };
+      }
+      placeUserDot(lat, lon, accuracy);
+    },
+    () => {},
+    { enableHighAccuracy: true, maximumAge: 4000, timeout: 10000 }
   );
 }
+
+// ── GEOLOCATION ──────────────────────────────────────
 async function getLocation() {
-  return new Promise(res => { if(!navigator.geolocation){res(null);return;} navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy}),()=>res(null),{timeout:8000,enableHighAccuracy:true}); });
-}
-async function locateMe() {
-  const loc = await getLocation();
-  if (loc) { S.origin=loc; placeUserDot(loc.lat,loc.lon,loc.acc); map.flyTo([loc.lat,loc.lon],15,{duration:1.2}); }
-  else showToast('Kunde inte hämta plats');
+  return new Promise(res => {
+    if (!navigator.geolocation) { res(null); return; }
+    navigator.geolocation.getCurrentPosition(
+      p => res({ lat: p.coords.latitude, lon: p.coords.longitude, acc: p.coords.accuracy }),
+      () => res(null),
+      { timeout: 8000, enableHighAccuracy: true }
+    );
+  });
 }
 
-// ── MAP TAP ───────────────────────────────────────────
+async function locateMe() {
+  const loc = await getLocation();
+  if (loc) {
+    S.origin = loc;
+    placeUserDot(loc.lat, loc.lon, loc.acc);
+    map.flyTo([loc.lat, loc.lon], 15, { duration: 1.2 });
+  } else {
+    showToast('Kunde inte hämta plats');
+  }
+}
+
+// ── MAP TAP → DESTINATION ────────────────────────────
 map.on('click', async function(e) {
-  hideSug(); document.getElementById('search-input').blur();
-  const {lat,lng:lon} = e.latlng;
+  hideSug();
+  document.getElementById('search-input').blur();
+
+  const lat = e.latlng.lat;
+  const lon = e.latlng.lng;
+
   clearDestMarkers();
-  S.markers = [L.marker([lat,lon],{icon:makeDestIcon(),zIndexOffset:500}).addTo(map)];
-  S.destCoords={lat,lon}; S.destName='Vald plats';
-  document.getElementById('search-input').value='Hämtar adress…';
+  const m = L.marker([lat, lon], { icon: makeDestIcon(), zIndexOffset: 500 }).addTo(map);
+  S.markers = [m];
+
+  S.destCoords = { lat, lon };
+  S.destName = 'Vald plats';
+  document.getElementById('search-input').value = 'Hämtar adress…';
   document.getElementById('clear-btn').classList.add('show');
+
+  // Reverse geocode with Nominatim
   try {
-    const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=sv`,{headers:{'Accept-Language':'sv','User-Agent':'MaxTretti/1.0'}});
+    const r = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=sv`,
+      { headers: { 'Accept-Language': 'sv' } }
+    );
     const d = await r.json();
-    if (d?.address) { const a=d.address; const pts=[a.road||a.pedestrian||a.path,a.house_number,a.city||a.town||a.village||a.municipality].filter(Boolean); S.destName=pts.length?pts.slice(0,2).join(' '):d.display_name.split(',')[0]; }
+    if (d && d.display_name) {
+      // Build a short name from address parts
+      const a = d.address || {};
+      const parts = [
+        a.road || a.pedestrian || a.path || a.footway,
+        a.house_number,
+        a.city || a.town || a.village || a.municipality
+      ].filter(Boolean);
+      S.destName = parts.length > 0 ? parts.slice(0,2).join(' ') || d.display_name.split(',')[0] : d.display_name.split(',')[0];
+    }
   } catch(_) {}
-  document.getElementById('search-input').value=S.destName;
-  expandSheet();
+
+  document.getElementById('search-input').value = S.destName;
   calcRoute();
 });
 
-// ── SEARCH ───────────────────────────────────────────
-let searchTimer, lastQuery='';
+// ── SEARCH / SUGGESTIONS ─────────────────────────────
+// Uses Nominatim (OpenStreetMap) — reliable, no API key needed
+let searchTimer;
+let lastQuery = '';
+
 function onInput() {
-  const q=document.getElementById('search-input').value.trim();
-  document.getElementById('clear-btn').classList.toggle('show',q.length>0);
-  if(q.length<2){hideSug();return;}
+  const q = document.getElementById('search-input').value.trim();
+  document.getElementById('clear-btn').classList.toggle('show', q.length > 0);
+  if (q.length < 2) { hideSug(); return; }
   clearTimeout(searchTimer);
-  searchTimer=setTimeout(()=>fetchSuggestions(q),400);
-}
-function onFocus() { const q=document.getElementById('search-input').value.trim(); if(q.length>=2)fetchSuggestions(q); }
-async function fetchSuggestions(q) {
-  if(q===lastQuery)return; lastQuery=q;
-  try {
-    const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=8&countrycodes=se&addressdetails=1&accept-language=sv`,{headers:{'Accept-Language':'sv','User-Agent':'MaxTretti/1.0'}});
-    if(!r.ok)throw new Error();
-    renderSuggestions(await r.json());
-  } catch(_) {
-    try { const r2=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&addressdetails=1&accept-language=sv`,{headers:{'Accept-Language':'sv','User-Agent':'MaxTretti/1.0'}}); renderSuggestions(await r2.json()); } catch(__){hideSug();}
-  }
-}
-function renderSuggestions(results) {
-  if(!results?.length){hideSug();return;}
-  const el=document.getElementById('suggestions');
-  el.innerHTML=results.map(item=>{
-    const lat=parseFloat(item.lat),lon=parseFloat(item.lon),a=item.address||{};
-    const name=item.name||a.road||a.pedestrian||a.place||item.display_name.split(',')[0];
-    const pts=[]; if(a.road&&name!==a.road)pts.push(a.housenumber?a.road+' '+a.housenumber:a.road); const city=a.city||a.town||a.village||a.municipality||a.county; if(city&&city!==name)pts.push(city);
-    const sub=pts.filter(Boolean).join(', '); const icon=getPlaceIcon(item.type,item.class,a);
-    return `<div class="sug-item" onclick="pickPlace(${JSON.stringify(name)},${lat},${lon})"><div class="sug-pin">${icon}</div><div class="sug-texts"><div class="sug-main">${escHtml(name)}</div>${sub?`<div class="sug-sub">${escHtml(sub)}</div>`:''}</div></div>`;
-  }).join('');
-  el.classList.add('show');
-}
-function getPlaceIcon(t,c,a){t=(t||'').toLowerCase();c=(c||'').toLowerCase();if(c==='highway')return'🛣';if(['city','town'].includes(t))return'🏙';if(['village','hamlet','suburb','municipality'].includes(t))return'🏘';if(t==='hospital')return'🏥';if(['school','university'].includes(t))return'🎓';if(['restaurant','cafe','fast_food'].includes(t))return'🍽';if(t==='fuel')return'⛽';if(['hotel','hostel'].includes(t))return'🏨';if(['supermarket','convenience'].includes(t))return'🛒';if(c==='railway'||t==='station')return'🚉';if(['park','forest','wood'].includes(t))return'🌲';if(t==='parking')return'🅿️';if(t==='pharmacy')return'💊';if(c==='amenity')return'🏛';return'📍';}
-function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function hideSug(){document.getElementById('suggestions').classList.remove('show');document.getElementById('suggestions').innerHTML='';}
-function pickPlace(name,lat,lon){
-  document.getElementById('search-input').value=name;document.getElementById('clear-btn').classList.add('show');hideSug();lastQuery='';
-  S.destCoords={lat,lon};S.destName=name;clearDestMarkers();S.markers=[L.marker([lat,lon],{icon:makeDestIcon(),zIndexOffset:500}).addTo(map)];
-  expandSheet();calcRoute();
+  // Slight debounce to avoid hammering the API
+  searchTimer = setTimeout(() => fetchSuggestions(q), 400);
 }
 
-// ── ROUTING — motorway+trunk always excluded ──────────
-async function fetchOSRM(oLon,oLat,dLon,dLat){
-  // exclude=motorway (motorväg) + trunk (motortrafikled) — HARD requirement
-  const excl='motorway,trunk';
-  const urls=[
-    `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
-    `https://routing.openstreetmap.de/routed-car/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
+function onFocus() {
+  const q = document.getElementById('search-input').value.trim();
+  if (q.length >= 2) fetchSuggestions(q);
+}
+
+async function fetchSuggestions(q) {
+  if (q === lastQuery) return;
+  lastQuery = q;
+
+  try {
+    // Nominatim geocoding — much more reliable than Photon for Swedish addresses
+    const viewbox = '10.5,55.0,24.2,69.5'; // Sweden bounding box (minLon,minLat,maxLon,maxLat)
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=8&countrycodes=se&addressdetails=1&accept-language=sv`;
+
+    const r = await fetch(url, {
+      headers: {
+        'Accept-Language': 'sv',
+        'User-Agent': 'MaxTretti/1.0'
+      }
+    });
+
+    if (!r.ok) throw new Error('Nominatim error ' + r.status);
+    const data = await r.json();
+    renderSuggestions(data);
+  } catch(e) {
+    console.warn('Search error:', e);
+    // Fallback: try without country restriction
+    try {
+      const url2 = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&addressdetails=1&accept-language=sv`;
+      const r2 = await fetch(url2, { headers: { 'Accept-Language': 'sv', 'User-Agent': 'MaxTretti/1.0' } });
+      const data2 = await r2.json();
+      renderSuggestions(data2);
+    } catch(e2) {
+      hideSug();
+    }
+  }
+}
+
+function renderSuggestions(results) {
+  if (!results || results.length === 0) { hideSug(); return; }
+  const el = document.getElementById('suggestions');
+
+  el.innerHTML = results.map(item => {
+    const lat = parseFloat(item.lat);
+    const lon = parseFloat(item.lon);
+    const addr = item.address || {};
+
+    // Build main label — prefer specific name over generic
+    const name = item.name || addr.road || addr.pedestrian || addr.place || item.display_name.split(',')[0];
+    // Build secondary label
+    const parts = [];
+    if (addr.road && name !== addr.road) parts.push(addr.road);
+    if (addr.house_number) parts[0] = (parts[0] || '') + ' ' + addr.house_number;
+    const city = addr.city || addr.town || addr.village || addr.municipality || addr.county;
+    if (city && city !== name) parts.push(city);
+
+    const sub = parts.filter(Boolean).join(', ');
+    const icon = getPlaceIcon(item.type, item.class, addr);
+
+    return `<div class="sug-item" onclick="pickPlace(${JSON.stringify(name)}, ${lat}, ${lon})">
+      <div class="sug-pin">${icon}</div>
+      <div class="sug-texts">
+        <div class="sug-main">${escHtml(name)}</div>
+        ${sub ? `<div class="sug-sub">${escHtml(sub)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  el.classList.add('show');
+}
+
+function getPlaceIcon(type, cls, addr) {
+  const t = (type || '').toLowerCase();
+  const c = (cls || '').toLowerCase();
+  if (c === 'highway' || t === 'road' || t === 'street') return '🛣';
+  if (['city','town'].includes(t)) return '🏙';
+  if (['village','hamlet','locality','suburb','municipality'].includes(t)) return '🏘';
+  if (t === 'hospital' || t === 'clinic') return '🏥';
+  if (['school','university','college'].includes(t)) return '🎓';
+  if (['restaurant','cafe','fast_food','bar'].includes(t)) return '🍽';
+  if (t === 'fuel') return '⛽';
+  if (['hotel','hostel','motel'].includes(t)) return '🏨';
+  if (['supermarket','convenience'].includes(t)) return '🛒';
+  if (['station','bus_stop','stop'].includes(t) || c === 'railway') return '🚉';
+  if (t === 'house' || t === 'residential') return '🏠';
+  if (['park','forest','nature_reserve','wood'].includes(t)) return '🌲';
+  if (t === 'parking') return '🅿️';
+  if (t === 'pharmacy') return '💊';
+  if (c === 'amenity') return '🏛';
+  return '📍';
+}
+
+function escHtml(s) {
+  return (s || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function hideSug() {
+  document.getElementById('suggestions').classList.remove('show');
+  document.getElementById('suggestions').innerHTML = '';
+}
+
+function pickPlace(name, lat, lon) {
+  document.getElementById('search-input').value = name;
+  document.getElementById('clear-btn').classList.add('show');
+  hideSug();
+  lastQuery = '';
+  S.destCoords = { lat, lon };
+  S.destName = name;
+
+  // Place pin immediately
+  clearDestMarkers();
+  const m = L.marker([lat, lon], { icon: makeDestIcon(), zIndexOffset: 500 }).addTo(map);
+  S.markers = [m];
+
+  calcRoute();
+}
+
+// ── ROUTE CALCULATION ────────────────────────────────
+// Tries multiple OSRM endpoints in sequence for reliability
+const OSRM_ENDPOINTS = [
+  'https://router.project-osrm.org',
+  'https://routing.openstreetmap.de/routed-car',
+  'https://osrm.route.cloudmade.com' // last resort
+];
+
+async function fetchOSRM(oLon, oLat, dLon, dLat) {
+  // Primary endpoint — project-osrm with motorway exclusion
+  const endpoints = [
+    `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=motorway`,
+    `https://routing.openstreetmap.de/routed-car/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full`,
   ];
-  for(const url of urls){
-    try{const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),10000);const r=await fetch(url,{signal:ctrl.signal});clearTimeout(tid);if(!r.ok)continue;const d=await r.json();if(d.code==='Ok'&&d.routes?.[0])return d;}catch(e){console.warn('OSRM:',e.message);}
+
+  for (const url of endpoints) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      const r = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (!r.ok) continue;
+      const data = await r.json();
+      if (data.code === 'Ok' && data.routes?.[0]) return data;
+    } catch(e) {
+      console.warn('OSRM endpoint failed:', url, e.message);
+    }
   }
   return null;
 }
-async function calcRoute(){
-  if(!S.destCoords)return;
-  showLoading(true,'Beräknar rutt…');
+
+async function calcRoute() {
+  if (!S.destCoords) return;
+
+  showLoading(true, 'Beräknar rutt…');
   document.getElementById('route-card').classList.remove('show');
-  if(!S.origin){showLoading(true,'Hämtar position…');S.origin=await getLocation();if(!S.origin){S.origin={lat:59.3293,lon:18.0686};showToast('📍 Startplats: Stockholm');}}
-  try{
-    const {lat:oLat,lon:oLon}=S.origin,{lat:dLat,lon:dLon}=S.destCoords;
-    const data=await fetchOSRM(oLon,oLat,dLon,dLat);
-    if(!data){showToast('❌ Ingen rutt hittades');showLoading(false);return;}
-    S.route=data.routes[0];drawRoute(S.route);showStats();
-  }catch(e){showToast('❌ Fel vid ruttberäkning');}
+
+  if (!S.origin) {
+    showLoading(true, 'Hämtar position…');
+    S.origin = await getLocation();
+    if (!S.origin) {
+      S.origin = { lat: 59.3293, lon: 18.0686 };
+      showToast('📍 Startplats: Stockholm');
+    }
+  }
+
+  const { lat: oLat, lon: oLon } = S.origin;
+  const { lat: dLat, lon: dLon } = S.destCoords;
+
+  try {
+    const data = await fetchOSRM(oLon, oLat, dLon, dLat);
+
+    if (!data) {
+      showToast('❌ Ingen rutt hittades – försök igen');
+      showLoading(false);
+      return;
+    }
+
+    S.route = data.routes[0];
+    drawRoute(S.route);
+    showStats();
+  } catch(e) {
+    console.error('Route error:', e);
+    showToast('❌ Fel vid ruttberäkning');
+  }
+
   showLoading(false);
 }
-function clearDestMarkers(){S.markers.forEach(m=>map.removeLayer(m));S.markers=[];}
-function drawRoute(route){
-  if(S.shadowLayer){map.removeLayer(S.shadowLayer);S.shadowLayer=null;}
-  if(S.routeLayer){map.removeLayer(S.routeLayer);S.routeLayer=null;}
-  clearDestMarkers();
-  const coords=route.geometry.coordinates.map(c=>[c[1],c[0]]);
-  S.shadowLayer=L.polyline(coords,{color:'rgba(0,0,0,0.13)',weight:9,lineCap:'round',lineJoin:'round'}).addTo(map);
-  S.routeLayer=L.polyline(coords,{color:'#007AFF',weight:5,opacity:0.9,lineCap:'round',lineJoin:'round'}).addTo(map);
-  S.markers=[L.marker([S.destCoords.lat,S.destCoords.lon],{icon:makeDestIcon(),zIndexOffset:500}).addTo(map)];
-  map.fitBounds(S.routeLayer.getBounds(),{padding:[70,70]});
+
+function clearDestMarkers() {
+  S.markers.forEach(m => map.removeLayer(m));
+  S.markers = [];
 }
-function showStats(){
-  const dist=S.route.distance,avgSpeed=S.speed*0.82,mins=Math.round((dist/1000)/avgSpeed*60),h=Math.floor(mins/60),m=mins%60;
-  document.getElementById('stat-time').textContent=mins<60?`${mins} min`:`${h}h ${m}m`;
-  document.getElementById('stat-dist').textContent=dist<1000?`${Math.round(dist)} m`:`${(dist/1000).toFixed(1)} km`;
-  document.getElementById('stat-speed').textContent=S.speed;
-  document.getElementById('route-dest-label').textContent=S.destName;
+
+function drawRoute(route) {
+  if (S.routeLayer) { map.removeLayer(S.routeLayer); S.routeLayer = null; }
+  clearDestMarkers();
+
+  const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
+
+  // Draw subtle shadow line first
+  L.polyline(coords, {
+    color: 'rgba(0,0,0,0.12)', weight: 9, opacity: 1,
+    lineCap: 'round', lineJoin: 'round'
+  }).addTo(map);
+
+  S.routeLayer = L.polyline(coords, {
+    color: '#007AFF', weight: 5, opacity: 0.9,
+    lineCap: 'round', lineJoin: 'round'
+  }).addTo(map);
+
+  const dM = L.marker([S.destCoords.lat, S.destCoords.lon], {
+    icon: makeDestIcon(), zIndexOffset: 500
+  }).addTo(map);
+  S.markers = [dM];
+
+  map.fitBounds(S.routeLayer.getBounds(), { padding: [70, 70] });
+}
+
+function showStats() {
+  const dist = S.route.distance;
+  const avgSpeed = S.speed * 0.82;
+  const mins = Math.round((dist / 1000) / avgSpeed * 60);
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  const timeStr = mins < 60 ? `${mins} min` : `${h}h ${m}m`;
+  const distStr = dist < 1000 ? `${Math.round(dist)} m` : `${(dist/1000).toFixed(1)} km`;
+
+  document.getElementById('stat-time').textContent = timeStr;
+  document.getElementById('stat-dist').textContent = distStr;
+  document.getElementById('stat-speed').textContent = S.speed;
+  document.getElementById('route-dest-label').textContent = S.destName;
   document.getElementById('route-card').classList.add('show');
 }
 
 // ── CLEAR ────────────────────────────────────────────
-function clearAll(){
-  document.getElementById('search-input').value='';document.getElementById('clear-btn').classList.remove('show');hideSug();document.getElementById('route-card').classList.remove('show');
-  S.destCoords=null;S.route=null;lastQuery='';
-  if(S.shadowLayer){map.removeLayer(S.shadowLayer);S.shadowLayer=null;}
-  if(S.routeLayer){map.removeLayer(S.routeLayer);S.routeLayer=null;}
+function clearAll() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('clear-btn').classList.remove('show');
+  hideSug();
+  document.getElementById('route-card').classList.remove('show');
+  S.destCoords = null;
+  S.route = null;
+  lastQuery = '';
+  // Remove shadow lines too
+  map.eachLayer(l => {
+    if (l instanceof L.Polyline) map.removeLayer(l);
+  });
+  S.routeLayer = null;
   clearDestMarkers();
-  if(S.origin)map.setView([S.origin.lat,S.origin.lon],14);else map.setView([62.5,16.5],5);
+  if (S.origin) {
+    map.setView([S.origin.lat, S.origin.lon], 14);
+  } else {
+    map.setView([62.5, 16.5], 5);
+  }
 }
 
 // ── STEPS ────────────────────────────────────────────
-function openSteps(){
-  if(!S.route)return;
-  const steps=S.route.legs?.[0]?.steps||[];
-  document.getElementById('steps-title').textContent=`Till ${S.destName}`;
-  const avg=S.speed*0.82,mins=Math.round((S.route.distance/1000)/avg*60),h=Math.floor(mins/60),m=mins%60;
-  document.getElementById('steps-sub').textContent=`${mins<60?mins+' min':h+'h '+m+'m'} · ${(S.route.distance/1000).toFixed(1)} km`;
-  const mI=t=>({'depart':'🚦','arrive':'🏁','turn':'↩️','merge':'🔀','new name':'➡️','continue':'➡️','roundabout':'🔄','rotary':'🔄','fork':'↗️','ramp':'↗️','end of road':'↩️'}[t]||'➡️');
-  const mSv={left:'vänster',right:'höger','sharp left':'skarpt vänster','sharp right':'skarpt höger','slight left':'svagt vänster','slight right':'svagt höger',straight:'rakt fram',uturn:'U-sväng'};
-  const tSv={depart:'Starta på',arrive:'Ankomst',turn:'Sväng','new name':'Fortsätt på',continue:'Fortsätt på',merge:'Anslut till',ramp:'Ta avfarten',fork:'Håll dig',roundabout:'Ta rondellen till','end of road':'Sväng vid slutet av'};
-  document.getElementById('steps-list').innerHTML=steps.map(s=>{
-    const t=s.maneuver.type,mod=s.maneuver.modifier?(mSv[s.maneuver.modifier]||s.maneuver.modifier):'',verb=tSv[t]||'Fortsätt',road=s.name||'';
-    const instr=t==='arrive'?'🏁 Framme vid destination':t==='depart'?`Starta på ${road}`:`${verb}${mod?' '+mod:''}${road?' mot '+road:''}`;
-    const dist=s.distance<1000?`${Math.round(s.distance)} m`:`${(s.distance/1000).toFixed(1)} km`;
-    return `<div class="step-row"><div class="step-icon-wrap">${mI(t)}</div><div class="step-body"><div class="step-instr">${escHtml(instr)}</div>${s.distance>10?`<div class="step-d">${dist}</div>`:''}</div></div>`;
+function openSteps() {
+  if (!S.route) return;
+  const steps = S.route.legs?.[0]?.steps || [];
+  document.getElementById('steps-title').textContent = `Till ${S.destName}`;
+  const avgSpeed = S.speed * 0.82;
+  const mins = Math.round((S.route.distance/1000)/avgSpeed*60);
+  const h = Math.floor(mins/60);
+  const m = mins % 60;
+  document.getElementById('steps-sub').textContent = `${mins < 60 ? mins+' min' : h+'h '+m+'m'} · ${(S.route.distance/1000).toFixed(1)} km`;
+
+  const maneuverIcon = t => ({
+    'depart':'🚦','arrive':'🏁','turn':'↩️','merge':'🔀',
+    'new name':'➡️','continue':'➡️','roundabout':'🔄','rotary':'🔄',
+    'fork':'↗️','ramp':'↗️','end of road':'↩️'
+  }[t] || '➡️');
+
+  const modSv = {
+    left:'vänster', right:'höger',
+    'sharp left':'skarpt vänster', 'sharp right':'skarpt höger',
+    'slight left':'svagt vänster', 'slight right':'svagt höger',
+    straight:'rakt fram', uturn:'U-sväng'
+  };
+  const typeSv = {
+    depart:'Starta på', arrive:'Ankomst', turn:'Sväng',
+    'new name':'Fortsätt på', continue:'Fortsätt på', merge:'Anslut till',
+    ramp:'Ta avfarten', fork:'Håll dig', roundabout:'Ta rondellen till',
+    'end of road':'Sväng vid slutet av'
+  };
+
+  document.getElementById('steps-list').innerHTML = steps.map(s => {
+    const t = s.maneuver.type;
+    const mod = s.maneuver.modifier ? (modSv[s.maneuver.modifier] || s.maneuver.modifier) : '';
+    const verb = typeSv[t] || 'Fortsätt';
+    const road = s.name || '';
+    const instr = t === 'arrive' ? '🏁 Framme vid destination' :
+                  t === 'depart' ? `Starta på ${road}` :
+                  `${verb}${mod ? ' '+mod : ''}${road ? ' mot '+road : ''}`;
+    const dist = s.distance < 1000 ? `${Math.round(s.distance)} m` : `${(s.distance/1000).toFixed(1)} km`;
+    return `<div class="step-row">
+      <div class="step-icon-wrap">${maneuverIcon(t)}</div>
+      <div class="step-body">
+        <div class="step-instr">${escHtml(instr)}</div>
+        ${s.distance > 10 ? `<div class="step-d">${dist}</div>` : ''}
+      </div>
+    </div>`;
   }).join('');
+
   document.getElementById('steps-panel').classList.add('show');
 }
-function closeSteps(){document.getElementById('steps-panel').classList.remove('show');}
-function openInMaps(){
-  if(!S.destCoords)return;const {lat:dLat,lon:dLon}=S.destCoords,{lat:oLat,lon:oLon}=S.origin||{lat:0,lon:0};
-  window.open(/iPad|iPhone|iPod/.test(navigator.userAgent)?`maps://maps.apple.com/?saddr=${oLat},${oLon}&daddr=${dLat},${dLon}&dirflg=d`:`https://www.google.com/maps/dir/${oLat},${oLon}/${dLat},${dLon}`);
+
+function closeSteps() {
+  document.getElementById('steps-panel').classList.remove('show');
 }
 
-// ── VEHICLE ───────────────────────────────────────────
-function pickVehicle(el){document.querySelectorAll('.v-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');S.speed=parseInt(el.dataset.speed);S.icon=el.dataset.icon;document.getElementById('vp-icon').textContent=S.icon;document.getElementById('vp-speed').textContent=S.speed+' km/h';syncVModal();if(S.destCoords)calcRoute();}
-function openVModal(){document.getElementById('v-modal').classList.add('show');}
-function closeVModal(e){if(e.target===document.getElementById('v-modal'))document.getElementById('v-modal').classList.remove('show');}
-function closeVModalOk(){document.getElementById('v-modal').classList.remove('show');if(S.destCoords)calcRoute();}
-function vmSelect(speed){S.speed=speed;document.getElementById('vp-speed').textContent=speed+' km/h';syncVModal();}
-function syncVModal(){document.getElementById('vm-45').classList.toggle('sel',S.speed===45);document.getElementById('vm-30').classList.toggle('sel',S.speed===30);document.getElementById('vm-45').querySelector('.v-opt-check').textContent=S.speed===45?'✓':'';document.getElementById('vm-30').querySelector('.v-opt-check').textContent=S.speed===30?'✓':'';}
+function openInMaps() {
+  if (!S.destCoords) return;
+  const { lat: dLat, lon: dLon } = S.destCoords;
+  const { lat: oLat, lon: oLon } = S.origin || { lat: 0, lon: 0 };
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  window.open(isIOS
+    ? `maps://maps.apple.com/?saddr=${oLat},${oLon}&daddr=${dLat},${dLon}&dirflg=d`
+    : `https://www.google.com/maps/dir/${oLat},${oLon}/${dLat},${dLon}`
+  );
+}
+
+// ── VEHICLE CHIPS ────────────────────────────────────
+function pickVehicle(el) {
+  document.querySelectorAll('.v-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  S.speed = parseInt(el.dataset.speed);
+  S.icon = el.dataset.icon;
+  document.getElementById('vp-icon').textContent = S.icon;
+  document.getElementById('vp-speed').textContent = S.speed + ' km/h';
+  syncVModal();
+  if (S.destCoords) calcRoute();
+}
+
+// ── VEHICLE MODAL ────────────────────────────────────
+function openVModal() { document.getElementById('v-modal').classList.add('show'); }
+function closeVModal(e) {
+  if (e.target === document.getElementById('v-modal'))
+    document.getElementById('v-modal').classList.remove('show');
+}
+function closeVModalOk() {
+  document.getElementById('v-modal').classList.remove('show');
+  if (S.destCoords) calcRoute();
+}
+function vmSelect(speed) {
+  S.speed = speed;
+  document.getElementById('vp-speed').textContent = speed + ' km/h';
+  syncVModal();
+}
+function syncVModal() {
+  document.getElementById('vm-45').classList.toggle('sel', S.speed === 45);
+  document.getElementById('vm-30').classList.toggle('sel', S.speed === 30);
+  document.getElementById('vm-45').querySelector('.v-opt-check').textContent = S.speed === 45 ? '✓' : '';
+  document.getElementById('vm-30').querySelector('.v-opt-check').textContent = S.speed === 30 ? '✓' : '';
+}
 
 // ── HELPERS ──────────────────────────────────────────
-function showLoading(v,msg){document.getElementById('loading').classList.toggle('show',v);if(msg)document.getElementById('load-txt').textContent=msg;}
+function showLoading(v, msg) {
+  document.getElementById('loading').classList.toggle('show', v);
+  if (msg) document.getElementById('load-txt').textContent = msg;
+}
+
 let toastT;
-function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600);}
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 2600);
+}
 
-document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();document.querySelector('.sug-item')?.click();}});
-document.addEventListener('touchstart',e=>{if(!document.getElementById('search-box').contains(e.target))hideSug();},{passive:true});
+// Enter key → pick first suggestion
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.target.blur();
+    const first = document.querySelector('.sug-item');
+    if (first) first.click();
+  }
+});
 
+// Close suggestions when tapping outside
+document.addEventListener('touchstart', e => {
+  if (!document.getElementById('search-box').contains(e.target)) hideSug();
+}, { passive: true });
+
+// Init
 startWatch();
 </script>
+
 </body>
 </html>
