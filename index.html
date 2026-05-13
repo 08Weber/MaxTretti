@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="sv">
 <head>
   <meta charset="UTF-8"/>
@@ -234,6 +235,7 @@
     #toast { position: fixed; top: calc(var(--safe-top) + 70px); left: 50%; transform: translateX(-50%) translateY(-10px); background: rgba(28,28,30,0.9); color: white; padding: 10px 18px; border-radius: 100px; font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 9999; }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
+
 </head>
 <body>
 <div id="app">
@@ -241,6 +243,7 @@
   <div id="loading"><div class="spin"></div><div class="load-txt" id="load-txt">Beräknar rutt…</div></div>
 
   <!-- TOP BAR -->
+
   <div id="topbar">
     <div class="topbar-inner">
       <div id="search-box">
@@ -259,10 +262,12 @@
   </div>
 
   <!-- FLOATING BTNS -->
+
   <div class="fab" id="theme-btn" onclick="toggleTheme()">🌙</div>
   <div class="fab" id="locate-btn" onclick="locateMe()">📍</div>
 
   <!-- BOTTOM SHEET -->
+
   <div id="bottom-sheet">
     <div id="sheet-handle-area"><div class="sheet-handle"></div></div>
     <div id="sheet-content">
@@ -296,6 +301,7 @@
 </div>
 
 <!-- STEPS PANEL -->
+
 <div id="steps-panel">
   <div class="steps-header">
     <div class="back-btn" onclick="closeSteps()">‹</div>
@@ -305,6 +311,7 @@
 </div>
 
 <!-- VEHICLE MODAL -->
+
 <div id="v-modal" onclick="closeVModal(event)">
   <div class="v-sheet">
     <div class="v-sheet-handle"></div>
@@ -532,6 +539,19 @@ function pickPlace(name,lat,lon){
   expandSheet();calcRoute();
 }
 
+// ── ROUTING — motorway+trunk always excluded ──────────
+async function fetchOSRM(oLon,oLat,dLon,dLat){
+  // exclude=motorway (motorväg) + trunk (motortrafikled) — HARD requirement
+  const excl='motorway,trunk';
+  const urls=[
+    `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
+    `https://routing.openstreetmap.de/routed-car/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
+  ];
+  for(const url of urls){
+    try{const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),10000);const r=await fetch(url,{signal:ctrl.signal});clearTimeout(tid);if(!r.ok)continue;const d=await r.json();if(d.code==='Ok'&&d.routes?.[0])return d;}catch(e){console.warn('OSRM:',e.message);}
+  }
+  return null;
+}
 async function calcRoute(){
   if(!S.destCoords)return;
   showLoading(true,'Beräknar rutt…');
@@ -617,5 +637,6 @@ document.addEventListener('touchstart',e=>{if(!document.getElementById('search-b
 
 startWatch();
 </script>
+
 </body>
 </html>
