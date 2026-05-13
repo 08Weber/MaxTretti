@@ -533,8 +533,6 @@ function pickPlace(name,lat,lon){
 }
 
 // ── ROUTING — motorway always excluded ──────────
-async function fetchOSRM(oLon,oLat,dLon,dLat){
-  const excl='motorway'; // Tog bort ,trunk
   const urls=[
     `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
     `https://routing.openstreetmap.de/routed-car/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
