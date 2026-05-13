@@ -532,16 +532,6 @@ function pickPlace(name,lat,lon){
   expandSheet();calcRoute();
 }
 
-// ── ROUTING — motorway always excluded ──────────
-  const urls=[
-    `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
-    `https://routing.openstreetmap.de/routed-car/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
-  ];
-  for(const url of urls){
-    try{const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),10000);const r=await fetch(url,{signal:ctrl.signal});clearTimeout(tid);if(!r.ok)continue;const d=await r.json();if(d.code==='Ok'&&d.routes?.[0])return d;}catch(e){console.warn('OSRM:',e.message);}
-  }
-  return null;
-}
 async function calcRoute(){
   if(!S.destCoords)return;
   showLoading(true,'Beräknar rutt…');
