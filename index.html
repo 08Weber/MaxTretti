@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SlowNav">
+    <meta name="apple-mobile-web-app-title" content="MaxTretti">
     
-    <title>SlowNav - 30/45 Navigation</title>
+    <title>MaxTretti - Smart LGF Navigation</title>
 
     <!-- Leaflet Maps CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -20,6 +20,7 @@
             --apple-blur: blur(20px);
             --apple-blue: #007AFF;
             --apple-red: #FF3B30;
+            --apple-orange: #FF9500;
             --apple-text: #1C1C1E;
             --apple-gray: #F2F2F7;
         }
@@ -57,9 +58,46 @@
             backdrop-filter: var(--apple-blur);
             -webkit-backdrop-filter: var(--apple-blur);
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px 15px 15px 15px;
             z-index: 10;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        /* App Header & Logo */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .logo-triangle {
+            width: 0; 
+            height: 0; 
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 17px solid var(--apple-orange);
+            position: relative;
+        }
+        
+        .logo-triangle::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: -5px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 8px solid var(--apple-red);
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--apple-text);
         }
 
         .search-box {
@@ -74,9 +112,14 @@
             padding: 12px 15px;
             border-radius: 10px;
             border: none;
-            background: rgba(0,0,0,0.05);
+            background: rgba(0,0,0,0.06);
             font-size: 16px;
             outline: none;
+            color: var(--apple-text);
+        }
+
+        input::placeholder {
+            color: #8E8E93;
         }
 
         .segmented-control {
@@ -96,7 +139,7 @@
             text-align: center;
             padding: 8px 0;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--apple-text);
             cursor: pointer;
             position: relative;
@@ -132,7 +175,7 @@
             border-radius: 20px;
             padding: 20px;
             z-index: 10;
-            box-shadow: 0 -8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
             transform: translateY(150%);
             transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
@@ -152,11 +195,13 @@
             font-size: 28px;
             font-weight: 700;
             color: var(--apple-blue);
+            letter-spacing: -0.5px;
         }
 
         .distance {
             font-size: 14px;
             color: #666;
+            margin-top: 2px;
         }
 
         .btn-nav {
@@ -169,6 +214,11 @@
             font-size: 17px;
             font-weight: 600;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-nav:active {
+            opacity: 0.8;
         }
 
         .warning-overlay {
@@ -204,15 +254,22 @@
 
     <div id="map"></div>
 
+    <!-- Proaktiv säkerhetsvarning -->
     <div class="warning-overlay" id="warningAlert">
         <div class="warning-icon">⚠️</div>
         <div>
             <strong>Otillåten väg närmar sig</strong>
-            <div style="font-size: 13px; opacity: 0.9;">Systemet har omdirigerat dig från motortrafikleden framför.</div>
+            <div style="font-size: 13px; opacity: 0.9;">MaxTretti har omdirigerat dig från motortrafikleden framför.</div>
         </div>
     </div>
 
+    <!-- Top Panel: Sök & Fordonsval -->
     <div class="top-panel" id="topPanel">
+        <div class="app-header">
+            <div class="logo-triangle"></div>
+            <div class="app-title">MaxTretti</div>
+        </div>
+
         <div class="search-box">
             <input type="text" placeholder="Nuvarande plats" value="Nuvarande plats" readonly>
             <input type="text" id="destination" placeholder="Vart ska du?" onkeypress="handleSearch(event)">
@@ -227,6 +284,7 @@
         </div>
     </div>
 
+    <!-- Bottom Panel: Navigation -->
     <div class="bottom-panel" id="bottomPanel">
         <div class="route-stats">
             <div>
@@ -235,7 +293,7 @@
             </div>
             <div style="text-align: right;">
                 <div style="font-size: 13px; color: #666;">Ankomsttid</div>
-                <div style="font-size: 18px; font-weight: 500;" id="arrivalTimeDisplay">--:--</div>
+                <div style="font-size: 18px; font-weight: 600;" id="arrivalTimeDisplay">--:--</div>
             </div>
         </div>
         <button class="btn-nav" onclick="startNavigation()">Starta navigering</button>
@@ -255,7 +313,7 @@
         let currentRoute = null;
         let routeDistanceKm = 0;
 
-        // Fiktiv vägrutt
+        // Fiktiv vägrutt som undviker E4:an
         const dummyRouteData = [
             [58.4108, 15.6214],
             [58.4050, 15.5900],
@@ -297,6 +355,7 @@
             const is30Mode = document.getElementById('mode-30').checked;
             const vehicleSpeed = is30Mode ? 30 : 45;
 
+            // Konstant uträkning baserat på fordonets förmåga
             const timeInHours = (routeDistanceKm / vehicleSpeed) * 1.1;
             const timeInMinutes = Math.round(timeInHours * 60);
 
@@ -315,6 +374,7 @@
             document.querySelector('.btn-nav').style.background = '#FF3B30';
             document.querySelector('.btn-nav').onclick = endNavigation;
 
+            // Simulera varningen efter 3 sekunder
             setTimeout(() => {
                 const warning = document.getElementById('warningAlert');
                 warning.classList.add('show');
