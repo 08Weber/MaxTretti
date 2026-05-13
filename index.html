@@ -532,11 +532,10 @@ function pickPlace(name,lat,lon){
   expandSheet();calcRoute();
 }
 
-// ── ROUTING — motorway+trunk always excluded ──────────
+// ── ROUTING — motorway always excluded ──────────
 async function fetchOSRM(oLon,oLat,dLon,dLat){
-  // exclude=motorway (motorväg) + trunk (motortrafikled) — HARD requirement
-  const excl='motorway,trunk';
-  const urls=[
+  // exclude=motorway (motorväg) — HARD requirement
+  const excl='motorway'; // Tog bort ,trunk
     `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
     `https://routing.openstreetmap.de/routed-car/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=${excl}`,
   ];
