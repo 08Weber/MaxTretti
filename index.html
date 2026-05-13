@@ -718,38 +718,78 @@ const S = {
   destName: '',
   route: null,
   routeLayer: null,
-  markers: []
+  markers: [],
+  userDot: null,
+  userAccCircle: null,
+  watchId: null
 };
 
 // ── MAP INIT ─────────────────────────────────────────
 const map = L.map('map', {
   zoomControl: false,
   attributionControl: true
-}).setView([62.5, 16.5], 5); // Sweden overview
+}).setView([62.5, 16.5], 5);
 
-// Light, clean tile layer
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '© OpenStreetMap © CARTO',
   subdomains: 'abcd',
   maxZoom: 19
 }).addTo(map);
 
-// Custom marker icons
-function makeIcon(emoji, color = '#007AFF') {
+// ── DEST PIN ICON ─────────────────────────────────────
+function makeDestIcon() {
   return L.divIcon({
-    html: `<div style="
-      width:36px;height:36px;
-      background:${color};
-      border-radius:50% 50% 50% 4px;
-      transform:rotate(-45deg);
-      display:flex;align-items:center;justify-content:center;
-      box-shadow:0 2px 10px rgba(0,0,0,0.25);
-      border:2.5px solid white;
-    "><span style="transform:rotate(45deg);font-size:16px;">${emoji}</span></div>`,
+    html: `<div style="width:28px;height:36px;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:28px;height:28px;background:#FF3B30;border-radius:50% 50% 50% 4px;
+        transform:rotate(-45deg);box-shadow:0 3px 12px rgba(255,59,48,0.5);border:2.5px solid white;"></div>
+    </div>`,
     className: '',
-    iconSize: [36, 36],
-    iconAnchor: [18, 36]
+    iconSize: [28, 36],
+    iconAnchor: [14, 36]
   });
+}
+
+// ── BLUE GPS DOT ──────────────────────────────────────
+function placeUserDot(lat, lon, accuracy) {
+  if (S.userAccCircle) { map.removeLayer(S.userAccCircle); S.userAccCircle = null; }
+  if (S.userDot) { map.removeLayer(S.userDot); S.userDot = null; }
+
+  S.userAccCircle = L.circle([lat, lon], {
+    radius: Math.min(accuracy || 30, 150),
+    color: '#007AFF', fillColor: '#007AFF',
+    fillOpacity: 0.1, weight: 1, opacity: 0.25
+  }).addTo(map);
+
+  S.userDot = L.marker([lat, lon], {
+    icon: L.divIcon({
+      html: `<div style="width:18px;height:18px;background:#007AFF;border-radius:50%;
+        border:3px solid white;box-shadow:0 2px 8px rgba(0,122,255,0.55);"></div>`,
+      className: '',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    }),
+    zIndexOffset: 1000,
+    interactive: false
+  }).addTo(map);
+}
+
+// ── LIVE POSITION WATCH ───────────────────────────────
+function startWatch() {
+  if (!navigator.geolocation || S.watchId != null) return;
+  S.watchId = navigator.geolocation.watchPosition(
+    p => {
+      const { latitude: lat, longitude: lon, accuracy } = p.coords;
+      if (!S.origin) {
+        S.origin = { lat, lon };
+        map.setView([lat, lon], 14);
+      } else {
+        S.origin = { lat, lon };
+      }
+      placeUserDot(lat, lon, accuracy);
+    },
+    () => {},
+    { enableHighAccuracy: true, maximumAge: 4000, timeout: 10000 }
+  );
 }
 
 // ── GEOLOCATION ──────────────────────────────────────
@@ -757,9 +797,9 @@ async function getLocation() {
   return new Promise(res => {
     if (!navigator.geolocation) { res(null); return; }
     navigator.geolocation.getCurrentPosition(
-      p => res({ lat: p.coords.latitude, lon: p.coords.longitude }),
+      p => res({ lat: p.coords.latitude, lon: p.coords.longitude, acc: p.coords.accuracy }),
       () => res(null),
-      { timeout: 7000, enableHighAccuracy: true }
+      { timeout: 8000, enableHighAccuracy: true }
     );
   });
 }
@@ -768,12 +808,50 @@ async function locateMe() {
   const loc = await getLocation();
   if (loc) {
     S.origin = loc;
-    map.flyTo([loc.lat, loc.lon], 14, { duration: 1 });
-    showToast('📍 Platsen hittad');
+    placeUserDot(loc.lat, loc.lon, loc.acc);
+    map.flyTo([loc.lat, loc.lon], 15, { duration: 1.2 });
   } else {
     showToast('Kunde inte hämta plats');
   }
 }
+
+// ── MAP TAP → DESTINATION ────────────────────────────
+map.on('click', async function(e) {
+  hideSug();
+  document.getElementById('search-input').blur();
+
+  const lat = e.latlng.lat;
+  const lon = e.latlng.lng;
+
+  // Remove old dest markers, place new one immediately
+  clearDestMarkers();
+  const m = L.marker([lat, lon], { icon: makeDestIcon(), zIndexOffset: 500 }).addTo(map);
+  S.markers = [m];
+
+  S.destCoords = { lat, lon };
+  S.destName = 'Vald plats';
+  document.getElementById('search-input').value = 'Hämtar adress…';
+  document.getElementById('clear-btn').classList.add('show');
+
+  // Reverse geocode with Photon
+  try {
+    const r = await fetch(`https://photon.komoot.io/reverse?lat=${lat}&lon=${lon}&lang=sv`);
+    const d = await r.json();
+    const feat = d.features && d.features[0];
+    if (feat) {
+      const p = feat.properties;
+      const parts = [
+        p.name,
+        p.housenumber ? (p.street || '') + ' ' + p.housenumber : p.street,
+        p.city || p.town || p.village
+      ].filter(x => x && x.trim());
+      S.destName = parts[0] || 'Vald plats';
+    }
+  } catch(_) {}
+
+  document.getElementById('search-input').value = S.destName;
+  calcRoute();
+});
 
 // ── SEARCH / SUGGESTIONS ─────────────────────────────
 let searchTimer;
@@ -783,7 +861,7 @@ function onInput() {
   document.getElementById('clear-btn').classList.toggle('show', q.length > 0);
   if (q.length < 2) { hideSug(); return; }
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => fetchSuggestions(q), 280);
+  searchTimer = setTimeout(() => fetchSuggestions(q), 320);
 }
 
 function onFocus() {
@@ -793,58 +871,79 @@ function onFocus() {
 
 async function fetchSuggestions(q) {
   try {
-    // Nominatim — searches all real addresses in Sweden
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&countrycodes=se&limit=7&format=json&addressdetails=1&accept-language=sv`;
-    const r = await fetch(url, { headers: { 'User-Agent': 'MaxTretti-App/1.0' } });
+    // Photon — precise, address-level, works without CORS issues
+    const bLat = S.origin ? S.origin.lat : 62.5;
+    const bLon = S.origin ? S.origin.lon : 16.5;
+    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=8&lang=sv&lat=${bLat}&lon=${bLon}&bbox=10.5,55.0,24.2,69.5`;
+    const r = await fetch(url);
     const data = await r.json();
-    renderSuggestions(data);
+    renderSuggestions(data.features || []);
   } catch(e) { hideSug(); }
 }
 
-function renderSuggestions(results) {
-  if (!results || results.length === 0) { hideSug(); return; }
+function renderSuggestions(features) {
+  if (!features || features.length === 0) { hideSug(); return; }
   const el = document.getElementById('suggestions');
-  el.innerHTML = results.map(p => {
-    const parts = p.display_name.split(', ');
-    const main = parts[0];
-    const sub = parts.slice(1, 3).join(', ');
-    const icon = getPlaceIcon(p.type, p.class);
-    return `<div class="sug-item" onclick="pickPlace('${escQ(p.display_name)}','${p.lat}','${p.lon}')">
+  el.innerHTML = features.map(f => {
+    const p = f.properties;
+    const coords = f.geometry.coordinates; // [lon, lat]
+    const lat = coords[1];
+    const lon = coords[0];
+    // Build primary label
+    const main = p.name || (p.street ? (p.housenumber ? p.street + ' ' + p.housenumber : p.street) : (p.city || p.town || p.village || 'Okänd'));
+    // Build secondary label
+    const sub = [
+      (p.name && p.street) ? (p.housenumber ? p.street + ' ' + p.housenumber : p.street) : null,
+      p.city || p.town || p.village || null,
+      p.county || null
+    ].filter(Boolean).join(', ');
+    const icon = getPlaceIcon(p.type);
+    const safeMain = esc(main);
+    const safeFullName = esc(sub ? main + ', ' + sub : main);
+    return `<div class="sug-item" onclick="pickPlace('${safeMain}','${lat}','${lon}')">
       <div class="sug-pin">${icon}</div>
       <div class="sug-texts">
         <div class="sug-main">${main}</div>
-        <div class="sug-sub">${sub}</div>
+        ${sub ? `<div class="sug-sub">${sub}</div>` : ''}
       </div>
     </div>`;
   }).join('');
   el.classList.add('show');
 }
 
-function getPlaceIcon(type, cls) {
-  if (cls === 'highway' || type === 'motorway') return '🛣';
-  if (cls === 'railway' || type === 'station') return '🚉';
-  if (type === 'city' || type === 'town') return '🏙';
-  if (type === 'village' || type === 'hamlet') return '🏘';
-  if (type === 'hospital') return '🏥';
-  if (type === 'school' || type === 'university') return '🎓';
-  if (type === 'restaurant' || type === 'cafe') return '☕';
-  if (type === 'fuel') return '⛽';
-  if (cls === 'amenity') return '📍';
+function getPlaceIcon(type) {
+  const t = (type || '').toLowerCase();
+  if (['city','town'].includes(t)) return '🏙';
+  if (['village','hamlet','locality','suburb'].includes(t)) return '🏘';
+  if (t === 'hospital' || t === 'clinic') return '🏥';
+  if (['school','university','college'].includes(t)) return '🎓';
+  if (['restaurant','cafe','fast_food','bar'].includes(t)) return '🍽';
+  if (t === 'fuel') return '⛽';
+  if (['hotel','hostel','motel'].includes(t)) return '🏨';
+  if (['supermarket','convenience','shop'].includes(t)) return '🛒';
+  if (['station','bus_stop','tram_stop','stop'].includes(t)) return '🚉';
+  if (['house','street','road','path','footway'].includes(t)) return '🏠';
+  if (['park','forest','nature_reserve','wood'].includes(t)) return '🌲';
+  if (t === 'parking') return '🅿️';
+  if (t === 'pharmacy') return '💊';
   return '📍';
 }
 
-function escQ(s) { return s.replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+function esc(s) {
+  return (s || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+}
 
 function hideSug() {
   document.getElementById('suggestions').classList.remove('show');
   document.getElementById('suggestions').innerHTML = '';
 }
 
-function pickPlace(displayName, lat, lon) {
-  document.getElementById('search-input').value = displayName.split(',')[0];
+function pickPlace(name, lat, lon) {
+  document.getElementById('search-input').value = name;
+  document.getElementById('clear-btn').classList.add('show');
   hideSug();
   S.destCoords = { lat: parseFloat(lat), lon: parseFloat(lon) };
-  S.destName = displayName.split(',')[0];
+  S.destName = name;
   calcRoute();
 }
 
@@ -889,29 +988,28 @@ async function calcRoute() {
   showLoading(false);
 }
 
-function drawRoute(route) {
-  // Clear old
-  if (S.routeLayer) map.removeLayer(S.routeLayer);
+function clearDestMarkers() {
   S.markers.forEach(m => map.removeLayer(m));
   S.markers = [];
+}
 
-  // Draw polyline
+function drawRoute(route) {
+  if (S.routeLayer) { map.removeLayer(S.routeLayer); S.routeLayer = null; }
+  clearDestMarkers();
+
   const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
   S.routeLayer = L.polyline(coords, {
-    color: '#007AFF',
-    weight: 5,
-    opacity: 0.85,
-    lineCap: 'round',
-    lineJoin: 'round'
+    color: '#007AFF', weight: 5, opacity: 0.85,
+    lineCap: 'round', lineJoin: 'round'
   }).addTo(map);
 
-  // Markers
-  const oM = L.marker([S.origin.lat, S.origin.lon], { icon: makeIcon('📍', '#34C759') }).addTo(map);
-  const dM = L.marker([S.destCoords.lat, S.destCoords.lon], { icon: makeIcon('🏁', '#FF3B30') }).addTo(map);
-  S.markers = [oM, dM];
+  // Destination pin only (user position shown as blue dot)
+  const dM = L.marker([S.destCoords.lat, S.destCoords.lon], {
+    icon: makeDestIcon(), zIndexOffset: 500
+  }).addTo(map);
+  S.markers = [dM];
 
-  // Fit map
-  map.fitBounds(S.routeLayer.getBounds(), { padding: [60, 60] });
+  map.fitBounds(S.routeLayer.getBounds(), { padding: [70, 70] });
 }
 
 function showStats() {
@@ -937,9 +1035,12 @@ function clearAll() {
   S.destCoords = null;
   S.route = null;
   if (S.routeLayer) { map.removeLayer(S.routeLayer); S.routeLayer = null; }
-  S.markers.forEach(m => map.removeLayer(m));
-  S.markers = [];
-  map.setView([62.5, 16.5], 5);
+  clearDestMarkers();
+  if (S.origin) {
+    map.setView([S.origin.lat, S.origin.lon], 14);
+  } else {
+    map.setView([62.5, 16.5], 5);
+  }
 }
 
 // ── STEPS ────────────────────────────────────────────
@@ -1048,26 +1149,13 @@ function showToast(msg) {
 document.getElementById('search-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') {
     e.target.blur();
-    // Try to pick first suggestion
     const first = document.querySelector('.sug-item');
     if (first) first.click();
   }
 });
 
-// Tap outside search box
-document.getElementById('map').addEventListener('click', () => {
-  hideSug();
-  document.getElementById('search-input').blur();
-});
-
-// Init location silently
-(async () => {
-  const loc = await getLocation();
-  if (loc) {
-    S.origin = loc;
-    map.setView([loc.lat, loc.lon], 13);
-  }
-})();
+// Init: start live GPS watch (shows blue dot + centers map)
+startWatch();
 </script>
 
 </body>
