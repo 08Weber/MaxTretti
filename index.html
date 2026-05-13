@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SlowNav">
+    
+    <title>SlowNav - 30/45 Navigation</title>
+
+    <!-- Leaflet Maps CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- SF Pro Font (Apple standard) -->
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+
+    <style>
+        :root {
+            --apple-bg: rgba(255, 255, 255, 0.85);
+            --apple-blur: blur(20px);
+            --apple-blue: #007AFF;
+            --apple-red: #FF3B30;
+            --apple-text: #1C1C1E;
+            --apple-gray: #F2F2F7;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .top-panel {
+            position: absolute;
+            top: 50px;
+            left: 15px;
+            right: 15px;
+            background: var(--apple-bg);
+            backdrop-filter: var(--apple-blur);
+            -webkit-backdrop-filter: var(--apple-blur);
+            border-radius: 20px;
+            padding: 15px;
+            z-index: 10;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(0,0,0,0.05);
+            font-size: 16px;
+            outline: none;
+        }
+
+        .segmented-control {
+            display: flex;
+            background: rgba(0,0,0,0.08);
+            border-radius: 9px;
+            padding: 2px;
+            position: relative;
+        }
+
+        .segmented-control input[type="radio"] {
+            display: none;
+        }
+
+        .segment-label {
+            flex: 1;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--apple-text);
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+        .segment-bg {
+            position: absolute;
+            top: 2px;
+            bottom: 2px;
+            left: 2px;
+            width: calc(50% - 2px);
+            background: white;
+            border-radius: 7px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1;
+        }
+
+        #mode-45:checked ~ .segment-bg {
+            transform: translateX(100%);
+        }
+
+        .bottom-panel {
+            position: absolute;
+            bottom: 30px;
+            left: 15px;
+            right: 15px;
+            background: var(--apple-bg);
+            backdrop-filter: var(--apple-blur);
+            -webkit-backdrop-filter: var(--apple-blur);
+            border-radius: 20px;
+            padding: 20px;
+            z-index: 10;
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.1);
+            transform: translateY(150%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .bottom-panel.active {
+            transform: translateY(0);
+        }
+
+        .route-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .eta {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--apple-blue);
+        }
+
+        .distance {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .btn-nav {
+            width: 100%;
+            background: var(--apple-blue);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .warning-overlay {
+            position: absolute;
+            top: -100px;
+            left: 15px;
+            right: 15px;
+            background: rgba(255, 59, 48, 0.95);
+            backdrop-filter: var(--apple-blur);
+            -webkit-backdrop-filter: var(--apple-blur);
+            color: white;
+            padding: 15px;
+            border-radius: 16px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(255, 59, 48, 0.3);
+            transition: top 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .warning-overlay.show {
+            top: 50px;
+        }
+        
+        .warning-icon {
+            font-size: 24px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <div class="warning-overlay" id="warningAlert">
+        <div class="warning-icon">⚠️</div>
+        <div>
+            <strong>Otillåten väg närmar sig</strong>
+            <div style="font-size: 13px; opacity: 0.9;">Systemet har omdirigerat dig från motortrafikleden framför.</div>
+        </div>
+    </div>
+
+    <div class="top-panel" id="topPanel">
+        <div class="search-box">
+            <input type="text" placeholder="Nuvarande plats" value="Nuvarande plats" readonly>
+            <input type="text" id="destination" placeholder="Vart ska du?" onkeypress="handleSearch(event)">
+        </div>
+
+        <div class="segmented-control">
+            <input type="radio" name="speed" id="mode-30" value="30" checked onchange="recalculate()">
+            <input type="radio" name="speed" id="mode-45" value="45" onchange="recalculate()">
+            <div class="segment-bg"></div>
+            <label class="segment-label" for="mode-30">A-Traktor (30 km/h)</label>
+            <label class="segment-label" for="mode-45">Mopedbil (45 km/h)</label>
+        </div>
+    </div>
+
+    <div class="bottom-panel" id="bottomPanel">
+        <div class="route-stats">
+            <div>
+                <div class="eta" id="etaDisplay">-- min</div>
+                <div class="distance" id="distanceDisplay">Undviker motorvägar</div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 13px; color: #666;">Ankomsttid</div>
+                <div style="font-size: 18px; font-weight: 500;" id="arrivalTimeDisplay">--:--</div>
+            </div>
+        </div>
+        <button class="btn-nav" onclick="startNavigation()">Starta navigering</button>
+    </div>
+
+    <!-- Leaflet JS för kartan -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initiera karta centrerad över Linköping
+        const map = L.map('map', { zoomControl: false }).setView([58.4108, 15.6214], 13);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap',
+            maxZoom: 19
+        }).addTo(map);
+
+        let currentRoute = null;
+        let routeDistanceKm = 0;
+
+        // Fiktiv vägrutt
+        const dummyRouteData = [
+            [58.4108, 15.6214],
+            [58.4050, 15.5900],
+            [58.4120, 15.5600],
+            [58.4250, 15.5400]
+        ];
+
+        function handleSearch(e) {
+            if(e.key === 'Enter') {
+                e.target.blur();
+                calculateSimulatedRoute();
+            }
+        }
+
+        function calculateSimulatedRoute() {
+            if(currentRoute) map.removeLayer(currentRoute);
+
+            currentRoute = L.polyline(dummyRouteData, {
+                color: '#007AFF',
+                weight: 6,
+                opacity: 0.8,
+                lineJoin: 'round'
+            }).addTo(map);
+
+            map.fitBounds(currentRoute.getBounds(), { padding: [50, 50] });
+
+            routeDistanceKm = 12.4; 
+            updateETA();
+            document.getElementById('bottomPanel').classList.add('active');
+        }
+
+        function recalculate() {
+            if(routeDistanceKm > 0) {
+                updateETA();
+            }
+        }
+
+        function updateETA() {
+            const is30Mode = document.getElementById('mode-30').checked;
+            const vehicleSpeed = is30Mode ? 30 : 45;
+
+            const timeInHours = (routeDistanceKm / vehicleSpeed) * 1.1;
+            const timeInMinutes = Math.round(timeInHours * 60);
+
+            const now = new Date();
+            now.setMinutes(now.getMinutes() + timeInMinutes);
+            const arrivalTime = now.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+
+            document.getElementById('etaDisplay').innerText = `${timeInMinutes} min`;
+            document.getElementById('distanceDisplay').innerText = `${routeDistanceKm.toFixed(1)} km • Max ${vehicleSpeed} km/h`;
+            document.getElementById('arrivalTimeDisplay').innerText = arrivalTime;
+        }
+
+        function startNavigation() {
+            document.getElementById('topPanel').style.display = 'none';
+            document.querySelector('.btn-nav').innerText = 'Avsluta navigering';
+            document.querySelector('.btn-nav').style.background = '#FF3B30';
+            document.querySelector('.btn-nav').onclick = endNavigation;
+
+            setTimeout(() => {
+                const warning = document.getElementById('warningAlert');
+                warning.classList.add('show');
+                
+                if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+
+                setTimeout(() => {
+                    warning.classList.remove('show');
+                }, 5000);
+            }, 3000);
+        }
+
+        function endNavigation() {
+            document.getElementById('topPanel').style.display = 'block';
+            document.querySelector('.btn-nav').innerText = 'Starta navigering';
+            document.querySelector('.btn-nav').style.background = '#007AFF';
+            document.querySelector('.btn-nav').onclick = startNavigation;
+            
+            if(currentRoute) map.removeLayer(currentRoute);
+            document.getElementById('bottomPanel').classList.remove('active');
+            document.getElementById('destination').value = '';
+            routeDistanceKm = 0;
+            map.setView([58.4108, 15.6214], 13);
+        }
+    </script>
+</body>
+</html>
