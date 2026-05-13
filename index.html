@@ -10,13 +10,8 @@
   <meta name="theme-color" content="#ffffff"/>
   <title>MaxTretti</title>
 
-  <!-- Leaflet map -->
-
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Fonts -->
-
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 
@@ -56,7 +51,6 @@
       position: relative;
     }
 
-    /* ── MAP ── */
     #map {
       flex: 1;
       z-index: 0;
@@ -68,13 +62,11 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* Hide leaflet attribution (tiny) */
     .leaflet-control-attribution {
       font-size: 9px;
       opacity: 0.5;
     }
 
-    /* ── TOP BAR ── */
     #topbar {
       position: absolute;
       top: 0; left: 0; right: 0;
@@ -137,7 +129,6 @@
     }
     #clear-btn.show { display: flex; }
 
-    /* Suggestions */
     #suggestions {
       display: none;
       border-top: 1px solid var(--border);
@@ -171,7 +162,6 @@
     .sug-main { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .sug-sub { font-size: 12px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* ── VEHICLE PILL ── */
     #vehicle-pill {
       background: var(--white);
       border-radius: 14px;
@@ -191,7 +181,6 @@
     .vp-icon { font-size: 20px; line-height: 1; }
     .vp-speed { font-size: 11px; font-weight: 700; color: var(--accent); }
 
-    /* ── LOCATE BUTTON ── */
     #locate-btn {
       position: absolute;
       right: 14px;
@@ -208,7 +197,6 @@
     }
     #locate-btn:active { transform: scale(0.92); }
 
-    /* ── BOTTOM SHEET ── */
     #bottom-sheet {
       background: var(--white);
       border-radius: 24px 24px 0 0;
@@ -226,7 +214,6 @@
       margin: 10px auto 14px;
     }
 
-    /* Vehicle selector */
     #vehicle-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -254,7 +241,6 @@
     .v-chip .vc-speed { font-size: 11px; font-weight: 700; color: var(--text2); margin-top: 1px; }
     .v-chip.active .vc-speed { color: var(--accent); }
 
-    /* Avoid tags */
     #avoid-row {
       display: flex; gap: 6px; flex-wrap: wrap;
       margin-bottom: 14px;
@@ -269,7 +255,6 @@
       display: flex; align-items: center; gap: 4px;
     }
 
-    /* ── ROUTE CARD ── */
     #route-card {
       display: none;
       background: var(--bg);
@@ -349,7 +334,6 @@
     }
     .btn-go:active { opacity: 0.85; transform: scale(0.98); }
 
-    /* ── STEPS PANEL ── */
     #steps-panel {
       position: fixed;
       inset: 0;
@@ -420,7 +404,6 @@
     }
     .open-maps-btn:active { background: var(--bg); }
 
-    /* ── VEHICLE MODAL ── */
     #v-modal {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.4);
@@ -497,7 +480,6 @@
     }
     .btn-confirm:active { opacity: 0.85; }
 
-    /* ── LOADING ── */
     #loading {
       position: absolute;
       inset: 0;
@@ -522,7 +504,6 @@
     @keyframes rot { to { transform: rotate(360deg); } }
     .load-txt { font-size: 13px; font-weight: 600; color: var(--muted); }
 
-    /* ── TOAST ── */
     #toast {
       position: fixed;
       top: calc(var(--safe-top) + 70px);
@@ -541,27 +522,18 @@
       z-index: 9999;
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    /* Leaflet route line */
-    .route-line { stroke: #007AFF; stroke-width: 5; stroke-opacity: 0.8; }
   </style>
 
 </head>
 <body>
 <div id="app">
 
-  <!-- MAP -->
-
   <div id="map"></div>
-
-  <!-- LOADING OVERLAY -->
 
   <div id="loading">
     <div class="spin"></div>
-    <div class="load-txt">Beräknar rutt…</div>
+    <div class="load-txt" id="load-txt">Beräknar rutt…</div>
   </div>
-
-  <!-- TOP BAR -->
 
   <div id="topbar">
     <div class="topbar-inner">
@@ -582,17 +554,12 @@
     </div>
   </div>
 
-  <!-- LOCATE BTN -->
-
   <div id="locate-btn" onclick="locateMe()">📍</div>
-
-  <!-- BOTTOM SHEET -->
 
   <div id="bottom-sheet">
     <div class="sheet-handle"></div>
 
 ```
-<!-- Route card (hidden until route) -->
 <div id="route-card">
   <div class="route-top">
     <div class="route-dest" id="route-dest-label">—</div>
@@ -621,13 +588,11 @@
   </button>
 </div>
 
-<!-- Avoid tags -->
 <div id="avoid-row">
   <div class="avoid-tag">🚫 Motorväg</div>
   <div class="avoid-tag">🚫 Motortrafikled</div>
 </div>
 
-<!-- Vehicle selector -->
 <div id="vehicle-row">
   <div class="v-chip active" data-speed="45" data-icon="🛵" data-name="EU-moped" onclick="pickVehicle(this)">
     <div class="vc-icon">🛵</div>
@@ -655,8 +620,6 @@
   </div>
 </div>
 
-<!-- STEPS PANEL -->
-
 <div id="steps-panel">
   <div class="steps-header">
     <div class="back-btn" onclick="closeSteps()">‹</div>
@@ -670,8 +633,6 @@
     <div class="open-maps-btn" onclick="openInMaps()">Öppna i Apple Maps / Google Maps →</div>
   </div>
 </div>
-
-<!-- VEHICLE MODAL -->
 
 <div id="v-modal" onclick="closeVModal(event)">
   <div class="v-sheet">
@@ -703,8 +664,6 @@
 
   </div>
 </div>
-
-<!-- TOAST -->
 
 <div id="toast"></div>
 
@@ -823,7 +782,6 @@ map.on('click', async function(e) {
   const lat = e.latlng.lat;
   const lon = e.latlng.lng;
 
-  // Remove old dest markers, place new one immediately
   clearDestMarkers();
   const m = L.marker([lat, lon], { icon: makeDestIcon(), zIndexOffset: 500 }).addTo(map);
   S.markers = [m];
@@ -833,19 +791,22 @@ map.on('click', async function(e) {
   document.getElementById('search-input').value = 'Hämtar adress…';
   document.getElementById('clear-btn').classList.add('show');
 
-  // Reverse geocode with Photon
+  // Reverse geocode with Nominatim
   try {
-    const r = await fetch(`https://photon.komoot.io/reverse?lat=${lat}&lon=${lon}&lang=sv`);
+    const r = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=sv`,
+      { headers: { 'Accept-Language': 'sv' } }
+    );
     const d = await r.json();
-    const feat = d.features && d.features[0];
-    if (feat) {
-      const p = feat.properties;
+    if (d && d.display_name) {
+      // Build a short name from address parts
+      const a = d.address || {};
       const parts = [
-        p.name,
-        p.housenumber ? (p.street || '') + ' ' + p.housenumber : p.street,
-        p.city || p.town || p.village
-      ].filter(x => x && x.trim());
-      S.destName = parts[0] || 'Vald plats';
+        a.road || a.pedestrian || a.path || a.footway,
+        a.house_number,
+        a.city || a.town || a.village || a.municipality
+      ].filter(Boolean);
+      S.destName = parts.length > 0 ? parts.slice(0,2).join(' ') || d.display_name.split(',')[0] : d.display_name.split(',')[0];
     }
   } catch(_) {}
 
@@ -854,14 +815,17 @@ map.on('click', async function(e) {
 });
 
 // ── SEARCH / SUGGESTIONS ─────────────────────────────
+// Uses Nominatim (OpenStreetMap) — reliable, no API key needed
 let searchTimer;
+let lastQuery = '';
 
 function onInput() {
   const q = document.getElementById('search-input').value.trim();
   document.getElementById('clear-btn').classList.toggle('show', q.length > 0);
   if (q.length < 2) { hideSug(); return; }
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => fetchSuggestions(q), 320);
+  // Slight debounce to avoid hammering the API
+  searchTimer = setTimeout(() => fetchSuggestions(q), 400);
 }
 
 function onFocus() {
@@ -870,67 +834,98 @@ function onFocus() {
 }
 
 async function fetchSuggestions(q) {
+  if (q === lastQuery) return;
+  lastQuery = q;
+
   try {
-    // Photon — precise, address-level, works without CORS issues
-    const bLat = S.origin ? S.origin.lat : 62.5;
-    const bLon = S.origin ? S.origin.lon : 16.5;
-    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=8&lang=sv&lat=${bLat}&lon=${bLon}&bbox=10.5,55.0,24.2,69.5`;
-    const r = await fetch(url);
+    // Nominatim geocoding — much more reliable than Photon for Swedish addresses
+    const viewbox = '10.5,55.0,24.2,69.5'; // Sweden bounding box (minLon,minLat,maxLon,maxLat)
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=8&countrycodes=se&addressdetails=1&accept-language=sv`;
+
+    const r = await fetch(url, {
+      headers: {
+        'Accept-Language': 'sv',
+        'User-Agent': 'MaxTretti/1.0'
+      }
+    });
+
+    if (!r.ok) throw new Error('Nominatim error ' + r.status);
     const data = await r.json();
-    renderSuggestions(data.features || []);
-  } catch(e) { hideSug(); }
+    renderSuggestions(data);
+  } catch(e) {
+    console.warn('Search error:', e);
+    // Fallback: try without country restriction
+    try {
+      const url2 = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&addressdetails=1&accept-language=sv`;
+      const r2 = await fetch(url2, { headers: { 'Accept-Language': 'sv', 'User-Agent': 'MaxTretti/1.0' } });
+      const data2 = await r2.json();
+      renderSuggestions(data2);
+    } catch(e2) {
+      hideSug();
+    }
+  }
 }
 
-function renderSuggestions(features) {
-  if (!features || features.length === 0) { hideSug(); return; }
+function renderSuggestions(results) {
+  if (!results || results.length === 0) { hideSug(); return; }
   const el = document.getElementById('suggestions');
-  el.innerHTML = features.map(f => {
-    const p = f.properties;
-    const coords = f.geometry.coordinates; // [lon, lat]
-    const lat = coords[1];
-    const lon = coords[0];
-    // Build primary label
-    const main = p.name || (p.street ? (p.housenumber ? p.street + ' ' + p.housenumber : p.street) : (p.city || p.town || p.village || 'Okänd'));
+
+  el.innerHTML = results.map(item => {
+    const lat = parseFloat(item.lat);
+    const lon = parseFloat(item.lon);
+    const addr = item.address || {};
+
+    // Build main label — prefer specific name over generic
+    const name = item.name || addr.road || addr.pedestrian || addr.place || item.display_name.split(',')[0];
     // Build secondary label
-    const sub = [
-      (p.name && p.street) ? (p.housenumber ? p.street + ' ' + p.housenumber : p.street) : null,
-      p.city || p.town || p.village || null,
-      p.county || null
-    ].filter(Boolean).join(', ');
-    const icon = getPlaceIcon(p.type);
-    const safeMain = esc(main);
-    const safeFullName = esc(sub ? main + ', ' + sub : main);
-    return `<div class="sug-item" onclick="pickPlace('${safeMain}','${lat}','${lon}')">
+    const parts = [];
+    if (addr.road && name !== addr.road) parts.push(addr.road);
+    if (addr.house_number) parts[0] = (parts[0] || '') + ' ' + addr.house_number;
+    const city = addr.city || addr.town || addr.village || addr.municipality || addr.county;
+    if (city && city !== name) parts.push(city);
+
+    const sub = parts.filter(Boolean).join(', ');
+    const icon = getPlaceIcon(item.type, item.class, addr);
+
+    return `<div class="sug-item" onclick="pickPlace(${JSON.stringify(name)}, ${lat}, ${lon})">
       <div class="sug-pin">${icon}</div>
       <div class="sug-texts">
-        <div class="sug-main">${main}</div>
-        ${sub ? `<div class="sug-sub">${sub}</div>` : ''}
+        <div class="sug-main">${escHtml(name)}</div>
+        ${sub ? `<div class="sug-sub">${escHtml(sub)}</div>` : ''}
       </div>
     </div>`;
   }).join('');
+
   el.classList.add('show');
 }
 
-function getPlaceIcon(type) {
+function getPlaceIcon(type, cls, addr) {
   const t = (type || '').toLowerCase();
+  const c = (cls || '').toLowerCase();
+  if (c === 'highway' || t === 'road' || t === 'street') return '🛣';
   if (['city','town'].includes(t)) return '🏙';
-  if (['village','hamlet','locality','suburb'].includes(t)) return '🏘';
+  if (['village','hamlet','locality','suburb','municipality'].includes(t)) return '🏘';
   if (t === 'hospital' || t === 'clinic') return '🏥';
   if (['school','university','college'].includes(t)) return '🎓';
   if (['restaurant','cafe','fast_food','bar'].includes(t)) return '🍽';
   if (t === 'fuel') return '⛽';
   if (['hotel','hostel','motel'].includes(t)) return '🏨';
-  if (['supermarket','convenience','shop'].includes(t)) return '🛒';
-  if (['station','bus_stop','tram_stop','stop'].includes(t)) return '🚉';
-  if (['house','street','road','path','footway'].includes(t)) return '🏠';
+  if (['supermarket','convenience'].includes(t)) return '🛒';
+  if (['station','bus_stop','stop'].includes(t) || c === 'railway') return '🚉';
+  if (t === 'house' || t === 'residential') return '🏠';
   if (['park','forest','nature_reserve','wood'].includes(t)) return '🌲';
   if (t === 'parking') return '🅿️';
   if (t === 'pharmacy') return '💊';
+  if (c === 'amenity') return '🏛';
   return '📍';
 }
 
-function esc(s) {
-  return (s || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+function escHtml(s) {
+  return (s || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
 }
 
 function hideSug() {
@@ -942,23 +937,59 @@ function pickPlace(name, lat, lon) {
   document.getElementById('search-input').value = name;
   document.getElementById('clear-btn').classList.add('show');
   hideSug();
-  S.destCoords = { lat: parseFloat(lat), lon: parseFloat(lon) };
+  lastQuery = '';
+  S.destCoords = { lat, lon };
   S.destName = name;
+
+  // Place pin immediately
+  clearDestMarkers();
+  const m = L.marker([lat, lon], { icon: makeDestIcon(), zIndexOffset: 500 }).addTo(map);
+  S.markers = [m];
+
   calcRoute();
 }
 
 // ── ROUTE CALCULATION ────────────────────────────────
+// Tries multiple OSRM endpoints in sequence for reliability
+const OSRM_ENDPOINTS = [
+  'https://router.project-osrm.org',
+  'https://routing.openstreetmap.de/routed-car',
+  'https://osrm.route.cloudmade.com' // last resort
+];
+
+async function fetchOSRM(oLon, oLat, dLon, dLat) {
+  // Primary endpoint — project-osrm with motorway exclusion
+  const endpoints = [
+    `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=motorway`,
+    `https://routing.openstreetmap.de/routed-car/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full`,
+  ];
+
+  for (const url of endpoints) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      const r = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (!r.ok) continue;
+      const data = await r.json();
+      if (data.code === 'Ok' && data.routes?.[0]) return data;
+    } catch(e) {
+      console.warn('OSRM endpoint failed:', url, e.message);
+    }
+  }
+  return null;
+}
+
 async function calcRoute() {
   if (!S.destCoords) return;
 
-  showLoading(true);
+  showLoading(true, 'Beräknar rutt…');
   document.getElementById('route-card').classList.remove('show');
 
-  // Get origin if not set
   if (!S.origin) {
+    showLoading(true, 'Hämtar position…');
     S.origin = await getLocation();
     if (!S.origin) {
-      // Default: Stockholm
       S.origin = { lat: 59.3293, lon: 18.0686 };
       showToast('📍 Startplats: Stockholm');
     }
@@ -968,12 +999,10 @@ async function calcRoute() {
   const { lat: dLat, lon: dLon } = S.destCoords;
 
   try {
-    const url = `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full&exclude=motorway`;
-    const r = await fetch(url);
-    const data = await r.json();
+    const data = await fetchOSRM(oLon, oLat, dLon, dLat);
 
-    if (data.code !== 'Ok' || !data.routes?.[0]) {
-      showToast('Ingen rutt hittades');
+    if (!data) {
+      showToast('❌ Ingen rutt hittades – försök igen');
       showLoading(false);
       return;
     }
@@ -982,7 +1011,8 @@ async function calcRoute() {
     drawRoute(S.route);
     showStats();
   } catch(e) {
-    showToast('Fel vid ruttberäkning');
+    console.error('Route error:', e);
+    showToast('❌ Fel vid ruttberäkning');
   }
 
   showLoading(false);
@@ -998,12 +1028,18 @@ function drawRoute(route) {
   clearDestMarkers();
 
   const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
-  S.routeLayer = L.polyline(coords, {
-    color: '#007AFF', weight: 5, opacity: 0.85,
+
+  // Draw subtle shadow line first
+  L.polyline(coords, {
+    color: 'rgba(0,0,0,0.12)', weight: 9, opacity: 1,
     lineCap: 'round', lineJoin: 'round'
   }).addTo(map);
 
-  // Destination pin only (user position shown as blue dot)
+  S.routeLayer = L.polyline(coords, {
+    color: '#007AFF', weight: 5, opacity: 0.9,
+    lineCap: 'round', lineJoin: 'round'
+  }).addTo(map);
+
   const dM = L.marker([S.destCoords.lat, S.destCoords.lon], {
     icon: makeDestIcon(), zIndexOffset: 500
   }).addTo(map);
@@ -1016,8 +1052,10 @@ function showStats() {
   const dist = S.route.distance;
   const avgSpeed = S.speed * 0.82;
   const mins = Math.round((dist / 1000) / avgSpeed * 60);
-  const timeStr = mins < 60 ? `${mins} min` : `${Math.floor(mins/60)}h ${mins%60}m`;
-  const distStr = dist < 1000 ? `${Math.round(dist)}m` : `${(dist/1000).toFixed(1)}km`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  const timeStr = mins < 60 ? `${mins} min` : `${h}h ${m}m`;
+  const distStr = dist < 1000 ? `${Math.round(dist)} m` : `${(dist/1000).toFixed(1)} km`;
 
   document.getElementById('stat-time').textContent = timeStr;
   document.getElementById('stat-dist').textContent = distStr;
@@ -1034,7 +1072,12 @@ function clearAll() {
   document.getElementById('route-card').classList.remove('show');
   S.destCoords = null;
   S.route = null;
-  if (S.routeLayer) { map.removeLayer(S.routeLayer); S.routeLayer = null; }
+  lastQuery = '';
+  // Remove shadow lines too
+  map.eachLayer(l => {
+    if (l instanceof L.Polyline) map.removeLayer(l);
+  });
+  S.routeLayer = null;
   clearDestMarkers();
   if (S.origin) {
     map.setView([S.origin.lat, S.origin.lon], 14);
@@ -1050,7 +1093,9 @@ function openSteps() {
   document.getElementById('steps-title').textContent = `Till ${S.destName}`;
   const avgSpeed = S.speed * 0.82;
   const mins = Math.round((S.route.distance/1000)/avgSpeed*60);
-  document.getElementById('steps-sub').textContent = `${mins < 60 ? mins+' min' : Math.floor(mins/60)+'h '+mins%60+'m'} · ${(S.route.distance/1000).toFixed(1)} km`;
+  const h = Math.floor(mins/60);
+  const m = mins % 60;
+  document.getElementById('steps-sub').textContent = `${mins < 60 ? mins+' min' : h+'h '+m+'m'} · ${(S.route.distance/1000).toFixed(1)} km`;
 
   const maneuverIcon = t => ({
     'depart':'🚦','arrive':'🏁','turn':'↩️','merge':'🔀',
@@ -1058,10 +1103,20 @@ function openSteps() {
     'fork':'↗️','ramp':'↗️','end of road':'↩️'
   }[t] || '➡️');
 
-  const modSv = { left:'vänster',right:'höger','sharp left':'skarpt vänster','sharp right':'skarpt höger','slight left':'svagt vänster','slight right':'svagt höger',straight:'rakt fram',uturn:'U-sväng' };
-  const typeSv = { depart:'Starta på',arrive:'Ankomst',turn:'Sväng','new name':'Fortsätt på',continue:'Fortsätt på',merge:'Anslut till',ramp:'Ta avfarten',fork:'Håll dig',roundabout:'Ta rondellen till','end of road':'Sväng vid slutet av' };
+  const modSv = {
+    left:'vänster', right:'höger',
+    'sharp left':'skarpt vänster', 'sharp right':'skarpt höger',
+    'slight left':'svagt vänster', 'slight right':'svagt höger',
+    straight:'rakt fram', uturn:'U-sväng'
+  };
+  const typeSv = {
+    depart:'Starta på', arrive:'Ankomst', turn:'Sväng',
+    'new name':'Fortsätt på', continue:'Fortsätt på', merge:'Anslut till',
+    ramp:'Ta avfarten', fork:'Håll dig', roundabout:'Ta rondellen till',
+    'end of road':'Sväng vid slutet av'
+  };
 
-  document.getElementById('steps-list').innerHTML = steps.map((s,i) => {
+  document.getElementById('steps-list').innerHTML = steps.map(s => {
     const t = s.maneuver.type;
     const mod = s.maneuver.modifier ? (modSv[s.maneuver.modifier] || s.maneuver.modifier) : '';
     const verb = typeSv[t] || 'Fortsätt';
@@ -1073,7 +1128,7 @@ function openSteps() {
     return `<div class="step-row">
       <div class="step-icon-wrap">${maneuverIcon(t)}</div>
       <div class="step-body">
-        <div class="step-instr">${instr}</div>
+        <div class="step-instr">${escHtml(instr)}</div>
         ${s.distance > 10 ? `<div class="step-d">${dist}</div>` : ''}
       </div>
     </div>`;
@@ -1132,8 +1187,9 @@ function syncVModal() {
 }
 
 // ── HELPERS ──────────────────────────────────────────
-function showLoading(v) {
+function showLoading(v, msg) {
   document.getElementById('loading').classList.toggle('show', v);
+  if (msg) document.getElementById('load-txt').textContent = msg;
 }
 
 let toastT;
@@ -1145,7 +1201,7 @@ function showToast(msg) {
   toastT = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-// Enter key
+// Enter key → pick first suggestion
 document.getElementById('search-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') {
     e.target.blur();
@@ -1154,7 +1210,12 @@ document.getElementById('search-input').addEventListener('keydown', e => {
   }
 });
 
-// Init: start live GPS watch (shows blue dot + centers map)
+// Close suggestions when tapping outside
+document.addEventListener('touchstart', e => {
+  if (!document.getElementById('search-box').contains(e.target)) hideSug();
+}, { passive: true });
+
+// Init
 startWatch();
 </script>
 
