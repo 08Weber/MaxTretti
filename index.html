@@ -9,6 +9,10 @@
   <meta name="theme-color" content="#ffffff"/>
   <title>MaxTretti</title>
 
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5522312321049268"
+       crossorigin="anonymous"></script>
+
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -114,9 +118,23 @@
     #theme-btn { font-size: 20px; }
     #locate-btn { font-size: 18px; }
 
+    /* AD BANNER */
+    #ad-banner {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 490;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 6px 0 calc(6px + var(--safe-bottom));
+      min-height: 60px;
+      transition: background 0.25s;
+    }
+    #ad-banner ins { display: block; }
+
     /* BOTTOM SHEET */
     #bottom-sheet {
-      position: absolute; left: 0; right: 0; bottom: 0;
+      position: absolute; left: 0; right: 0;
+      /* sit above the ad banner — adjusted via JS */
       background: var(--sheet-bg); border-radius: 24px 24px 0 0;
       box-shadow: 0 -4px 30px rgba(0,0,0,0.10); z-index: 500;
       transition: transform 0.38s cubic-bezier(0.32,0.72,0,1), background 0.25s;
@@ -140,10 +158,10 @@
     }
     #bottom-sheet.collapsed #sheet-content { max-height: 0 !important; opacity: 0; pointer-events: none; }
 
-    .sheet-inner { padding: 0 16px; padding-bottom: calc(var(--safe-bottom) + 8px); }
+    .sheet-inner { padding: 0 16px 12px; }
 
-    /* VEHICLE ROW */
-    #vehicle-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+    /* VEHICLE ROW — 2 chips now */
+    #vehicle-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
     .v-chip {
       background: var(--chip-bg); border: 1.5px solid transparent; border-radius: var(--r-sm);
       padding: 10px 4px; text-align: center; cursor: pointer; transition: all 0.18s; user-select: none;
@@ -154,10 +172,6 @@
     .v-chip.active .vc-label { color: var(--accent); }
     .v-chip .vc-speed { font-size: 11px; font-weight: 700; color: var(--text2); margin-top: 1px; }
     .v-chip.active .vc-speed { color: var(--accent); }
-
-    /* AVOID TAGS */
-    #avoid-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-    .avoid-tag { background: var(--accent-soft); border-radius: 100px; padding: 5px 10px; font-size: 11px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 4px; }
 
     /* ROUTE CARD */
     #route-card { display: none; background: var(--card-bg); border-radius: var(--r); padding: 14px 16px; margin-bottom: 12px; transition: background 0.25s; }
@@ -240,16 +254,22 @@
         </div>
         <div id="suggestions"></div>
       </div>
-      <div id="vehicle-pill" onclick="openVModal()">
-        <div class="vp-icon" id="vp-icon">🛵</div>
-        <div class="vp-speed" id="vp-speed">45 km/h</div>
-      </div>
     </div>
   </div>
 
   <!-- FLOATING BTNS -->
   <div class="fab" id="theme-btn" onclick="toggleTheme()">🌙</div>
   <div class="fab" id="locate-btn" onclick="locateMe()">📍</div>
+
+  <!-- AD BANNER (bottom, above sheet) -->
+  <div id="ad-banner">
+    <ins class="adsbygoogle"
+         style="display:block;width:320px;height:50px;"
+         data-ad-client="ca-pub-5522312321049268"
+         data-ad-slot="auto"
+         data-ad-format="horizontal"
+         data-full-width-responsive="false"></ins>
+  </div>
 
   <!-- BOTTOM SHEET -->
   <div id="bottom-sheet">
@@ -267,11 +287,10 @@
             <div class="r-stat"><div class="rv" id="stat-speed">—</div><div class="ru">km/h</div><div class="rl">Max</div></div>
           </div>
         </div>
+        <!-- Only 2 vehicle chips: Mopedbil (45) and A-traktor (30) -->
         <div id="vehicle-row">
-          <div class="v-chip active" data-speed="45" data-icon="🛵" onclick="pickVehicle(this)"><div class="vc-icon">🛵</div><div class="vc-label">EU-moped</div><div class="vc-speed">45 km/h</div></div>
-          <div class="v-chip" data-speed="45" data-icon="🚗" onclick="pickVehicle(this)"><div class="vc-icon">🚗</div><div class="vc-label">Mopedbil</div><div class="vc-speed">45 km/h</div></div>
+          <div class="v-chip active" data-speed="45" data-icon="🚗" onclick="pickVehicle(this)"><div class="vc-icon">🚗</div><div class="vc-label">Mopedbil</div><div class="vc-speed">45 km/h</div></div>
           <div class="v-chip" data-speed="30" data-icon="🚜" onclick="pickVehicle(this)"><div class="vc-icon">🚜</div><div class="vc-label">A-traktor</div><div class="vc-speed">30 km/h</div></div>
-          <div class="v-chip" data-speed="30" data-icon="🛺" onclick="pickVehicle(this)"><div class="vc-icon">🛺</div><div class="vc-label">Moped II</div><div class="vc-speed">30 km/h</div></div>
         </div>
       </div>
     </div>
@@ -294,8 +313,8 @@
     <div class="v-sheet-title">Välj fordon</div>
     <div class="v-sheet-sub">Motorvägar och motortrafiksleder undviks alltid — oavsett fordon.</div>
     <div class="v-opt sel" id="vm-45" onclick="vmSelect(45)">
-      <span class="v-opt-icon">🛵</span>
-      <div class="v-opt-info"><div class="v-opt-speed">45 km/h</div><div class="v-opt-desc">EU-moped · Mopedbil · Moped klass I</div></div>
+      <span class="v-opt-icon">🚗</span>
+      <div class="v-opt-info"><div class="v-opt-speed">45 km/h</div><div class="v-opt-desc">Mopedbil · Moped klass I</div></div>
       <div class="v-opt-check">✓</div>
     </div>
     <div class="v-opt" id="vm-30" onclick="vmSelect(30)">
@@ -311,7 +330,7 @@
 
 <script>
 const S = {
-  speed: 45, icon: '🛵', origin: null, destCoords: null, destName: '',
+  speed: 45, icon: '🚗', origin: null, destCoords: null, destName: '',
   route: null, routeLayer: null, shadowLayer: null,
   markers: [], userDot: null, userAccCircle: null, watchId: null,
   theme: 'light', sheetCollapsed: false, didInitialCenter: false
@@ -334,23 +353,21 @@ function applyTheme() {
 }
 try { const sv = localStorage.getItem('mt-theme'); if (sv === 'dark') { S.theme = 'dark'; applyTheme(); } } catch(_) {}
 
-// ── BOTTOM SHEET ──────────────────────────────────────
+// ── AD BANNER + BOTTOM SHEET LAYOUT ──────────────────
+// The sheet sits directly above the ad banner.
+const adBannerEl   = document.getElementById('ad-banner');
 const sheetEl      = document.getElementById('bottom-sheet');
 const contentEl    = document.getElementById('sheet-content');
 const handleArea   = document.getElementById('sheet-handle-area');
 
-function measureContent() {
-  // temporarily uncollapse to measure real height
-  const was = S.sheetCollapsed;
-  if (was) { sheetEl.classList.remove('collapsed'); contentEl.style.maxHeight = ''; }
-  const h = contentEl.scrollHeight;
-  if (was) { sheetEl.classList.add('collapsed'); contentEl.style.maxHeight = '0'; }
-  return h;
+function getAdHeight() { return adBannerEl.offsetHeight || 0; }
+
+function positionSheet() {
+  sheetEl.style.bottom = getAdHeight() + 'px';
 }
 
 function setCollapseVar() {
-  // The sheet should translate so only the handle (28px) peeks
-  const handleH = handleArea.offsetHeight; // ~28px
+  const handleH = handleArea.offsetHeight;
   const totalH  = sheetEl.offsetHeight;
   const dy = totalH - handleH;
   sheetEl.style.setProperty('--collapse-y', dy + 'px');
@@ -369,21 +386,17 @@ function expandSheet() {
   setTimeout(updateFabPositions, 400);
 }
 
-// FAB positioning
 function updateFabPositions() {
+  const adH    = getAdHeight();
   const sheetH = S.sheetCollapsed ? handleArea.offsetHeight : sheetEl.offsetHeight;
-  const base   = sheetH + 10;
+  const base   = adH + sheetH + 10;
   document.getElementById('locate-btn').style.bottom = base + 'px';
   document.getElementById('theme-btn').style.bottom  = (base + 54) + 'px';
 }
 
 // Drag gesture
 let drag = { on: false, startY: 0, startT: 0 };
-
-function dragStart(y) {
-  drag.on = true; drag.startY = y; drag.startT = 0;
-  sheetEl.style.transition = 'none';
-}
+function dragStart(y) { drag.on = true; drag.startY = y; drag.startT = 0; sheetEl.style.transition = 'none'; }
 function dragMove(y) {
   if (!drag.on) return;
   const dy = y - drag.startY;
@@ -407,23 +420,17 @@ function dragEnd() {
   if (cur > thresh) collapseSheet(); else expandSheet();
 }
 
-// Touch
 handleArea.addEventListener('touchstart', e => dragStart(e.touches[0].clientY), { passive: true });
 document.addEventListener('touchmove',  e => { if (drag.on) dragMove(e.touches[0].clientY); }, { passive: true });
 document.addEventListener('touchend',   dragEnd);
-
-// Mouse (desktop)
 handleArea.addEventListener('mousedown', e => { dragStart(e.clientY); e.preventDefault(); });
 document.addEventListener('mousemove', e => dragMove(e.clientY));
 document.addEventListener('mouseup',   dragEnd);
-
-// Tap handle to toggle when fully collapsed
 handleArea.addEventListener('click', () => { if (S.sheetCollapsed) expandSheet(); });
+window.addEventListener('resize', () => { positionSheet(); if (!S.sheetCollapsed) updateFabPositions(); else collapseSheet(); });
 
-window.addEventListener('resize', () => { if (!S.sheetCollapsed) updateFabPositions(); else collapseSheet(); });
-
-// Initial
-setTimeout(updateFabPositions, 50);
+// Init layout after fonts/ad may have shifted sizes
+setTimeout(() => { positionSheet(); updateFabPositions(); }, 100);
 
 // ── DEST ICON ────────────────────────────────────────
 function makeDestIcon() {
@@ -515,9 +522,8 @@ function pickPlace(name,lat,lon){
   expandSheet();calcRoute();
 }
 
-// ── ROUTING — motorway+trunk always excluded ──────────
+// ── ROUTING ──────────────────────────────────────────
 async function fetchOSRM(oLon,oLat,dLon,dLat){
-  // exclude=motorway (motorväg) + trunk (motortrafikled) — HARD requirement
   const urls=[
     `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full`,
     `https://routing.openstreetmap.de/routed-car/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full`,
@@ -595,11 +601,11 @@ function openInMaps(){
 }
 
 // ── VEHICLE ───────────────────────────────────────────
-function pickVehicle(el){document.querySelectorAll('.v-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');S.speed=parseInt(el.dataset.speed);S.icon=el.dataset.icon;document.getElementById('vp-icon').textContent=S.icon;document.getElementById('vp-speed').textContent=S.speed+' km/h';syncVModal();if(S.destCoords)calcRoute();}
+function pickVehicle(el){document.querySelectorAll('.v-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');S.speed=parseInt(el.dataset.speed);S.icon=el.dataset.icon;syncVModal();if(S.destCoords)calcRoute();}
 function openVModal(){document.getElementById('v-modal').classList.add('show');}
 function closeVModal(e){if(e.target===document.getElementById('v-modal'))document.getElementById('v-modal').classList.remove('show');}
 function closeVModalOk(){document.getElementById('v-modal').classList.remove('show');if(S.destCoords)calcRoute();}
-function vmSelect(speed){S.speed=speed;document.getElementById('vp-speed').textContent=speed+' km/h';syncVModal();}
+function vmSelect(speed){S.speed=speed;syncVModal();}
 function syncVModal(){document.getElementById('vm-45').classList.toggle('sel',S.speed===45);document.getElementById('vm-30').classList.toggle('sel',S.speed===30);document.getElementById('vm-45').querySelector('.v-opt-check').textContent=S.speed===45?'✓':'';document.getElementById('vm-30').querySelector('.v-opt-check').textContent=S.speed===30?'✓':'';}
 
 // ── HELPERS ──────────────────────────────────────────
@@ -609,6 +615,11 @@ function showToast(msg){const el=document.getElementById('toast');el.textContent
 
 document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();document.querySelector('.sug-item')?.click();}});
 document.addEventListener('touchstart',e=>{if(!document.getElementById('search-box').contains(e.target))hideSug();},{passive:true});
+
+// ── ADSENSE INIT ──────────────────────────────────────
+(function() {
+  try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+})();
 
 startWatch();
 </script>
