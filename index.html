@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
   <meta name="apple-mobile-web-app-title" content="MaxTretti"/>
@@ -42,8 +42,8 @@
       background: var(--bg); color: var(--text);
       transition: background 0.25s, color 0.25s;
     }
-    #app { display: flex; flex-direction: column; height: 100dvh; position: relative; }
-    #map { flex: 1; z-index: 0; position: relative; }
+    #app { position: relative; height: 100dvh; width: 100%; overflow: hidden; }
+    #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; }
     .leaflet-container { background: #e8ecf0; font-family: 'Plus Jakarta Sans', sans-serif; }
     .leaflet-control-attribution { font-size: 9px; opacity: 0.5; }
     #topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 1000; padding-top: var(--safe-top); pointer-events: none; }
@@ -221,7 +221,7 @@
             <div class="r-stat"><div class="rv" id="stat-dist">—</div><div class="rl">Sträcka</div></div>
             <div class="r-stat"><div class="rv" id="stat-speed">—</div><div class="ru">km/h</div><div class="rl">Max</div></div>
           </div>
-          <button class="btn-go" onclick="openSteps()">🗺 Vägbeskrivning</button>
+          <button class="btn-go" onclick="openInMaps()">🗺 Öppna i Apple / Google Maps</button>
         </div>
         <div id="vehicle-row">
           <div class="v-chip active" data-speed="45" data-icon="🚗" onclick="pickVehicle(this)"><div class="vc-icon">🚗</div><div class="vc-label">Mopedbil</div><div class="vc-speed">45 km/h</div></div>
