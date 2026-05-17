@@ -491,38 +491,41 @@ async function fetchORS(oLon, oLat, dLon, dLat) {
 
 // OSRM fallback — always works, no API key required
 async function fetchOSRM(oLon, oLat, dLon, dLat) {
-  try {
-    showToast('🔄 Reservrutt — undviker motorväg…');
-    var url = 'https://router.project-osrm.org/route/v1/driving/'
-      + oLon + ',' + oLat + ';' + dLon + ',' + dLat
-      + '?overview=full&geometries=geojson&steps=true&exclude=motorway';
-    var r = await fetch(url);
-    if (!r.ok) throw new Error('OSRM HTTP ' + r.status);
-    var data = await r.json();
-    if (!data.routes || !data.routes[0]) throw new Error('No OSRM route');
-    // Convert OSRM format to ORS-like format for parseORS
-    var route = data.routes[0];
-    return {
-      routes: [{
-        summary: { distance: route.distance, duration: route.duration },
-        geometry: route.geometry, // already GeoJSON from OSRM
-        segments: [{
-          steps: route.legs[0].steps.map(function(s) {
-            return {
-              distance: s.distance,
-              duration: s.duration,
-              type: 1,
-              name: s.name || '',
-              instruction: s.maneuver.type.replace(/_/g,' ')
-            };
-          })
+  var attempts = [
+    { url: '?overview=full&geometries=geojson&steps=true&exclude=motorway', msg: '🔄 Reservrutt — undviker motorväg…' },
+    { url: '?overview=full&geometries=geojson&steps=true',                  msg: '⚠️ Ingen landsvägsrutt — visar snabbaste väg' }
+  ];
+  for (var i = 0; i < attempts.length; i++) {
+    try {
+      showToast(attempts[i].msg);
+      var r = await fetch('https://router.project-osrm.org/route/v1/driving/'
+        + oLon + ',' + oLat + ';' + dLon + ',' + dLat + attempts[i].url);
+      if (!r.ok) { console.warn('OSRM attempt', i, 'HTTP', r.status); continue; }
+      var data = await r.json();
+      if (!data.routes || !data.routes[0] || data.code !== 'Ok') { console.warn('OSRM attempt', i, 'no route:', data.code); continue; }
+      var route = data.routes[0];
+      return {
+        routes: [{
+          summary: { distance: route.distance, duration: route.duration },
+          geometry: route.geometry,
+          segments: [{
+            steps: route.legs[0].steps.map(function(s) {
+              return {
+                distance: s.distance,
+                duration: s.duration,
+                type: 1,
+                name: s.name || '',
+                instruction: s.maneuver.type.replace(/_/g, ' ')
+              };
+            })
+          }]
         }]
-      }]
-    };
-  } catch(e) {
-    console.error('OSRM fallback error:', e);
-    return null;
+      };
+    } catch(e) {
+      console.error('OSRM attempt', i, 'error:', e);
+    }
   }
+  return null;
 }
 
 function parseORS(data) {
