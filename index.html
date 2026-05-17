@@ -9,9 +9,7 @@
   <meta name="theme-color" content="#ffffff"/>
   <title>MaxTretti</title>
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5522312321049268"
-       crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5522312321049268" crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -45,13 +43,9 @@
       transition: background 0.25s, color 0.25s;
     }
     #app { display: flex; flex-direction: column; height: 100dvh; position: relative; }
-
-    /* MAP */
     #map { flex: 1; z-index: 0; position: relative; }
     .leaflet-container { background: #e8ecf0; font-family: 'Plus Jakarta Sans', sans-serif; }
     .leaflet-control-attribution { font-size: 9px; opacity: 0.5; }
-
-    /* TOP BAR */
     #topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 1000; padding-top: var(--safe-top); pointer-events: none; }
     .topbar-inner { display: flex; align-items: center; gap: 10px; padding: 10px 14px 0; }
     #search-box {
@@ -85,8 +79,6 @@
     .sug-texts { flex: 1; min-width: 0; }
     .sug-main { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .sug-sub { font-size: 12px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    /* FLOATING BUTTONS */
     .fab {
       position: absolute; right: 14px; z-index: 999;
       width: 44px; height: 44px; background: var(--white); border-radius: 12px;
@@ -96,8 +88,6 @@
       transition: transform 0.15s, background 0.25s, bottom 0.38s cubic-bezier(0.32,0.72,0,1);
     }
     .fab:active { transform: scale(0.92); }
-
-    /* AD BANNER */
     #ad-banner {
       position: absolute; bottom: 0; left: 0; right: 0; z-index: 490;
       display: flex; align-items: center; justify-content: center;
@@ -105,8 +95,6 @@
       padding: 6px 0 calc(6px + var(--safe-bottom)); min-height: 60px;
       transition: background 0.25s;
     }
-
-    /* BOTTOM SHEET */
     #bottom-sheet {
       position: absolute; left: 0; right: 0;
       background: var(--sheet-bg); border-radius: 24px 24px 0 0;
@@ -124,8 +112,6 @@
     #sheet-content { overflow: hidden; transition: max-height 0.38s cubic-bezier(0.32,0.72,0,1), opacity 0.25s; }
     #bottom-sheet.collapsed #sheet-content { max-height: 0 !important; opacity: 0; pointer-events: none; }
     .sheet-inner { padding: 0 16px 12px; }
-
-    /* VEHICLE ROW */
     #vehicle-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
     .v-chip {
       background: var(--chip-bg); border: 1.5px solid transparent; border-radius: var(--r-sm);
@@ -137,8 +123,6 @@
     .v-chip.active .vc-label { color: var(--accent); }
     .v-chip .vc-speed { font-size: 11px; font-weight: 700; color: var(--text2); margin-top: 1px; }
     .v-chip.active .vc-speed { color: var(--accent); }
-
-    /* ROUTE CARD */
     #route-card { display: none; background: var(--card-bg); border-radius: var(--r); padding: 14px 16px; margin-bottom: 12px; transition: background 0.25s; }
     #route-card.show { display: block; }
     .route-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
@@ -151,8 +135,6 @@
     .r-stat .rl { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
     .btn-go { width: 100%; background: var(--blue); color: white; border: none; border-radius: var(--r-sm); padding: 15px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.15s, transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
     .btn-go:active { opacity: 0.85; transform: scale(0.98); }
-
-    /* STEPS PANEL */
     #steps-panel { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); overflow: hidden; transition: background 0.25s; }
     #steps-panel.show { display: flex; }
     .steps-header { background: var(--white); padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
@@ -167,8 +149,6 @@
     .step-d { font-size: 12px; color: var(--muted); margin-top: 3px; }
     .open-maps-btn { margin: 16px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); padding: 15px; text-align: center; font-size: 15px; font-weight: 700; color: var(--blue); cursor: pointer; transition: background 0.15s; }
     .open-maps-btn:active { background: var(--bg); }
-
-    /* VEHICLE MODAL */
     #v-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 3000; display: none; align-items: flex-end; }
     #v-modal.show { display: flex; }
     .v-sheet { width: 100%; background: var(--sheet-bg); border-radius: 24px 24px 0 0; padding: 0 20px; padding-bottom: calc(var(--safe-bottom) + 20px); animation: su 0.28s cubic-bezier(0.32,0.72,0,1); transition: background 0.25s; }
@@ -187,16 +167,12 @@
     .v-opt.sel .v-opt-check { background: var(--accent); border-color: var(--accent); color: white; }
     .btn-confirm { width: 100%; background: var(--blue); color: white; border: none; border-radius: var(--r-sm); padding: 16px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 14px; transition: opacity 0.15s; }
     .btn-confirm:active { opacity: 0.85; }
-
-    /* LOADING */
     #loading { position: absolute; inset: 0; background: rgba(255,255,255,0.75); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 900; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
     [data-theme="dark"] #loading { background: rgba(0,0,0,0.65); }
     #loading.show { display: flex; }
     .spin { width: 32px; height: 32px; border: 3px solid var(--handle); border-top-color: var(--blue); border-radius: 50%; animation: rot 0.7s linear infinite; }
     @keyframes rot { to { transform: rotate(360deg); } }
     .load-txt { font-size: 13px; font-weight: 600; color: var(--muted); }
-
-    /* TOAST */
     #toast { position: fixed; top: calc(var(--safe-top) + 70px); left: 50%; transform: translateX(-50%) translateY(-10px); background: rgba(28,28,30,0.9); color: white; padding: 10px 18px; border-radius: 100px; font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 9999; }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
@@ -206,7 +182,6 @@
   <div id="map"></div>
   <div id="loading"><div class="spin"></div><div class="load-txt" id="load-txt">Beräknar rutt…</div></div>
 
-  <!-- TOP BAR -->
   <div id="topbar">
     <div class="topbar-inner">
       <div id="search-box">
@@ -220,11 +195,9 @@
     </div>
   </div>
 
-  <!-- FLOATING BTNS -->
   <div class="fab" id="theme-btn" onclick="toggleTheme()">🌙</div>
   <div class="fab" id="locate-btn" onclick="locateMe()">📍</div>
 
-  <!-- AD BANNER -->
   <div id="ad-banner">
     <ins class="adsbygoogle"
          style="display:block;width:320px;height:50px;"
@@ -234,7 +207,6 @@
          data-full-width-responsive="false"></ins>
   </div>
 
-  <!-- BOTTOM SHEET -->
   <div id="bottom-sheet">
     <div id="sheet-handle-area"><div class="sheet-handle"></div></div>
     <div id="sheet-content">
@@ -249,6 +221,7 @@
             <div class="r-stat"><div class="rv" id="stat-dist">—</div><div class="rl">Sträcka</div></div>
             <div class="r-stat"><div class="rv" id="stat-speed">—</div><div class="ru">km/h</div><div class="rl">Max</div></div>
           </div>
+          <button class="btn-go" onclick="openSteps()">🗺 Vägbeskrivning</button>
         </div>
         <div id="vehicle-row">
           <div class="v-chip active" data-speed="45" data-icon="🚗" onclick="pickVehicle(this)"><div class="vc-icon">🚗</div><div class="vc-label">Mopedbil</div><div class="vc-speed">45 km/h</div></div>
@@ -259,7 +232,6 @@
   </div>
 </div>
 
-<!-- STEPS PANEL -->
 <div id="steps-panel">
   <div class="steps-header">
     <div class="back-btn" onclick="closeSteps()">‹</div>
@@ -268,7 +240,6 @@
   <div class="steps-scroll"><div id="steps-list"></div><div class="open-maps-btn" onclick="openInMaps()">Öppna i Apple Maps / Google Maps →</div></div>
 </div>
 
-<!-- VEHICLE MODAL -->
 <div id="v-modal" onclick="closeVModal(event)">
   <div class="v-sheet">
     <div class="v-sheet-handle"></div>
@@ -454,10 +425,10 @@ function pickPlace(name,lat,lon){
   expandSheet();calcRoute();
 }
 
-// ── ROUTING — OpenRouteService Directions V2 ──────────
-const ORS_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImI2NDYxNWY3MjM3ODRlMjZhOWQ1ZWZlNTUxYTk1NGE0IiwiaCI6Im11cm11cjY0In0=';
+// ── ROUTING ──────────────────────────────────────────
+// ORS API key (decoded from your base64 string)
+const ORS_KEY = atob('eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImI2NDYxNWY3MjM3ODRlMjZhOWQ1ZWZlNTUxYTk1NGE0IiwiaCI6Im11cm11cjY0In0=');
 
-// Decode ORS encoded polyline (precision 5)
 function decodePolyline(encoded) {
   var idx=0, lat=0, lng=0, coords=[];
   while (idx < encoded.length) {
@@ -467,39 +438,100 @@ function decodePolyline(encoded) {
     shift=0; result=0;
     do { b=encoded.charCodeAt(idx++)-63; result|=(b&0x1f)<<shift; shift+=5; } while(b>=0x20);
     lng += (result&1) ? ~(result>>1) : (result>>1);
-    coords.push([lng/1e5, lat/1e5]); // [lon, lat]
+    coords.push([lng/1e5, lat/1e5]);
   }
   return coords;
 }
 
 async function fetchORS(oLon, oLat, dLon, dLat) {
-  // Attempt 1: avoid highways. Attempt 2: no avoidance fallback.
-  var attempts = [
+  // Try with highway avoidance first, fall back to no avoidance
+  const attempts = [
     { options: { avoid_features: ['highways'] } },
     {}
   ];
-  for (var i=0; i<attempts.length; i++) {
-    var extra = attempts[i];
-    var body = { coordinates: [[oLon, oLat], [dLon, dLat]], instructions: true, instructions_format: 'text', language: 'sv' };
-    if (extra.options) body.options = extra.options;
-    var ctrl = new AbortController();
-    var tid = setTimeout(function(c){ return function(){ c.abort(); }; }(ctrl), 15000);
+
+  for (var i = 0; i < attempts.length; i++) {
+    var body = {
+      coordinates: [[oLon, oLat], [dLon, dLat]],
+      instructions: true,
+      instructions_format: 'text',
+      language: 'sv'
+    };
+    if (attempts[i].options) body.options = attempts[i].options;
+
     try {
+      var ctrl = new AbortController();
+      var tid = setTimeout(function() { ctrl.abort(); }, 15000);
+
       var r = await fetch('https://api.openrouteservice.org/v2/directions/driving-car', {
         method: 'POST',
         signal: ctrl.signal,
-        headers: { 'Content-Type': 'application/json', 'Authorization': ORS_KEY },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': ORS_KEY   // ← fixed: decoded key sent directly
+        },
         body: JSON.stringify(body)
       });
       clearTimeout(tid);
+
       var data = null;
-      try { data = await r.json(); } catch(je) {}
-      if (!r.ok) { console.warn('ORS attempt ' + i + ' failed, status=' + r.status, data); continue; }
-      if (data && data.routes && data.routes[0]) return data;
-      console.warn('ORS attempt ' + i + ': no routes in response', data);
-    } catch(e) { clearTimeout(tid); console.warn('ORS fetch error attempt ' + i + ':', e.message); }
+      try { data = await r.json(); } catch(je) { console.warn('ORS JSON parse error:', je); }
+
+      if (!r.ok) {
+        console.warn('ORS attempt', i, 'HTTP', r.status, data);
+        // Log the error detail for debugging
+        if (data && data.error) console.warn('ORS error detail:', data.error);
+        continue;
+      }
+
+      if (data && data.routes && data.routes.length > 0) {
+        console.log('ORS success on attempt', i, data.routes[0].summary);
+        return data;
+      }
+      console.warn('ORS attempt', i, ': unexpected response structure', data);
+    } catch(e) {
+      console.warn('ORS fetch error attempt', i, ':', e.message);
+    }
   }
-  return null;
+
+  // Final fallback: OSRM (free, no key needed)
+  return fetchOSRM(oLon, oLat, dLon, dLat);
+}
+
+// OSRM fallback — always works, no API key required
+async function fetchOSRM(oLon, oLat, dLon, dLat) {
+  try {
+    showToast('🔄 Använder reservrutt…');
+    var url = 'https://router.project-osrm.org/route/v1/driving/'
+      + oLon + ',' + oLat + ';' + dLon + ',' + dLat
+      + '?overview=full&geometries=geojson&steps=true';
+    var r = await fetch(url);
+    if (!r.ok) throw new Error('OSRM HTTP ' + r.status);
+    var data = await r.json();
+    if (!data.routes || !data.routes[0]) throw new Error('No OSRM route');
+    // Convert OSRM format to ORS-like format for parseORS
+    var route = data.routes[0];
+    return {
+      routes: [{
+        summary: { distance: route.distance, duration: route.duration },
+        geometry: route.geometry, // already GeoJSON from OSRM
+        segments: [{
+          steps: route.legs[0].steps.map(function(s) {
+            return {
+              distance: s.distance,
+              duration: s.duration,
+              type: 1,
+              name: s.name || '',
+              instruction: s.maneuver.type.replace(/_/g,' ')
+            };
+          })
+        }]
+      }]
+    };
+  } catch(e) {
+    console.error('OSRM fallback error:', e);
+    return null;
+  }
 }
 
 function parseORS(data) {
@@ -507,18 +539,27 @@ function parseORS(data) {
   var route = data.routes[0];
   var seg = (route.segments && route.segments[0]) || {};
   var coordinates;
+
   if (typeof route.geometry === 'string') {
     coordinates = decodePolyline(route.geometry);
   } else if (route.geometry && route.geometry.coordinates) {
     coordinates = route.geometry.coordinates;
-  } else { return null; }
+  } else {
+    return null;
+  }
+
   return {
     distance: route.summary.distance,
     duration: route.summary.duration,
     geometry: { type: 'LineString', coordinates: coordinates },
     legs: [{
       steps: (seg.steps || []).map(function(s) {
-        return { distance: s.distance, name: s.name||'', maneuver: { type: mapORSType(s.type) }, instruction: s.instruction||'' };
+        return {
+          distance: s.distance,
+          name: s.name || '',
+          maneuver: { type: mapORSType(s.type) },
+          instruction: s.instruction || s.name || ''
+        };
       })
     }]
   };
@@ -529,98 +570,135 @@ function mapORSType(n) {
   return m[n] || 'continue';
 }
 
-async function calcRoute(){
-  if(!S.destCoords)return;
-  showLoading(true,'Beräknar rutt…');
+async function calcRoute() {
+  if (!S.destCoords) return;
+  showLoading(true, 'Beräknar rutt…');
   document.getElementById('route-card').classList.remove('show');
-  if(!S.origin){showLoading(true,'Hämtar position…');S.origin=await getLocation();if(!S.origin){S.origin={lat:59.3293,lon:18.0686};showToast('📍 Startplats: Stockholm');}}
-  try{
-    const {lat:oLat,lon:oLon}=S.origin,{lat:dLat,lon:dLon}=S.destCoords;
-    const data = await fetchORS(oLon,oLat,dLon,dLat);
-    if(!data){showToast('❌ Ingen rutt hittades');showLoading(false);return;}
+
+  if (!S.origin) {
+    showLoading(true, 'Hämtar position…');
+    S.origin = await getLocation();
+    if (!S.origin) {
+      S.origin = { lat: 59.3293, lon: 18.0686 };
+      showToast('📍 Startplats: Stockholm');
+    }
+  }
+
+  try {
+    const { lat: oLat, lon: oLon } = S.origin;
+    const { lat: dLat, lon: dLon } = S.destCoords;
+    const data = await fetchORS(oLon, oLat, dLon, dLat);
+
+    if (!data) {
+      showToast('❌ Ingen rutt hittades');
+      showLoading(false);
+      return;
+    }
+
     S.route = parseORS(data);
-    if(!S.route){showToast('❌ Ingen rutt hittades');showLoading(false);return;}
-    drawRoute(S.route);showStats();
-  }catch(e){console.error(e);showToast('❌ Fel vid ruttberäkning');}
+    if (!S.route) {
+      showToast('❌ Ingen rutt hittades');
+      showLoading(false);
+      return;
+    }
+
+    drawRoute(S.route);
+    showStats();
+  } catch(e) {
+    console.error('calcRoute error:', e);
+    showToast('❌ Fel vid ruttberäkning');
+  }
   showLoading(false);
 }
-function clearDestMarkers(){S.markers.forEach(m=>map.removeLayer(m));S.markers=[];}
-function drawRoute(route){
-  if(S.shadowLayer){map.removeLayer(S.shadowLayer);S.shadowLayer=null;}
-  if(S.routeLayer){map.removeLayer(S.routeLayer);S.routeLayer=null;}
+
+function clearDestMarkers() { S.markers.forEach(m => map.removeLayer(m)); S.markers = []; }
+
+function drawRoute(route) {
+  if (S.shadowLayer) { map.removeLayer(S.shadowLayer); S.shadowLayer = null; }
+  if (S.routeLayer)  { map.removeLayer(S.routeLayer);  S.routeLayer  = null; }
   clearDestMarkers();
-  // ORS coords are [lon,lat] — flip to [lat,lon] for Leaflet
-  const coords=route.geometry.coordinates.map(c=>[c[1],c[0]]);
-  S.shadowLayer=L.polyline(coords,{color:'rgba(0,0,0,0.13)',weight:9,lineCap:'round',lineJoin:'round'}).addTo(map);
-  S.routeLayer=L.polyline(coords,{color:'#007AFF',weight:5,opacity:0.9,lineCap:'round',lineJoin:'round'}).addTo(map);
-  S.markers=[L.marker([S.destCoords.lat,S.destCoords.lon],{icon:makeDestIcon(),zIndexOffset:500}).addTo(map)];
-  map.fitBounds(S.routeLayer.getBounds(),{padding:[70,70]});
+  const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
+  S.shadowLayer = L.polyline(coords, { color:'rgba(0,0,0,0.13)', weight:9,  lineCap:'round', lineJoin:'round' }).addTo(map);
+  S.routeLayer  = L.polyline(coords, { color:'#007AFF',           weight:5,  opacity:0.9, lineCap:'round', lineJoin:'round' }).addTo(map);
+  S.markers = [L.marker([S.destCoords.lat, S.destCoords.lon], { icon: makeDestIcon(), zIndexOffset: 500 }).addTo(map)];
+  map.fitBounds(S.routeLayer.getBounds(), { padding: [70, 70] });
 }
-function showStats(){
-  const dist=S.route.distance,avgSpeed=S.speed*0.82,mins=Math.round((dist/1000)/avgSpeed*60),h=Math.floor(mins/60),m=mins%60;
-  document.getElementById('stat-time').textContent=mins<60?(mins+' min'):(h+'h '+m+'m');
-  document.getElementById('stat-dist').textContent=dist<1000?(Math.round(dist)+' m'):((dist/1000).toFixed(1)+' km');
-  document.getElementById('stat-speed').textContent=S.speed;
-  document.getElementById('route-dest-label').textContent=S.destName;
+
+function showStats() {
+  const dist = S.route.distance;
+  const avgSpeed = S.speed * 0.82;
+  const mins = Math.round((dist / 1000) / avgSpeed * 60);
+  const h = Math.floor(mins / 60), m = mins % 60;
+  document.getElementById('stat-time').textContent  = mins < 60 ? (mins + ' min') : (h + 'h ' + m + 'm');
+  document.getElementById('stat-dist').textContent  = dist < 1000 ? (Math.round(dist) + ' m') : ((dist / 1000).toFixed(1) + ' km');
+  document.getElementById('stat-speed').textContent = S.speed;
+  document.getElementById('route-dest-label').textContent = S.destName;
   document.getElementById('route-card').classList.add('show');
 }
 
-// ── CLEAR ────────────────────────────────────────────
-function clearAll(){
-  document.getElementById('search-input').value='';document.getElementById('clear-btn').classList.remove('show');hideSug();document.getElementById('route-card').classList.remove('show');
-  S.destCoords=null;S.route=null;lastQuery='';
-  if(S.shadowLayer){map.removeLayer(S.shadowLayer);S.shadowLayer=null;}
-  if(S.routeLayer){map.removeLayer(S.routeLayer);S.routeLayer=null;}
+// ── CLEAR ─────────────────────────────────────────────
+function clearAll() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('clear-btn').classList.remove('show');
+  hideSug();
+  document.getElementById('route-card').classList.remove('show');
+  S.destCoords = null; S.route = null; lastQuery = '';
+  if (S.shadowLayer) { map.removeLayer(S.shadowLayer); S.shadowLayer = null; }
+  if (S.routeLayer)  { map.removeLayer(S.routeLayer);  S.routeLayer  = null; }
   clearDestMarkers();
-  if(S.origin)map.setView([S.origin.lat,S.origin.lon],14);else map.setView([62.5,16.5],5);
+  if (S.origin) map.setView([S.origin.lat, S.origin.lon], 14);
+  else map.setView([62.5, 16.5], 5);
 }
 
-// ── STEPS ────────────────────────────────────────────
-function openSteps(){
-  if(!S.route)return;
-  const steps=S.route.legs[0].steps||[];
-  document.getElementById('steps-title').textContent='Till '+S.destName;
-  const avg=S.speed*0.82,mins=Math.round((S.route.distance/1000)/avg*60),h=Math.floor(mins/60),m=mins%60;
-  document.getElementById('steps-sub').textContent=(mins<60?mins+' min':h+'h '+m+'m')+' · '+(S.route.distance/1000).toFixed(1)+' km';
-  const mI=t=>({'depart':'🚦','arrive':'🏁','turn':'↩️','merge':'🔀','new name':'➡️','continue':'➡️','roundabout':'🔄','rotary':'🔄','fork':'↗️','ramp':'↗️','end of road':'↩️'}[t]||'➡️');
-  document.getElementById('steps-list').innerHTML=steps.map(s=>{
-    const t=s.maneuver.type;
-    const instr=s.instruction||t;
-    const dist=s.distance<1000?Math.round(s.distance)+' m':(s.distance/1000).toFixed(1)+' km';
-    return '<div class="step-row"><div class="step-icon-wrap">'+mI(t)+'</div><div class="step-body"><div class="step-instr">'+escHtml(instr)+'</div>'+(s.distance>10?'<div class="step-d">'+dist+'</div>':'')+'</div></div>';
+// ── STEPS ─────────────────────────────────────────────
+function openSteps() {
+  if (!S.route) return;
+  const steps = S.route.legs[0].steps || [];
+  document.getElementById('steps-title').textContent = 'Till ' + S.destName;
+  const avg = S.speed * 0.82, mins = Math.round((S.route.distance / 1000) / avg * 60);
+  const h = Math.floor(mins / 60), m = mins % 60;
+  document.getElementById('steps-sub').textContent = (mins < 60 ? mins + ' min' : h + 'h ' + m + 'm') + ' · ' + (S.route.distance / 1000).toFixed(1) + ' km';
+  const mI = t => ({'depart':'🚦','arrive':'🏁','turn':'↩️','merge':'🔀','new name':'➡️','continue':'➡️','roundabout':'🔄','rotary':'🔄','fork':'↗️','ramp':'↗️','end of road':'↩️'}[t] || '➡️');
+  document.getElementById('steps-list').innerHTML = steps.map(s => {
+    const t = s.maneuver.type;
+    const instr = s.instruction || t;
+    const dist = s.distance < 1000 ? Math.round(s.distance) + ' m' : (s.distance / 1000).toFixed(1) + ' km';
+    return '<div class="step-row"><div class="step-icon-wrap">' + mI(t) + '</div><div class="step-body"><div class="step-instr">' + escHtml(instr) + '</div>' + (s.distance > 10 ? '<div class="step-d">' + dist + '</div>' : '') + '</div></div>';
   }).join('');
   document.getElementById('steps-panel').classList.add('show');
 }
-function closeSteps(){document.getElementById('steps-panel').classList.remove('show');}
-function openInMaps(){
-  if(!S.destCoords)return;
-  const {lat:dLat,lon:dLon}=S.destCoords,{lat:oLat,lon:oLon}=S.origin||{lat:0,lon:0};
-  window.open(/iPad|iPhone|iPod/.test(navigator.userAgent)?'maps://maps.apple.com/?saddr='+oLat+','+oLon+'&daddr='+dLat+','+dLon+'&dirflg=d':'https://www.google.com/maps/dir/'+oLat+','+oLon+'/'+dLat+','+dLon);
+function closeSteps() { document.getElementById('steps-panel').classList.remove('show'); }
+function openInMaps() {
+  if (!S.destCoords) return;
+  const { lat: dLat, lon: dLon } = S.destCoords;
+  const { lat: oLat, lon: oLon } = S.origin || { lat: 0, lon: 0 };
+  window.open(/iPad|iPhone|iPod/.test(navigator.userAgent)
+    ? 'maps://maps.apple.com/?saddr=' + oLat + ',' + oLon + '&daddr=' + dLat + ',' + dLon + '&dirflg=d'
+    : 'https://www.google.com/maps/dir/' + oLat + ',' + oLon + '/' + dLat + ',' + dLon);
 }
 
 // ── VEHICLE ───────────────────────────────────────────
-function pickVehicle(el){document.querySelectorAll('.v-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');S.speed=parseInt(el.dataset.speed);S.icon=el.dataset.icon;syncVModal();if(S.destCoords)calcRoute();}
-function openVModal(){document.getElementById('v-modal').classList.add('show');}
-function closeVModal(e){if(e.target===document.getElementById('v-modal'))document.getElementById('v-modal').classList.remove('show');}
-function closeVModalOk(){document.getElementById('v-modal').classList.remove('show');if(S.destCoords)calcRoute();}
-function vmSelect(speed){S.speed=speed;syncVModal();}
-function syncVModal(){
-  document.getElementById('vm-45').classList.toggle('sel',S.speed===45);
-  document.getElementById('vm-30').classList.toggle('sel',S.speed===30);
-  document.getElementById('vm-45').querySelector('.v-opt-check').textContent=S.speed===45?'✓':'';
-  document.getElementById('vm-30').querySelector('.v-opt-check').textContent=S.speed===30?'✓':'';
+function pickVehicle(el) { document.querySelectorAll('.v-chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); S.speed = parseInt(el.dataset.speed); S.icon = el.dataset.icon; syncVModal(); if (S.destCoords) calcRoute(); }
+function openVModal() { document.getElementById('v-modal').classList.add('show'); }
+function closeVModal(e) { if (e.target === document.getElementById('v-modal')) document.getElementById('v-modal').classList.remove('show'); }
+function closeVModalOk() { document.getElementById('v-modal').classList.remove('show'); if (S.destCoords) calcRoute(); }
+function vmSelect(speed) { S.speed = speed; syncVModal(); }
+function syncVModal() {
+  document.getElementById('vm-45').classList.toggle('sel', S.speed === 45);
+  document.getElementById('vm-30').classList.toggle('sel', S.speed === 30);
+  document.getElementById('vm-45').querySelector('.v-opt-check').textContent = S.speed === 45 ? '✓' : '';
+  document.getElementById('vm-30').querySelector('.v-opt-check').textContent = S.speed === 30 ? '✓' : '';
 }
 
 // ── HELPERS ──────────────────────────────────────────
-function showLoading(v,msg){document.getElementById('loading').classList.toggle('show',v);if(msg)document.getElementById('load-txt').textContent=msg;}
+function showLoading(v, msg) { document.getElementById('loading').classList.toggle('show', v); if (msg) document.getElementById('load-txt').textContent = msg; }
 let toastT;
-function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600);}
+function showToast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 2600); }
 
-document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();document.querySelector('.sug-item')&&document.querySelector('.sug-item').click();}});
-document.addEventListener('touchstart',e=>{if(!document.getElementById('search-box').contains(e.target))hideSug();},{passive:true});
+document.getElementById('search-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.target.blur(); document.querySelector('.sug-item') && document.querySelector('.sug-item').click(); } });
+document.addEventListener('touchstart', e => { if (!document.getElementById('search-box').contains(e.target)) hideSug(); }, { passive: true });
 
-// AdSense init
-(function(){ try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){} })();
+(function() { try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {} })();
 
 startWatch();
 </script>
