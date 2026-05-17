@@ -20,41 +20,22 @@
 
   <style>
     :root {
-      --bg: #f5f5f7;
-      --white: #ffffff;
-      --sheet-bg: #ffffff;
-      --border: rgba(0,0,0,0.08);
-      --accent: #FF3B30;
-      --accent-soft: rgba(255,59,48,0.10);
-      --blue: #007AFF;
-      --text: #1c1c1e;
-      --text2: #3a3a3c;
-      --muted: #8e8e93;
-      --handle: #d1d1d6;
-      --card-bg: #f5f5f7;
-      --stat-bg: #ffffff;
-      --chip-bg: #f5f5f7;
+      --bg: #f5f5f7; --white: #ffffff; --sheet-bg: #ffffff;
+      --border: rgba(0,0,0,0.08); --accent: #FF3B30;
+      --accent-soft: rgba(255,59,48,0.10); --blue: #007AFF;
+      --text: #1c1c1e; --text2: #3a3a3c; --muted: #8e8e93;
+      --handle: #d1d1d6; --card-bg: #f5f5f7; --stat-bg: #ffffff; --chip-bg: #f5f5f7;
       --r: 16px; --r-sm: 12px;
       --safe-top: env(safe-area-inset-top, 44px);
       --safe-bottom: env(safe-area-inset-bottom, 20px);
     }
     [data-theme="dark"] {
-      --bg: #1c1c1e;
-      --white: #2c2c2e;
-      --sheet-bg: #1c1c1e;
-      --border: rgba(255,255,255,0.10);
-      --accent: #FF453A;
-      --accent-soft: rgba(255,69,58,0.15);
-      --blue: #0A84FF;
-      --text: #f2f2f7;
-      --text2: #ebebf5;
-      --muted: #8e8e93;
-      --handle: #48484a;
-      --card-bg: #2c2c2e;
-      --stat-bg: #3a3a3c;
-      --chip-bg: #2c2c2e;
+      --bg: #1c1c1e; --white: #2c2c2e; --sheet-bg: #1c1c1e;
+      --border: rgba(255,255,255,0.10); --accent: #FF453A;
+      --accent-soft: rgba(255,69,58,0.15); --blue: #0A84FF;
+      --text: #f2f2f7; --text2: #ebebf5; --muted: #8e8e93;
+      --handle: #48484a; --card-bg: #2c2c2e; --stat-bg: #3a3a3c; --chip-bg: #2c2c2e;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body {
       height: 100%; width: 100%; overflow: hidden;
@@ -115,52 +96,36 @@
       transition: transform 0.15s, background 0.25s, bottom 0.38s cubic-bezier(0.32,0.72,0,1);
     }
     .fab:active { transform: scale(0.92); }
-    #theme-btn { font-size: 20px; }
-    #locate-btn { font-size: 18px; }
 
     /* AD BANNER */
     #ad-banner {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      z-index: 490;
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 490;
       display: flex; align-items: center; justify-content: center;
-      background: var(--white);
-      border-top: 1px solid var(--border);
-      padding: 6px 0 calc(6px + var(--safe-bottom));
-      min-height: 60px;
+      background: var(--white); border-top: 1px solid var(--border);
+      padding: 6px 0 calc(6px + var(--safe-bottom)); min-height: 60px;
       transition: background 0.25s;
     }
-    #ad-banner ins { display: block; }
 
     /* BOTTOM SHEET */
     #bottom-sheet {
       position: absolute; left: 0; right: 0;
-      /* sit above the ad banner — adjusted via JS */
       background: var(--sheet-bg); border-radius: 24px 24px 0 0;
       box-shadow: 0 -4px 30px rgba(0,0,0,0.10); z-index: 500;
       transition: transform 0.38s cubic-bezier(0.32,0.72,0,1), background 0.25s;
       will-change: transform;
     }
     #bottom-sheet.collapsed { transform: translateY(var(--collapse-y, 0px)); }
-
-    /* handle area — always visible */
     #sheet-handle-area {
-      width: 100%; padding: 10px 0 6px;
-      display: flex; justify-content: center;
+      width: 100%; padding: 10px 0 6px; display: flex; justify-content: center;
       cursor: grab; user-select: none; touch-action: none;
     }
     #sheet-handle-area:active { cursor: grabbing; }
     .sheet-handle { width: 36px; height: 4px; background: var(--handle); border-radius: 2px; transition: background 0.25s; }
-
-    /* collapsible content */
-    #sheet-content {
-      overflow: hidden;
-      transition: max-height 0.38s cubic-bezier(0.32,0.72,0,1), opacity 0.25s;
-    }
+    #sheet-content { overflow: hidden; transition: max-height 0.38s cubic-bezier(0.32,0.72,0,1), opacity 0.25s; }
     #bottom-sheet.collapsed #sheet-content { max-height: 0 !important; opacity: 0; pointer-events: none; }
-
     .sheet-inner { padding: 0 16px 12px; }
 
-    /* VEHICLE ROW — 2 chips now */
+    /* VEHICLE ROW */
     #vehicle-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
     .v-chip {
       background: var(--chip-bg); border: 1.5px solid transparent; border-radius: var(--r-sm);
@@ -184,8 +149,6 @@
     .r-stat .rv { font-size: 20px; font-weight: 800; color: var(--text); line-height: 1; }
     .r-stat .ru { font-size: 11px; color: var(--muted); font-weight: 500; }
     .r-stat .rl { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
-    .route-info-line { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; margin-bottom: 12px; }
-    .route-info-line span { color: var(--accent); font-weight: 600; }
     .btn-go { width: 100%; background: var(--blue); color: white; border: none; border-radius: var(--r-sm); padding: 15px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.15s, transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
     .btn-go:active { opacity: 0.85; transform: scale(0.98); }
 
@@ -261,7 +224,7 @@
   <div class="fab" id="theme-btn" onclick="toggleTheme()">🌙</div>
   <div class="fab" id="locate-btn" onclick="locateMe()">📍</div>
 
-  <!-- AD BANNER (bottom, above sheet) -->
+  <!-- AD BANNER -->
   <div id="ad-banner">
     <ins class="adsbygoogle"
          style="display:block;width:320px;height:50px;"
@@ -287,7 +250,6 @@
             <div class="r-stat"><div class="rv" id="stat-speed">—</div><div class="ru">km/h</div><div class="rl">Max</div></div>
           </div>
         </div>
-        <!-- Only 2 vehicle chips: Mopedbil (45) and A-traktor (30) -->
         <div id="vehicle-row">
           <div class="v-chip active" data-speed="45" data-icon="🚗" onclick="pickVehicle(this)"><div class="vc-icon">🚗</div><div class="vc-label">Mopedbil</div><div class="vc-speed">45 km/h</div></div>
           <div class="v-chip" data-speed="30" data-icon="🚜" onclick="pickVehicle(this)"><div class="vc-icon">🚜</div><div class="vc-label">A-traktor</div><div class="vc-speed">30 km/h</div></div>
@@ -311,7 +273,7 @@
   <div class="v-sheet">
     <div class="v-sheet-handle"></div>
     <div class="v-sheet-title">Välj fordon</div>
-    <div class="v-sheet-sub">Motorvägar och motortrafiksleder undviks alltid — oavsett fordon.</div>
+    <div class="v-sheet-sub">Motorvägar undviks alltid — oavsett fordon.</div>
     <div class="v-opt sel" id="vm-45" onclick="vmSelect(45)">
       <span class="v-opt-icon">🚗</span>
       <div class="v-opt-info"><div class="v-opt-speed">45 km/h</div><div class="v-opt-desc">Mopedbil · Moped klass I</div></div>
@@ -353,39 +315,21 @@ function applyTheme() {
 }
 try { const sv = localStorage.getItem('mt-theme'); if (sv === 'dark') { S.theme = 'dark'; applyTheme(); } } catch(_) {}
 
-// ── AD BANNER + BOTTOM SHEET LAYOUT ──────────────────
-// The sheet sits directly above the ad banner.
-const adBannerEl   = document.getElementById('ad-banner');
-const sheetEl      = document.getElementById('bottom-sheet');
-const contentEl    = document.getElementById('sheet-content');
-const handleArea   = document.getElementById('sheet-handle-area');
+// ── LAYOUT ───────────────────────────────────────────
+const adBannerEl  = document.getElementById('ad-banner');
+const sheetEl     = document.getElementById('bottom-sheet');
+const contentEl   = document.getElementById('sheet-content');
+const handleArea  = document.getElementById('sheet-handle-area');
 
 function getAdHeight() { return adBannerEl.offsetHeight || 0; }
-
-function positionSheet() {
-  sheetEl.style.bottom = getAdHeight() + 'px';
-}
-
+function positionSheet() { sheetEl.style.bottom = getAdHeight() + 'px'; }
 function setCollapseVar() {
   const handleH = handleArea.offsetHeight;
   const totalH  = sheetEl.offsetHeight;
-  const dy = totalH - handleH;
-  sheetEl.style.setProperty('--collapse-y', dy + 'px');
+  sheetEl.style.setProperty('--collapse-y', (totalH - handleH) + 'px');
 }
-
-function collapseSheet() {
-  S.sheetCollapsed = true;
-  setCollapseVar();
-  sheetEl.classList.add('collapsed');
-  updateFabPositions();
-}
-function expandSheet() {
-  S.sheetCollapsed = false;
-  sheetEl.classList.remove('collapsed');
-  sheetEl.style.transform = '';
-  setTimeout(updateFabPositions, 400);
-}
-
+function collapseSheet() { S.sheetCollapsed = true; setCollapseVar(); sheetEl.classList.add('collapsed'); updateFabPositions(); }
+function expandSheet() { S.sheetCollapsed = false; sheetEl.classList.remove('collapsed'); sheetEl.style.transform = ''; setTimeout(updateFabPositions, 400); }
 function updateFabPositions() {
   const adH    = getAdHeight();
   const sheetH = S.sheetCollapsed ? handleArea.offsetHeight : sheetEl.offsetHeight;
@@ -393,48 +337,37 @@ function updateFabPositions() {
   document.getElementById('locate-btn').style.bottom = base + 'px';
   document.getElementById('theme-btn').style.bottom  = (base + 54) + 'px';
 }
-
-// Drag gesture
-let drag = { on: false, startY: 0, startT: 0 };
-function dragStart(y) { drag.on = true; drag.startY = y; drag.startT = 0; sheetEl.style.transition = 'none'; }
+let drag = { on: false, startY: 0 };
+function dragStart(y) { drag.on = true; drag.startY = y; sheetEl.style.transition = 'none'; }
 function dragMove(y) {
   if (!drag.on) return;
   const dy = y - drag.startY;
-  drag.startT = dy;
-  const handleH = handleArea.offsetHeight;
-  const totalH  = sheetEl.offsetHeight;
-  const maxDy   = totalH - handleH;
-  const clamp   = Math.max(0, Math.min(dy + (S.sheetCollapsed ? maxDy : 0), maxDy));
-  sheetEl.style.transform = `translateY(${clamp}px)`;
+  const handleH = handleArea.offsetHeight, totalH = sheetEl.offsetHeight;
+  const maxDy = totalH - handleH;
+  const clamp = Math.max(0, Math.min(dy + (S.sheetCollapsed ? maxDy : 0), maxDy));
+  sheetEl.style.transform = 'translateY(' + clamp + 'px)';
 }
 function dragEnd() {
-  if (!drag.on) return;
-  drag.on = false;
-  sheetEl.style.transition = '';
-  sheetEl.style.transform  = '';
+  if (!drag.on) return; drag.on = false;
+  sheetEl.style.transition = ''; sheetEl.style.transform = '';
   const mat = new DOMMatrix(getComputedStyle(sheetEl).transform);
   const cur = mat.m42 || 0;
-  const totalH  = sheetEl.offsetHeight;
-  const handleH = handleArea.offsetHeight;
-  const thresh  = (totalH - handleH) * 0.38;
-  if (cur > thresh) collapseSheet(); else expandSheet();
+  const totalH = sheetEl.offsetHeight, handleH = handleArea.offsetHeight;
+  if (cur > (totalH - handleH) * 0.38) collapseSheet(); else expandSheet();
 }
-
 handleArea.addEventListener('touchstart', e => dragStart(e.touches[0].clientY), { passive: true });
-document.addEventListener('touchmove',  e => { if (drag.on) dragMove(e.touches[0].clientY); }, { passive: true });
-document.addEventListener('touchend',   dragEnd);
+document.addEventListener('touchmove', e => { if (drag.on) dragMove(e.touches[0].clientY); }, { passive: true });
+document.addEventListener('touchend', dragEnd);
 handleArea.addEventListener('mousedown', e => { dragStart(e.clientY); e.preventDefault(); });
 document.addEventListener('mousemove', e => dragMove(e.clientY));
-document.addEventListener('mouseup',   dragEnd);
+document.addEventListener('mouseup', dragEnd);
 handleArea.addEventListener('click', () => { if (S.sheetCollapsed) expandSheet(); });
 window.addEventListener('resize', () => { positionSheet(); if (!S.sheetCollapsed) updateFabPositions(); else collapseSheet(); });
-
-// Init layout after fonts/ad may have shifted sizes
 setTimeout(() => { positionSheet(); updateFabPositions(); }, 100);
 
 // ── DEST ICON ────────────────────────────────────────
 function makeDestIcon() {
-  return L.divIcon({ html: `<div style="width:28px;height:36px;display:flex;flex-direction:column;align-items:center;"><div style="width:28px;height:28px;background:#FF3B30;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);box-shadow:0 3px 12px rgba(255,59,48,0.5);border:2.5px solid white;"></div></div>`, className: '', iconSize: [28,36], iconAnchor: [14,36] });
+  return L.divIcon({ html: '<div style="width:28px;height:36px;display:flex;flex-direction:column;align-items:center;"><div style="width:28px;height:28px;background:#FF3B30;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);box-shadow:0 3px 12px rgba(255,59,48,0.5);border:2.5px solid white;"></div></div>', className: '', iconSize: [28,36], iconAnchor: [14,36] });
 }
 
 // ── USER DOT ─────────────────────────────────────────
@@ -442,7 +375,7 @@ function placeUserDot(lat, lon, acc) {
   if (S.userAccCircle) { map.removeLayer(S.userAccCircle); S.userAccCircle = null; }
   if (S.userDot)       { map.removeLayer(S.userDot);       S.userDot = null; }
   S.userAccCircle = L.circle([lat,lon], { radius: Math.min(acc||30,150), color:'#007AFF', fillColor:'#007AFF', fillOpacity:0.1, weight:1, opacity:0.25 }).addTo(map);
-  S.userDot = L.marker([lat,lon], { icon: L.divIcon({ html:`<div style="width:18px;height:18px;background:#007AFF;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,122,255,0.55);"></div>`, className:'', iconSize:[18,18], iconAnchor:[9,9] }), zIndexOffset:1000, interactive:false }).addTo(map);
+  S.userDot = L.marker([lat,lon], { icon: L.divIcon({ html:'<div style="width:18px;height:18px;background:#007AFF;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,122,255,0.55);"></div>', className:'', iconSize:[18,18], iconAnchor:[9,9] }), zIndexOffset:1000, interactive:false }).addTo(map);
 }
 
 // ── GPS ───────────────────────────────────────────────
@@ -472,13 +405,12 @@ map.on('click', async function(e) {
   document.getElementById('search-input').value='Hämtar adress…';
   document.getElementById('clear-btn').classList.add('show');
   try {
-    const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=sv`,{headers:{'Accept-Language':'sv','User-Agent':'MaxTretti/1.0'}});
+    const r = await fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json&accept-language=sv',{headers:{'Accept-Language':'sv','User-Agent':'MaxTretti/1.0'}});
     const d = await r.json();
-    if (d?.address) { const a=d.address; const pts=[a.road||a.pedestrian||a.path,a.house_number,a.city||a.town||a.village||a.municipality].filter(Boolean); S.destName=pts.length?pts.slice(0,2).join(' '):d.display_name.split(',')[0]; }
+    if (d && d.address) { const a=d.address; const pts=[a.road||a.pedestrian||a.path,a.house_number,a.city||a.town||a.village||a.municipality].filter(Boolean); S.destName=pts.length?pts.slice(0,2).join(' '):d.display_name.split(',')[0]; }
   } catch(_) {}
   document.getElementById('search-input').value=S.destName;
-  expandSheet();
-  calcRoute();
+  expandSheet(); calcRoute();
 });
 
 // ── SEARCH ───────────────────────────────────────────
@@ -494,22 +426,22 @@ function onFocus() { const q=document.getElementById('search-input').value.trim(
 async function fetchSuggestions(q) {
   if(q===lastQuery)return; lastQuery=q;
   try {
-    const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=8&countrycodes=se&addressdetails=1&accept-language=sv`,{headers:{'Accept-Language':'sv','User-Agent':'MaxTretti/1.0'}});
+    const r=await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&limit=8&countrycodes=se&addressdetails=1&accept-language=sv',{headers:{'Accept-Language':'sv','User-Agent':'MaxTretti/1.0'}});
     if(!r.ok)throw new Error();
     renderSuggestions(await r.json());
   } catch(_) {
-    try { const r2=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&addressdetails=1&accept-language=sv`,{headers:{'Accept-Language':'sv','User-Agent':'MaxTretti/1.0'}}); renderSuggestions(await r2.json()); } catch(__){hideSug();}
+    try { const r2=await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&limit=6&addressdetails=1&accept-language=sv',{headers:{'Accept-Language':'sv','User-Agent':'MaxTretti/1.0'}}); renderSuggestions(await r2.json()); } catch(__){hideSug();}
   }
 }
 function renderSuggestions(results) {
-  if(!results?.length){hideSug();return;}
+  if(!results||!results.length){hideSug();return;}
   const el=document.getElementById('suggestions');
   el.innerHTML=results.map(item=>{
     const lat=parseFloat(item.lat),lon=parseFloat(item.lon),a=item.address||{};
     const name=item.name||a.road||a.pedestrian||a.place||item.display_name.split(',')[0];
     const pts=[]; if(a.road&&name!==a.road)pts.push(a.housenumber?a.road+' '+a.housenumber:a.road); const city=a.city||a.town||a.village||a.municipality||a.county; if(city&&city!==name)pts.push(city);
     const sub=pts.filter(Boolean).join(', '); const icon=getPlaceIcon(item.type,item.class,a);
-    return `<div class="sug-item" onclick="pickPlace(${JSON.stringify(name)},${lat},${lon})"><div class="sug-pin">${icon}</div><div class="sug-texts"><div class="sug-main">${escHtml(name)}</div>${sub?`<div class="sug-sub">${escHtml(sub)}</div>`:''}</div></div>`;
+    return '<div class="sug-item" onclick="pickPlace('+JSON.stringify(name)+','+lat+','+lon+')"><div class="sug-pin">'+icon+'</div><div class="sug-texts"><div class="sug-main">'+escHtml(name)+'</div>'+(sub?'<div class="sug-sub">'+escHtml(sub)+'</div>':'')+'</div></div>';
   }).join('');
   el.classList.add('show');
 }
@@ -525,81 +457,76 @@ function pickPlace(name,lat,lon){
 // ── ROUTING — OpenRouteService Directions V2 ──────────
 const ORS_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImI2NDYxNWY3MjM3ODRlMjZhOWQ1ZWZlNTUxYTk1NGE0IiwiaCI6Im11cm11cjY0In0=';
 
-async function fetchORS(oLon, oLat, dLon, dLat) {
-  // driving-car profile; avoid motorways (highway=motorway) and trunk roads
-  const body = {
-    coordinates: [[oLon, oLat], [dLon, dLat]],
-    instructions: true,
-    instructions_format: 'text',
-    language: 'sv',
-    geometry: true,
-    options: {
-      avoid_features: ['highways', 'tollways']
-    }
-  };
-  const ctrl = new AbortController();
-  const tid = setTimeout(() => ctrl.abort(), 15000);
-  try {
-    const r = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/geojson', {
-      method: 'POST',
-      signal: ctrl.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': ORS_KEY
-      },
-      body: JSON.stringify(body)
-    });
-    clearTimeout(tid);
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
-      console.warn('ORS error:', err);
-      return null;
-    }
-    return await r.json();
-  } catch(e) {
-    clearTimeout(tid);
-    console.warn('ORS fetch failed:', e.message);
-    return null;
+// Decode ORS encoded polyline (precision 5)
+function decodePolyline(encoded) {
+  var idx=0, lat=0, lng=0, coords=[];
+  while (idx < encoded.length) {
+    var b, shift=0, result=0;
+    do { b=encoded.charCodeAt(idx++)-63; result|=(b&0x1f)<<shift; shift+=5; } while(b>=0x20);
+    lat += (result&1) ? ~(result>>1) : (result>>1);
+    shift=0; result=0;
+    do { b=encoded.charCodeAt(idx++)-63; result|=(b&0x1f)<<shift; shift+=5; } while(b>=0x20);
+    lng += (result&1) ? ~(result>>1) : (result>>1);
+    coords.push([lng/1e5, lat/1e5]); // [lon, lat]
   }
+  return coords;
 }
 
-// Normalise ORS GeoJSON response → internal route object
-function parseORS(geojson) {
-  const feat = geojson?.features?.[0];
-  if (!feat) return null;
-  const props = feat.properties;
-  const seg   = props.segments?.[0] || {};
+async function fetchORS(oLon, oLat, dLon, dLat) {
+  // Attempt 1: avoid highways. Attempt 2: no avoidance fallback.
+  var attempts = [
+    { options: { avoid_features: ['highways'] } },
+    {}
+  ];
+  for (var i=0; i<attempts.length; i++) {
+    var extra = attempts[i];
+    var body = { coordinates: [[oLon, oLat], [dLon, dLat]], instructions: true, instructions_format: 'text', language: 'sv' };
+    if (extra.options) body.options = extra.options;
+    var ctrl = new AbortController();
+    var tid = setTimeout(function(c){ return function(){ c.abort(); }; }(ctrl), 15000);
+    try {
+      var r = await fetch('https://api.openrouteservice.org/v2/directions/driving-car', {
+        method: 'POST',
+        signal: ctrl.signal,
+        headers: { 'Content-Type': 'application/json', 'Authorization': ORS_KEY },
+        body: JSON.stringify(body)
+      });
+      clearTimeout(tid);
+      var data = null;
+      try { data = await r.json(); } catch(je) {}
+      if (!r.ok) { console.warn('ORS attempt ' + i + ' failed, status=' + r.status, data); continue; }
+      if (data && data.routes && data.routes[0]) return data;
+      console.warn('ORS attempt ' + i + ': no routes in response', data);
+    } catch(e) { clearTimeout(tid); console.warn('ORS fetch error attempt ' + i + ':', e.message); }
+  }
+  return null;
+}
+
+function parseORS(data) {
+  if (!data || !data.routes || !data.routes[0]) return null;
+  var route = data.routes[0];
+  var seg = (route.segments && route.segments[0]) || {};
+  var coordinates;
+  if (typeof route.geometry === 'string') {
+    coordinates = decodePolyline(route.geometry);
+  } else if (route.geometry && route.geometry.coordinates) {
+    coordinates = route.geometry.coordinates;
+  } else { return null; }
   return {
-    distance: props.summary.distance,   // metres
-    duration: props.summary.duration,   // seconds
-    geometry: feat.geometry,            // {type:'LineString', coordinates:[[lon,lat],...]}
+    distance: route.summary.distance,
+    duration: route.summary.duration,
+    geometry: { type: 'LineString', coordinates: coordinates },
     legs: [{
-      steps: (seg.steps || []).map(s => ({
-        distance: s.distance,
-        duration: s.duration,
-        name: s.name || '',
-        maneuver: {
-          type: mapORSType(s.type),
-          modifier: mapORSModifier(s.instruction)
-        },
-        instruction: s.instruction
-      }))
+      steps: (seg.steps || []).map(function(s) {
+        return { distance: s.distance, name: s.name||'', maneuver: { type: mapORSType(s.type) }, instruction: s.instruction||'' };
+      })
     }]
   };
 }
 
-// ORS step type numbers → OSRM-like strings
 function mapORSType(n) {
-  const m = {0:'depart',1:'turn',2:'turn',3:'turn',4:'turn',5:'merge',6:'fork',7:'fork',8:'ramp',9:'ramp',10:'roundabout',11:'rotary',12:'continue',13:'new name',14:'arrive'};
+  var m = {0:'depart',1:'turn',2:'turn',3:'turn',4:'turn',5:'merge',6:'fork',7:'fork',8:'ramp',9:'ramp',10:'roundabout',11:'rotary',12:'continue',13:'new name',14:'arrive'};
   return m[n] || 'continue';
-}
-function mapORSModifier(instruction) {
-  if (!instruction) return 'straight';
-  const i = instruction.toLowerCase();
-  if (i.includes('vänster') || i.includes('left'))   return 'left';
-  if (i.includes('höger')   || i.includes('right'))  return 'right';
-  if (i.includes('u-sväng') || i.includes('u-turn')) return 'uturn';
-  return 'straight';
 }
 
 async function calcRoute(){
@@ -609,9 +536,9 @@ async function calcRoute(){
   if(!S.origin){showLoading(true,'Hämtar position…');S.origin=await getLocation();if(!S.origin){S.origin={lat:59.3293,lon:18.0686};showToast('📍 Startplats: Stockholm');}}
   try{
     const {lat:oLat,lon:oLon}=S.origin,{lat:dLat,lon:dLon}=S.destCoords;
-    const geojson = await fetchORS(oLon,oLat,dLon,dLat);
-    if(!geojson){showToast('❌ Ingen rutt hittades');showLoading(false);return;}
-    S.route = parseORS(geojson);
+    const data = await fetchORS(oLon,oLat,dLon,dLat);
+    if(!data){showToast('❌ Ingen rutt hittades');showLoading(false);return;}
+    S.route = parseORS(data);
     if(!S.route){showToast('❌ Ingen rutt hittades');showLoading(false);return;}
     drawRoute(S.route);showStats();
   }catch(e){console.error(e);showToast('❌ Fel vid ruttberäkning');}
@@ -622,7 +549,7 @@ function drawRoute(route){
   if(S.shadowLayer){map.removeLayer(S.shadowLayer);S.shadowLayer=null;}
   if(S.routeLayer){map.removeLayer(S.routeLayer);S.routeLayer=null;}
   clearDestMarkers();
-  // ORS geometry coords are [lon,lat] — flip to [lat,lon] for Leaflet
+  // ORS coords are [lon,lat] — flip to [lat,lon] for Leaflet
   const coords=route.geometry.coordinates.map(c=>[c[1],c[0]]);
   S.shadowLayer=L.polyline(coords,{color:'rgba(0,0,0,0.13)',weight:9,lineCap:'round',lineJoin:'round'}).addTo(map);
   S.routeLayer=L.polyline(coords,{color:'#007AFF',weight:5,opacity:0.9,lineCap:'round',lineJoin:'round'}).addTo(map);
@@ -631,8 +558,8 @@ function drawRoute(route){
 }
 function showStats(){
   const dist=S.route.distance,avgSpeed=S.speed*0.82,mins=Math.round((dist/1000)/avgSpeed*60),h=Math.floor(mins/60),m=mins%60;
-  document.getElementById('stat-time').textContent=mins<60?`${mins} min`:`${h}h ${m}m`;
-  document.getElementById('stat-dist').textContent=dist<1000?`${Math.round(dist)} m`:`${(dist/1000).toFixed(1)} km`;
+  document.getElementById('stat-time').textContent=mins<60?(mins+' min'):(h+'h '+m+'m');
+  document.getElementById('stat-dist').textContent=dist<1000?(Math.round(dist)+' m'):((dist/1000).toFixed(1)+' km');
   document.getElementById('stat-speed').textContent=S.speed;
   document.getElementById('route-dest-label').textContent=S.destName;
   document.getElementById('route-card').classList.add('show');
@@ -651,25 +578,24 @@ function clearAll(){
 // ── STEPS ────────────────────────────────────────────
 function openSteps(){
   if(!S.route)return;
-  const steps=S.route.legs?.[0]?.steps||[];
-  document.getElementById('steps-title').textContent=`Till ${S.destName}`;
+  const steps=S.route.legs[0].steps||[];
+  document.getElementById('steps-title').textContent='Till '+S.destName;
   const avg=S.speed*0.82,mins=Math.round((S.route.distance/1000)/avg*60),h=Math.floor(mins/60),m=mins%60;
-  document.getElementById('steps-sub').textContent=`${mins<60?mins+' min':h+'h '+m+'m'} · ${(S.route.distance/1000).toFixed(1)} km`;
-  // ORS type → emoji
+  document.getElementById('steps-sub').textContent=(mins<60?mins+' min':h+'h '+m+'m')+' · '+(S.route.distance/1000).toFixed(1)+' km';
   const mI=t=>({'depart':'🚦','arrive':'🏁','turn':'↩️','merge':'🔀','new name':'➡️','continue':'➡️','roundabout':'🔄','rotary':'🔄','fork':'↗️','ramp':'↗️','end of road':'↩️'}[t]||'➡️');
   document.getElementById('steps-list').innerHTML=steps.map(s=>{
     const t=s.maneuver.type;
-    // ORS provides ready-made instruction text (in Swedish since we set language:'sv')
-    const instr=s.instruction||`${t} ${s.name||''}`;
-    const dist=s.distance<1000?`${Math.round(s.distance)} m`:`${(s.distance/1000).toFixed(1)} km`;
-    return `<div class="step-row"><div class="step-icon-wrap">${mI(t)}</div><div class="step-body"><div class="step-instr">${escHtml(instr)}</div>${s.distance>10?`<div class="step-d">${dist}</div>`:''}</div></div>`;
+    const instr=s.instruction||t;
+    const dist=s.distance<1000?Math.round(s.distance)+' m':(s.distance/1000).toFixed(1)+' km';
+    return '<div class="step-row"><div class="step-icon-wrap">'+mI(t)+'</div><div class="step-body"><div class="step-instr">'+escHtml(instr)+'</div>'+(s.distance>10?'<div class="step-d">'+dist+'</div>':'')+'</div></div>';
   }).join('');
   document.getElementById('steps-panel').classList.add('show');
 }
 function closeSteps(){document.getElementById('steps-panel').classList.remove('show');}
 function openInMaps(){
-  if(!S.destCoords)return;const {lat:dLat,lon:dLon}=S.destCoords,{lat:oLat,lon:oLon}=S.origin||{lat:0,lon:0};
-  window.open(/iPad|iPhone|iPod/.test(navigator.userAgent)?`maps://maps.apple.com/?saddr=${oLat},${oLon}&daddr=${dLat},${dLon}&dirflg=d`:`https://www.google.com/maps/dir/${oLat},${oLon}/${dLat},${dLon}`);
+  if(!S.destCoords)return;
+  const {lat:dLat,lon:dLon}=S.destCoords,{lat:oLat,lon:oLon}=S.origin||{lat:0,lon:0};
+  window.open(/iPad|iPhone|iPod/.test(navigator.userAgent)?'maps://maps.apple.com/?saddr='+oLat+','+oLon+'&daddr='+dLat+','+dLon+'&dirflg=d':'https://www.google.com/maps/dir/'+oLat+','+oLon+'/'+dLat+','+dLon);
 }
 
 // ── VEHICLE ───────────────────────────────────────────
@@ -678,20 +604,23 @@ function openVModal(){document.getElementById('v-modal').classList.add('show');}
 function closeVModal(e){if(e.target===document.getElementById('v-modal'))document.getElementById('v-modal').classList.remove('show');}
 function closeVModalOk(){document.getElementById('v-modal').classList.remove('show');if(S.destCoords)calcRoute();}
 function vmSelect(speed){S.speed=speed;syncVModal();}
-function syncVModal(){document.getElementById('vm-45').classList.toggle('sel',S.speed===45);document.getElementById('vm-30').classList.toggle('sel',S.speed===30);document.getElementById('vm-45').querySelector('.v-opt-check').textContent=S.speed===45?'✓':'';document.getElementById('vm-30').querySelector('.v-opt-check').textContent=S.speed===30?'✓':'';}
+function syncVModal(){
+  document.getElementById('vm-45').classList.toggle('sel',S.speed===45);
+  document.getElementById('vm-30').classList.toggle('sel',S.speed===30);
+  document.getElementById('vm-45').querySelector('.v-opt-check').textContent=S.speed===45?'✓':'';
+  document.getElementById('vm-30').querySelector('.v-opt-check').textContent=S.speed===30?'✓':'';
+}
 
 // ── HELPERS ──────────────────────────────────────────
 function showLoading(v,msg){document.getElementById('loading').classList.toggle('show',v);if(msg)document.getElementById('load-txt').textContent=msg;}
 let toastT;
 function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600);}
 
-document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();document.querySelector('.sug-item')?.click();}});
+document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();document.querySelector('.sug-item')&&document.querySelector('.sug-item').click();}});
 document.addEventListener('touchstart',e=>{if(!document.getElementById('search-box').contains(e.target))hideSug();},{passive:true});
 
-// ── ADSENSE INIT ──────────────────────────────────────
-(function() {
-  try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-})();
+// AdSense init
+(function(){ try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){} })();
 
 startWatch();
 </script>
