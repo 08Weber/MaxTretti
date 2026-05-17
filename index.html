@@ -522,17 +522,86 @@ function pickPlace(name,lat,lon){
   expandSheet();calcRoute();
 }
 
-// ── ROUTING ──────────────────────────────────────────
-async function fetchOSRM(oLon,oLat,dLon,dLat){
-  const urls=[
-    `https://router.project-osrm.org/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full`,
-    `https://routing.openstreetmap.de/routed-car/route/v1/driving/${oLon},${oLat};${dLon},${dLat}?steps=true&geometries=geojson&overview=full`,
-  ];
-  for(const url of urls){
-    try{const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),10000);const r=await fetch(url,{signal:ctrl.signal});clearTimeout(tid);if(!r.ok)continue;const d=await r.json();if(d.code==='Ok'&&d.routes?.[0])return d;}catch(e){console.warn('OSRM:',e.message);}
+// ── ROUTING — OpenRouteService Directions V2 ──────────
+const ORS_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImI2NDYxNWY3MjM3ODRlMjZhOWQ1ZWZlNTUxYTk1NGE0IiwiaCI6Im11cm11cjY0In0=';
+
+async function fetchORS(oLon, oLat, dLon, dLat) {
+  // driving-car profile; avoid motorways (highway=motorway) and trunk roads
+  const body = {
+    coordinates: [[oLon, oLat], [dLon, dLat]],
+    instructions: true,
+    instructions_format: 'text',
+    language: 'sv',
+    geometry: true,
+    options: {
+      avoid_features: ['highways', 'tollways']
+    }
+  };
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), 15000);
+  try {
+    const r = await fetch('https://api.openrouteservice.org/v2/directions/driving-car/geojson', {
+      method: 'POST',
+      signal: ctrl.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': ORS_KEY
+      },
+      body: JSON.stringify(body)
+    });
+    clearTimeout(tid);
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      console.warn('ORS error:', err);
+      return null;
+    }
+    return await r.json();
+  } catch(e) {
+    clearTimeout(tid);
+    console.warn('ORS fetch failed:', e.message);
+    return null;
   }
-  return null;
 }
+
+// Normalise ORS GeoJSON response → internal route object
+function parseORS(geojson) {
+  const feat = geojson?.features?.[0];
+  if (!feat) return null;
+  const props = feat.properties;
+  const seg   = props.segments?.[0] || {};
+  return {
+    distance: props.summary.distance,   // metres
+    duration: props.summary.duration,   // seconds
+    geometry: feat.geometry,            // {type:'LineString', coordinates:[[lon,lat],...]}
+    legs: [{
+      steps: (seg.steps || []).map(s => ({
+        distance: s.distance,
+        duration: s.duration,
+        name: s.name || '',
+        maneuver: {
+          type: mapORSType(s.type),
+          modifier: mapORSModifier(s.instruction)
+        },
+        instruction: s.instruction
+      }))
+    }]
+  };
+}
+
+// ORS step type numbers → OSRM-like strings
+function mapORSType(n) {
+  const m = {0:'depart',1:'turn',2:'turn',3:'turn',4:'turn',5:'merge',6:'fork',7:'fork',8:'ramp',9:'ramp',10:'roundabout',11:'rotary',12:'continue',13:'new name',14:'arrive'};
+  return m[n] || 'continue';
+}
+function mapORSModifier(instruction) {
+  if (!instruction) return 'straight';
+  const i = instruction.toLowerCase();
+  if (i.includes('vänster') || i.includes('left'))   return 'left';
+  if (i.includes('höger')   || i.includes('right'))  return 'right';
+  if (i.includes('u-sväng') || i.includes('u-turn')) return 'uturn';
+  return 'straight';
+}
+
 async function calcRoute(){
   if(!S.destCoords)return;
   showLoading(true,'Beräknar rutt…');
@@ -540,10 +609,12 @@ async function calcRoute(){
   if(!S.origin){showLoading(true,'Hämtar position…');S.origin=await getLocation();if(!S.origin){S.origin={lat:59.3293,lon:18.0686};showToast('📍 Startplats: Stockholm');}}
   try{
     const {lat:oLat,lon:oLon}=S.origin,{lat:dLat,lon:dLon}=S.destCoords;
-    const data=await fetchOSRM(oLon,oLat,dLon,dLat);
-    if(!data){showToast('❌ Ingen rutt hittades');showLoading(false);return;}
-    S.route=data.routes[0];drawRoute(S.route);showStats();
-  }catch(e){showToast('❌ Fel vid ruttberäkning');}
+    const geojson = await fetchORS(oLon,oLat,dLon,dLat);
+    if(!geojson){showToast('❌ Ingen rutt hittades');showLoading(false);return;}
+    S.route = parseORS(geojson);
+    if(!S.route){showToast('❌ Ingen rutt hittades');showLoading(false);return;}
+    drawRoute(S.route);showStats();
+  }catch(e){console.error(e);showToast('❌ Fel vid ruttberäkning');}
   showLoading(false);
 }
 function clearDestMarkers(){S.markers.forEach(m=>map.removeLayer(m));S.markers=[];}
@@ -551,6 +622,7 @@ function drawRoute(route){
   if(S.shadowLayer){map.removeLayer(S.shadowLayer);S.shadowLayer=null;}
   if(S.routeLayer){map.removeLayer(S.routeLayer);S.routeLayer=null;}
   clearDestMarkers();
+  // ORS geometry coords are [lon,lat] — flip to [lat,lon] for Leaflet
   const coords=route.geometry.coordinates.map(c=>[c[1],c[0]]);
   S.shadowLayer=L.polyline(coords,{color:'rgba(0,0,0,0.13)',weight:9,lineCap:'round',lineJoin:'round'}).addTo(map);
   S.routeLayer=L.polyline(coords,{color:'#007AFF',weight:5,opacity:0.9,lineCap:'round',lineJoin:'round'}).addTo(map);
@@ -583,12 +655,12 @@ function openSteps(){
   document.getElementById('steps-title').textContent=`Till ${S.destName}`;
   const avg=S.speed*0.82,mins=Math.round((S.route.distance/1000)/avg*60),h=Math.floor(mins/60),m=mins%60;
   document.getElementById('steps-sub').textContent=`${mins<60?mins+' min':h+'h '+m+'m'} · ${(S.route.distance/1000).toFixed(1)} km`;
+  // ORS type → emoji
   const mI=t=>({'depart':'🚦','arrive':'🏁','turn':'↩️','merge':'🔀','new name':'➡️','continue':'➡️','roundabout':'🔄','rotary':'🔄','fork':'↗️','ramp':'↗️','end of road':'↩️'}[t]||'➡️');
-  const mSv={left:'vänster',right:'höger','sharp left':'skarpt vänster','sharp right':'skarpt höger','slight left':'svagt vänster','slight right':'svagt höger',straight:'rakt fram',uturn:'U-sväng'};
-  const tSv={depart:'Starta på',arrive:'Ankomst',turn:'Sväng','new name':'Fortsätt på',continue:'Fortsätt på',merge:'Anslut till',ramp:'Ta avfarten',fork:'Håll dig',roundabout:'Ta rondellen till','end of road':'Sväng vid slutet av'};
   document.getElementById('steps-list').innerHTML=steps.map(s=>{
-    const t=s.maneuver.type,mod=s.maneuver.modifier?(mSv[s.maneuver.modifier]||s.maneuver.modifier):'',verb=tSv[t]||'Fortsätt',road=s.name||'';
-    const instr=t==='arrive'?'🏁 Framme vid destination':t==='depart'?`Starta på ${road}`:`${verb}${mod?' '+mod:''}${road?' mot '+road:''}`;
+    const t=s.maneuver.type;
+    // ORS provides ready-made instruction text (in Swedish since we set language:'sv')
+    const instr=s.instruction||`${t} ${s.name||''}`;
     const dist=s.distance<1000?`${Math.round(s.distance)} m`:`${(s.distance/1000).toFixed(1)} km`;
     return `<div class="step-row"><div class="step-icon-wrap">${mI(t)}</div><div class="step-body"><div class="step-instr">${escHtml(instr)}</div>${s.distance>10?`<div class="step-d">${dist}</div>`:''}</div></div>`;
   }).join('');
