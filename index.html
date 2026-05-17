@@ -492,10 +492,10 @@ async function fetchORS(oLon, oLat, dLon, dLat) {
 // OSRM fallback — always works, no API key required
 async function fetchOSRM(oLon, oLat, dLon, dLat) {
   try {
-    showToast('🔄 Använder reservrutt…');
+    showToast('🔄 Reservrutt — undviker motorväg…');
     var url = 'https://router.project-osrm.org/route/v1/driving/'
       + oLon + ',' + oLat + ';' + dLon + ',' + dLat
-      + '?overview=full&geometries=geojson&steps=true';
+      + '?overview=full&geometries=geojson&steps=true&exclude=motorway';
     var r = await fetch(url);
     if (!r.ok) throw new Error('OSRM HTTP ' + r.status);
     var data = await r.json();
