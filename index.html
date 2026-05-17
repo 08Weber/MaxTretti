@@ -426,8 +426,8 @@ function pickPlace(name,lat,lon){
 }
 
 // ── ROUTING ──────────────────────────────────────────
-// ORS API key (decoded from your base64 string)
-const ORS_KEY = atob('eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImI2NDYxNWY3MjM3ODRlMjZhOWQ1ZWZlNTUxYTk1NGE0IiwiaCI6Im11cm11cjY0In0=');
+// ORS API key — sent as-is (this IS the key, not base64 of something else)
+const ORS_KEY = 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImI2NDYxNWY3MjM3ODRlMjZhOWQ1ZWZlNTUxYTk1NGE0IiwiaCI6Im11cm11cjY0In0=';
 
 function decodePolyline(encoded) {
   var idx=0, lat=0, lng=0, coords=[];
@@ -444,57 +444,48 @@ function decodePolyline(encoded) {
 }
 
 async function fetchORS(oLon, oLat, dLon, dLat) {
-  // Try with highway avoidance first, fall back to no avoidance
-  const attempts = [
-    { options: { avoid_features: ['highways'] } },
-    {}
-  ];
+  // Always avoid highways (motorvägar)
+  var body = {
+    coordinates: [[oLon, oLat], [dLon, dLat]],
+    instructions: true,
+    instructions_format: 'text',
+    language: 'sv',
+    options: { avoid_features: ['highways'] }
+  };
 
-  for (var i = 0; i < attempts.length; i++) {
-    var body = {
-      coordinates: [[oLon, oLat], [dLon, dLat]],
-      instructions: true,
-      instructions_format: 'text',
-      language: 'sv'
-    };
-    if (attempts[i].options) body.options = attempts[i].options;
+  try {
+    var ctrl = new AbortController();
+    var tid = setTimeout(function() { ctrl.abort(); }, 15000);
 
-    try {
-      var ctrl = new AbortController();
-      var tid = setTimeout(function() { ctrl.abort(); }, 15000);
+    var r = await fetch('https://api.openrouteservice.org/v2/directions/driving-car', {
+      method: 'POST',
+      signal: ctrl.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': ORS_KEY
+      },
+      body: JSON.stringify(body)
+    });
+    clearTimeout(tid);
 
-      var r = await fetch('https://api.openrouteservice.org/v2/directions/driving-car', {
-        method: 'POST',
-        signal: ctrl.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': ORS_KEY   // ← fixed: decoded key sent directly
-        },
-        body: JSON.stringify(body)
-      });
-      clearTimeout(tid);
+    var data = null;
+    try { data = await r.json(); } catch(je) { console.warn('ORS JSON parse error:', je); }
 
-      var data = null;
-      try { data = await r.json(); } catch(je) { console.warn('ORS JSON parse error:', je); }
-
-      if (!r.ok) {
-        console.warn('ORS attempt', i, 'HTTP', r.status, data);
-        // Log the error detail for debugging
-        if (data && data.error) console.warn('ORS error detail:', data.error);
-        continue;
-      }
-
-      if (data && data.routes && data.routes.length > 0) {
-        console.log('ORS success on attempt', i, data.routes[0].summary);
-        return data;
-      }
-      console.warn('ORS attempt', i, ': unexpected response structure', data);
-    } catch(e) {
-      console.warn('ORS fetch error attempt', i, ':', e.message);
+    if (!r.ok) {
+      console.warn('ORS HTTP', r.status, data);
+      if (data && data.error) console.warn('ORS error detail:', data.error);
+      // Fall through to OSRM
+    } else if (data && data.routes && data.routes.length > 0) {
+      console.log('ORS success ✓ motorvägar undvikna', data.routes[0].summary);
+      return data;
+    } else {
+      console.warn('ORS: unexpected response', data);
     }
+  } catch(e) {
+    console.warn('ORS fetch error:', e.message);
   }
 
-  // Final fallback: OSRM (free, no key needed)
+  // Fallback: OSRM (free, no key needed)
   return fetchOSRM(oLon, oLat, dLon, dLat);
 }
 
