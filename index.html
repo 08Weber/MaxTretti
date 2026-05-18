@@ -15,14 +15,14 @@
     :root {
       --safe-top: env(safe-area-inset-top, 44px);
       --safe-bottom: env(safe-area-inset-bottom, 20px);
-      --glass-bg:     rgba(255,255,255,0.42);
-      --glass-border: rgba(255,255,255,0.60);
-      --glass-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.75);
+      --glass-bg:     rgba(255,255,255,0.28);
+      --glass-border: rgba(255,255,255,0.45);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.65);
       --glass-blur:   blur(32px) saturate(220%) brightness(1.08);
-      --sheet-bg:     rgba(235,235,240,0.68);
+      --sheet-bg:     rgba(235,235,240,0.52);
       --sheet-blur:   blur(40px) saturate(220%) brightness(1.04);
-      --sheet-border: rgba(255,255,255,0.55);
-      --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.50), 0 -8px 40px rgba(0,0,0,0.08);
+      --sheet-border: rgba(255,255,255,0.42);
+      --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.40), 0 -8px 40px rgba(0,0,0,0.08);
       --blue:         #007AFF;
       --blue-glass:   rgba(0,122,255,0.12);
       --accent:       #FF3B30;
@@ -35,14 +35,14 @@
       --r-xl:24px; --r-lg:20px; --r-md:16px; --r-sm:13px; --r-xs:10px;
     }
     [data-theme="dark"] {
-      --glass-bg:     rgba(28,28,32,0.55);
-      --glass-border: rgba(255,255,255,0.08);
-      --glass-shadow: 0 8px 32px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.06);
+      --glass-bg:     rgba(28,28,32,0.42);
+      --glass-border: rgba(255,255,255,0.07);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.05);
       --glass-blur:   blur(32px) saturate(180%) brightness(0.94);
-      --sheet-bg:     rgba(20,20,24,0.72);
+      --sheet-bg:     rgba(20,20,24,0.58);
       --sheet-blur:   blur(40px) saturate(200%) brightness(0.92);
-      --sheet-border: rgba(255,255,255,0.06);
-      --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.04), 0 -8px 40px rgba(0,0,0,0.40);
+      --sheet-border: rgba(255,255,255,0.05);
+      --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.03), 0 -8px 40px rgba(0,0,0,0.40);
       --blue:         #0A84FF;
       --blue-glass:   rgba(10,132,255,0.16);
       --accent:       #FF453A;
@@ -53,15 +53,34 @@
       --sep:          rgba(255,255,255,0.08);
       --handle:       rgba(255,255,255,0.24);
     }
+    [data-theme="grey"] {
+      --glass-bg:     rgba(50,52,58,0.42);
+      --glass-border: rgba(255,255,255,0.07);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.36), 0 2px 8px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.06);
+      --glass-blur:   blur(32px) saturate(140%) brightness(0.88);
+      --sheet-bg:     rgba(42,44,50,0.58);
+      --sheet-blur:   blur(40px) saturate(160%) brightness(0.86);
+      --sheet-border: rgba(255,255,255,0.06);
+      --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.04), 0 -8px 40px rgba(0,0,0,0.36);
+      --blue:         #5AC8FA;
+      --blue-glass:   rgba(90,200,250,0.16);
+      --accent:       #FF453A;
+      --accent-glass: rgba(255,69,58,0.14);
+      --text:         #e8e8ee;
+      --text2:        #d0d0d8;
+      --muted:        rgba(210,210,220,0.55);
+      --sep:          rgba(255,255,255,0.08);
+      --handle:       rgba(255,255,255,0.22);
+    }
     [data-theme="satellite"] {
-      --glass-bg:     rgba(18,20,26,0.52);
-      --glass-border: rgba(255,255,255,0.10);
-      --glass-shadow: 0 8px 32px rgba(0,0,0,0.36), 0 2px 8px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.08);
+      --glass-bg:     rgba(18,20,26,0.42);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.36), 0 2px 8px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.06);
       --glass-blur:   blur(32px) saturate(160%) brightness(0.90);
-      --sheet-bg:     rgba(16,18,22,0.70);
+      --sheet-bg:     rgba(16,18,22,0.56);
       --sheet-blur:   blur(40px) saturate(180%) brightness(0.88);
-      --sheet-border: rgba(255,255,255,0.08);
-      --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.05), 0 -8px 40px rgba(0,0,0,0.36);
+      --sheet-border: rgba(255,255,255,0.06);
+      --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.04), 0 -8px 40px rgba(0,0,0,0.36);
       --blue:         #0A84FF;
       --blue-glass:   rgba(10,132,255,0.16);
       --accent:       #FF453A;
@@ -109,9 +128,7 @@
     .sug-main{font-size:15px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .sug-sub{font-size:12px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-    /* ── FABs — STACKED VERTICALLY, RIGHT SIDE ──────── */
-    /* The FAB container stacks them in a column.
-       They sit above the bottom sheet, positioned via JS. */
+    /* FABs */
     #fab-stack{
       position:absolute;
       right:14px;
@@ -136,12 +153,6 @@
       flex-shrink:0;
     }
     .fab:active{transform:scale(0.88);}
-
-    /* Apple-style location arrow icon */
-    .fab-locate-icon{
-      position:relative;
-      width:22px;height:22px;
-    }
 
     /* AD */
     #ad-banner{
@@ -174,7 +185,7 @@
     #bottom-sheet.collapsed #sheet-content{max-height:0!important;opacity:0;pointer-events:none;}
     .sheet-inner{padding:0 14px 16px;}
 
-    /* VEHICLE CHIPS — horizontal grid */
+    /* VEHICLE CHIPS */
     #vehicle-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
     .v-chip{
       background:var(--glass-bg);
@@ -226,7 +237,7 @@
     .open-maps-btn:active{opacity:0.65;}
 
     /* VEHICLE MODAL */
-    #v-modal{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.32);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);display:none;align-items:flex-end;}
+    #v-modal{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.28);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);display:none;align-items:flex-end;}
     #v-modal.show{display:flex;}
     .v-sheet{width:100%;background:var(--sheet-bg);backdrop-filter:var(--sheet-blur);-webkit-backdrop-filter:var(--sheet-blur);border-radius:var(--r-xl) var(--r-xl) 0 0;border-top:1px solid var(--sheet-border);padding:0 16px;padding-bottom:calc(var(--safe-bottom) + 16px);animation:slideUp 0.28s cubic-bezier(0.32,0.72,0,1);}
     @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -245,11 +256,20 @@
     .btn-confirm{width:100%;border:none;border-radius:var(--r-md);padding:15px;font-family:inherit;font-size:16px;font-weight:600;color:white;margin-top:12px;cursor:pointer;background:linear-gradient(135deg,#1a8fff 0%,#0066dd 100%);box-shadow:0 4px 18px rgba(0,122,255,0.38),inset 0 1px 0 rgba(255,255,255,0.22);transition:opacity 0.14s;}
     .btn-confirm:active{opacity:0.82;}
 
-    /* ── MAP STYLE MODAL — Apple Maps style ──────────── */
-    #map-modal{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.32);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);display:none;align-items:flex-end;}
+    /* ── MAP STYLE MODAL ──────────────────────────────── */
+    #map-modal{
+      position:fixed;inset:0;z-index:300;
+      background:rgba(0,0,0,0.28);
+      backdrop-filter:blur(16px) saturate(180%);
+      -webkit-backdrop-filter:blur(16px) saturate(180%);
+      display:none;align-items:flex-end;
+    }
     #map-modal.show{display:flex;}
+
+    /* The sheet itself — draggable */
     .map-sheet{
       width:100%;
+      /* Ultra-transparent like other glass panels */
       background:var(--sheet-bg);
       backdrop-filter:var(--sheet-blur);
       -webkit-backdrop-filter:var(--sheet-blur);
@@ -258,13 +278,24 @@
       padding:0 20px;
       padding-bottom:calc(var(--safe-bottom) + 20px);
       animation:slideUp 0.28s cubic-bezier(0.32,0.72,0,1);
+      /* transition for drag-dismiss */
+      transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);
+      will-change:transform;
+      touch-action:none;
+      user-select:none;
     }
-    .map-sheet-handle{width:36px;height:4px;background:var(--handle);border-radius:2px;margin:10px auto 0;}
-    .map-sheet-header{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;}
+    .map-sheet-handle-area{
+      padding:10px 0 4px;
+      display:flex;justify-content:center;
+      cursor:grab;touch-action:none;user-select:none;
+    }
+    .map-sheet-handle-area:active{cursor:grabbing;}
+    .map-sheet-handle{width:36px;height:4px;background:var(--handle);border-radius:2px;}
+    .map-sheet-header{display:flex;align-items:center;justify-content:space-between;padding:12px 0 14px;}
     .map-sheet-title{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.4px;}
     .map-close-btn{width:30px;height:30px;border-radius:50%;background:var(--sep);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px;font-weight:600;}
-    
-    /* 4-column style grid like Apple Maps */
+
+    /* 4-column style grid */
     .map-style-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
     .map-style-opt{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;}
     .map-style-thumb{
@@ -277,15 +308,6 @@
     .map-style-label{font-size:11px;font-weight:500;color:var(--text2);text-align:center;}
     .map-style-opt.active .map-style-label{color:var(--blue);font-weight:600;}
 
-    /* Toggle rows */
-    .map-toggle-section{border-top:1px solid var(--sep);padding-top:14px;}
-    .map-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--sep);}
-    .map-toggle-row:last-child{border-bottom:none;}
-    .map-toggle-label{font-size:17px;color:var(--text);}
-    .toggle-switch{width:51px;height:31px;border-radius:16px;background:var(--sep);position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;}
-    .toggle-switch.on{background:#34C759;}
-    .toggle-knob{position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:white;box-shadow:0 2px 6px rgba(0,0,0,0.22);transition:transform 0.22s cubic-bezier(0.32,0.72,0,1);}
-    .toggle-switch.on .toggle-knob{transform:translateX(20px);}
     .map-attr{font-size:11px;color:var(--muted);text-align:center;margin-top:12px;}
 
     /* LOADING */
@@ -329,18 +351,15 @@
     </div>
   </div>
 
-  <!-- FAB STACK — globe on top, then locate arrow -->
+  <!-- FAB STACK -->
   <div id="fab-stack">
-    <!-- Globe / Map style -->
     <div class="fab" id="map-style-btn" onclick="openMapModal()" title="Kartlägen">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"/>
         <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
       </svg>
     </div>
-    <!-- Apple-style location arrow -->
     <div class="fab" id="locate-btn" onclick="locateMe()" title="Min plats">
-      <!-- Apple Maps location arrow: arrow pointing up-right inside circle -->
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 2L19.07 19.07L12 15.5L4.93 19.07L12 2Z" fill="currentColor" opacity="0.9"/>
       </svg>
@@ -374,7 +393,7 @@
             Öppna i Apple / Google Maps
           </button>
         </div>
-        <!-- VEHICLE CHIPS with emojis -->
+        <!-- VEHICLE CHIPS -->
         <div id="vehicle-row">
           <div class="v-chip active" data-speed="45" onclick="pickVehicle(this)">
             <div class="vc-emoji">🚗</div>
@@ -429,10 +448,12 @@
   </div>
 </div>
 
-<!-- MAP STYLE MODAL — Apple Maps style with 4 grid items + toggles -->
+<!-- MAP STYLE MODAL — draggable -->
 <div id="map-modal" onclick="closeMapModal(event)">
-  <div class="map-sheet">
-    <div class="map-sheet-handle"></div>
+  <div class="map-sheet" id="map-sheet-inner">
+    <div class="map-sheet-handle-area" id="map-sheet-handle-area">
+      <div class="map-sheet-handle"></div>
+    </div>
     <div class="map-sheet-header">
       <div class="map-sheet-title">Kartlägen</div>
       <div class="map-close-btn" onclick="document.getElementById('map-modal').classList.remove('show')">✕</div>
@@ -440,7 +461,7 @@
 
     <!-- 4-column style grid -->
     <div class="map-style-grid">
-      <!-- Utforska (Light) -->
+      <!-- Ljust -->
       <div class="map-style-opt active" id="ms-light" onclick="setMapStyle('light')">
         <div class="map-style-thumb">
           <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
@@ -451,47 +472,44 @@
             <rect x="36" y="0" width="2" height="80" fill="#b8bcc8" opacity="0.4"/>
             <rect x="8" y="8" width="16" height="12" rx="2" fill="#b8bcc4"/>
             <rect x="54" y="46" width="16" height="12" rx="2" fill="#b8bcc4"/>
-            <!-- little orange dot like Apple -->
             <circle cx="40" cy="35" r="3" fill="#FF9500"/>
           </svg>
         </div>
-        <div class="map-style-label">Utforska</div>
+        <div class="map-style-label">Ljust</div>
       </div>
 
-      <!-- Med bil (with traffic style) -->
+      <!-- Mörkt -->
       <div class="map-style-opt" id="ms-dark" onclick="setMapStyle('dark')">
         <div class="map-style-thumb">
           <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
             <rect width="80" height="80" fill="#1a1c22"/>
             <rect x="0" y="30" width="80" height="10" fill="#2a2d38"/>
             <rect x="34" y="0" width="8" height="80" fill="#2a2d38"/>
-            <!-- traffic highlight red -->
             <rect x="0" y="33" width="40" height="4" fill="#FF453A" opacity="0.8"/>
             <rect x="36" y="0" width="2" height="30" fill="#FF9500" opacity="0.7"/>
             <rect x="8" y="8" width="16" height="12" rx="2" fill="#32363f"/>
             <rect x="54" y="46" width="16" height="12" rx="2" fill="#32363f"/>
-            <!-- warning triangle -->
             <text x="38" y="22" font-size="10" fill="#FFD60A">⚠</text>
           </svg>
         </div>
-        <div class="map-style-label">Med bil</div>
+        <div class="map-style-label">Mörkt</div>
       </div>
 
-      <!-- Kollektivtrafik -->
-      <div class="map-style-opt" id="ms-transit" onclick="setMapStyle('transit')">
+      <!-- Grått -->
+      <div class="map-style-opt" id="ms-grey" onclick="setMapStyle('grey')">
         <div class="map-style-thumb">
           <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-            <rect width="80" height="80" fill="#1e2030"/>
-            <rect x="0" y="30" width="80" height="10" fill="#2a3040"/>
-            <rect x="34" y="0" width="8" height="80" fill="#2a3040"/>
-            <!-- transit lines colored -->
-            <path d="M10 55 Q30 30 70 20" stroke="#30B050" stroke-width="3" fill="none"/>
-            <path d="M5 65 Q40 45 75 35" stroke="#FF9500" stroke-width="3" fill="none"/>
-            <path d="M0 40 Q25 50 80 60" stroke="#0A84FF" stroke-width="3" fill="none"/>
-            <rect x="8" y="8" width="16" height="12" rx="2" fill="#2a3040"/>
+            <rect width="80" height="80" fill="#3a3d44"/>
+            <rect x="0" y="30" width="80" height="10" fill="#4a4e58"/>
+            <rect x="34" y="0" width="8" height="80" fill="#4a4e58"/>
+            <rect x="0" y="33" width="80" height="4" fill="#606470" opacity="0.6"/>
+            <rect x="36" y="0" width="2" height="80" fill="#606470" opacity="0.4"/>
+            <rect x="8" y="8" width="16" height="12" rx="2" fill="#555a64"/>
+            <rect x="54" y="46" width="16" height="12" rx="2" fill="#555a64"/>
+            <circle cx="40" cy="35" r="3" fill="#5AC8FA"/>
           </svg>
         </div>
-        <div class="map-style-label">Kollektivtrafik</div>
+        <div class="map-style-label">Grått</div>
       </div>
 
       <!-- Satellit -->
@@ -511,22 +529,7 @@
       </div>
     </div>
 
-    <!-- Toggles like Apple Maps -->
-    <div class="map-toggle-section">
-      <div class="map-toggle-row">
-        <div class="map-toggle-label">Trafikstockning</div>
-        <div class="toggle-switch" id="toggle-traffic" onclick="toggleMapOption('traffic')">
-          <div class="toggle-knob"></div>
-        </div>
-      </div>
-      <div class="map-toggle-row">
-        <div class="map-toggle-label">Etiketter</div>
-        <div class="toggle-switch on" id="toggle-labels" onclick="toggleMapOption('labels')">
-          <div class="toggle-knob"></div>
-        </div>
-      </div>
-    </div>
-    <div class="map-attr">© OpenStreetMap och andra dataleverantörer</div>
+    <div class="map-attr">© Mille Weber</div>
   </div>
 </div>
 
@@ -545,6 +548,7 @@ const S = {
 const map = L.map('map', { zoomControl: false }).setView([62.5, 16.5], 5);
 const tileLight     = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',   { attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19 });
 const tileDark      = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',    { attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19 });
+const tileGrey      = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19 });
 const tileSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Esri', maxZoom: 19 });
 tileLight.addTo(map);
 
@@ -595,6 +599,51 @@ document.addEventListener('mouseup', dragEnd);
 handleArea.addEventListener('click', () => { if (S.sheetCollapsed) expandSheet(); });
 window.addEventListener('resize', () => { positionSheet(); if (!S.sheetCollapsed) updateFabPositions(); else collapseSheet(); });
 setTimeout(() => { positionSheet(); updateFabPositions(); }, 100);
+
+// ── MAP SHEET DRAG ────────────────────────────────────
+const mapSheetEl     = document.getElementById('map-sheet-inner');
+const mapSheetHandle = document.getElementById('map-sheet-handle-area');
+let msDrag = { on: false, startY: 0, curY: 0 };
+
+function msDown(y) {
+  msDrag.on = true; msDrag.startY = y; msDrag.curY = y;
+  mapSheetEl.style.transition = 'none';
+}
+function msMove(y) {
+  if (!msDrag.on) return;
+  msDrag.curY = y;
+  const dy = Math.max(0, y - msDrag.startY);
+  mapSheetEl.style.transform = 'translateY(' + dy + 'px)';
+}
+function msUp() {
+  if (!msDrag.on) return; msDrag.on = false;
+  mapSheetEl.style.transition = '';
+  const dy = Math.max(0, msDrag.curY - msDrag.startY);
+  const threshold = mapSheetEl.offsetHeight * 0.32;
+  if (dy > threshold) {
+    mapSheetEl.style.transform = 'translateY(' + mapSheetEl.offsetHeight + 'px)';
+    setTimeout(() => {
+      document.getElementById('map-modal').classList.remove('show');
+      mapSheetEl.style.transform = '';
+    }, 300);
+  } else {
+    mapSheetEl.style.transform = '';
+  }
+}
+
+mapSheetHandle.addEventListener('touchstart', e => msDown(e.touches[0].clientY), { passive: true });
+document.addEventListener('touchmove', e => { if (msDrag.on) { msMove(e.touches[0].clientY); } }, { passive: true });
+document.addEventListener('touchend', msUp);
+mapSheetHandle.addEventListener('mousedown', e => { msDown(e.clientY); e.preventDefault(); });
+document.addEventListener('mousemove', e => { if (msDrag.on) msMove(e.clientY); });
+document.addEventListener('mouseup', msUp);
+
+// reset transform when modal opens
+document.getElementById('map-modal').addEventListener('transitionend', () => {
+  if (!document.getElementById('map-modal').classList.contains('show')) {
+    mapSheetEl.style.transform = '';
+  }
+});
 
 // ── DEST MARKER ──────────────────────────────────────
 function makeDestIcon() {
@@ -835,7 +884,6 @@ function closeVModal(e)  { if (e.target===document.getElementById('v-modal')) do
 function closeVModalOk() { document.getElementById('v-modal').classList.remove('show'); if (S.destCoords) calcRoute(); }
 function vmSelect(speed) {
   S.speed = speed;
-  // also sync chips
   document.querySelectorAll('.v-chip').forEach(c => c.classList.toggle('active', parseInt(c.dataset.speed) === speed));
   syncVModal();
 }
@@ -848,15 +896,18 @@ function syncVModal() {
 
 // ── MAP STYLE ─────────────────────────────────────────
 function setMapStyle(style) {
-  [tileLight, tileDark, tileSatellite].forEach(t => { try { map.removeLayer(t); } catch(_){} });
+  [tileLight, tileDark, tileGrey, tileSatellite].forEach(t => { try { map.removeLayer(t); } catch(_){} });
   if      (style==='dark')      tileDark.addTo(map);
   else if (style==='satellite') tileSatellite.addTo(map);
-  else if (style==='transit')   tileLight.addTo(map); // use light for transit (no free transit tiles)
+  else if (style==='grey')      tileGrey.addTo(map);
   else                          tileLight.addTo(map);
-  const theme = (style==='dark'||style==='satellite') ? (style==='dark'?'dark':'satellite') : 'light';
+
+  const themeMap = { dark: 'dark', satellite: 'satellite', grey: 'grey', light: 'light' };
+  const theme = themeMap[style] || 'light';
   document.documentElement.setAttribute('data-theme', theme);
   S.theme = theme; S.mapStyle = style;
-  ['light','dark','transit','satellite'].forEach(s => {
+
+  ['light','dark','grey','satellite'].forEach(s => {
     const el = document.getElementById('ms-'+s);
     if (el) el.classList.toggle('active', s===style);
   });
@@ -864,14 +915,12 @@ function setMapStyle(style) {
   document.getElementById('map-modal').classList.remove('show');
 }
 
-function openMapModal()   { document.getElementById('map-modal').classList.add('show'); }
-function closeMapModal(e) { if (e.target===document.getElementById('map-modal')) document.getElementById('map-modal').classList.remove('show'); }
-
-function toggleMapOption(key) {
-  S.mapOptions[key] = !S.mapOptions[key];
-  const el = document.getElementById('toggle-'+key);
-  el.classList.toggle('on', S.mapOptions[key]);
+function openMapModal() {
+  mapSheetEl.style.transform = '';
+  mapSheetEl.style.transition = '';
+  document.getElementById('map-modal').classList.add('show');
 }
+function closeMapModal(e) { if (e.target===document.getElementById('map-modal')) document.getElementById('map-modal').classList.remove('show'); }
 
 // ── HELPERS ──────────────────────────────────────────
 function showLoading(v, msg) { document.getElementById('loading').classList.toggle('show',v); if(msg)document.getElementById('load-txt').textContent=msg; }
