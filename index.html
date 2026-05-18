@@ -15,13 +15,13 @@
     :root {
       --safe-top: env(safe-area-inset-top, 44px);
       --safe-bottom: env(safe-area-inset-bottom, 20px);
-      --glass-bg:     rgba(255,255,255,0.28);
-      --glass-border: rgba(255,255,255,0.45);
-      --glass-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.65);
-      --glass-blur:   blur(32px) saturate(220%) brightness(1.08);
-      --sheet-bg:     rgba(235,235,240,0.52);
-      --sheet-blur:   blur(40px) saturate(220%) brightness(1.04);
-      --sheet-border: rgba(255,255,255,0.42);
+      --glass-bg:     rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.16);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.28);
+      --glass-blur:   blur(40px) saturate(260%) brightness(1.12);
+      --sheet-bg:     rgba(235,235,240,0.12);
+      --sheet-blur:   blur(48px) saturate(260%) brightness(1.08);
+      --sheet-border: rgba(255,255,255,0.14);
       --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.40), 0 -8px 40px rgba(0,0,0,0.08);
       --blue:         #007AFF;
       --blue-glass:   rgba(0,122,255,0.12);
@@ -35,12 +35,12 @@
       --r-xl:24px; --r-lg:20px; --r-md:16px; --r-sm:13px; --r-xs:10px;
     }
     [data-theme="dark"] {
-      --glass-bg:     rgba(28,28,32,0.42);
-      --glass-border: rgba(255,255,255,0.07);
-      --glass-shadow: 0 8px 32px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.05);
-      --glass-blur:   blur(32px) saturate(180%) brightness(0.94);
-      --sheet-bg:     rgba(20,20,24,0.58);
-      --sheet-blur:   blur(40px) saturate(200%) brightness(0.92);
+      --glass-bg:     rgba(28,28,32,0.26);
+      --glass-border: rgba(255,255,255,0.06);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.36), 0 2px 8px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.04);
+      --glass-blur:   blur(36px) saturate(200%) brightness(0.92);
+      --sheet-bg:     rgba(20,20,24,0.36);
+      --sheet-blur:   blur(44px) saturate(220%) brightness(0.90);
       --sheet-border: rgba(255,255,255,0.05);
       --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.03), 0 -8px 40px rgba(0,0,0,0.40);
       --blue:         #0A84FF;
@@ -54,13 +54,13 @@
       --handle:       rgba(255,255,255,0.24);
     }
     [data-theme="grey"] {
-      --glass-bg:     rgba(50,52,58,0.42);
-      --glass-border: rgba(255,255,255,0.07);
-      --glass-shadow: 0 8px 32px rgba(0,0,0,0.36), 0 2px 8px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.06);
-      --glass-blur:   blur(32px) saturate(140%) brightness(0.88);
-      --sheet-bg:     rgba(42,44,50,0.58);
-      --sheet-blur:   blur(40px) saturate(160%) brightness(0.86);
-      --sheet-border: rgba(255,255,255,0.06);
+      --glass-bg:     rgba(50,52,58,0.26);
+      --glass-border: rgba(255,255,255,0.06);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.32), 0 2px 8px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.05);
+      --glass-blur:   blur(36px) saturate(160%) brightness(0.86);
+      --sheet-bg:     rgba(42,44,50,0.34);
+      --sheet-blur:   blur(44px) saturate(180%) brightness(0.84);
+      --sheet-border: rgba(255,255,255,0.05);
       --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.04), 0 -8px 40px rgba(0,0,0,0.36);
       --blue:         #5AC8FA;
       --blue-glass:   rgba(90,200,250,0.16);
@@ -73,12 +73,12 @@
       --handle:       rgba(255,255,255,0.22);
     }
     [data-theme="satellite"] {
-      --glass-bg:     rgba(18,20,26,0.42);
-      --glass-border: rgba(255,255,255,0.08);
-      --glass-shadow: 0 8px 32px rgba(0,0,0,0.36), 0 2px 8px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.06);
-      --glass-blur:   blur(32px) saturate(160%) brightness(0.90);
-      --sheet-bg:     rgba(16,18,22,0.56);
-      --sheet-blur:   blur(40px) saturate(180%) brightness(0.88);
+      --glass-bg:     rgba(18,20,26,0.26);
+      --glass-border: rgba(255,255,255,0.07);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.32), 0 2px 8px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.05);
+      --glass-blur:   blur(36px) saturate(180%) brightness(0.88);
+      --sheet-bg:     rgba(16,18,22,0.34);
+      --sheet-blur:   blur(44px) saturate(200%) brightness(0.86);
       --sheet-border: rgba(255,255,255,0.06);
       --sheet-shadow: 0 -1px 0 rgba(255,255,255,0.04), 0 -8px 40px rgba(0,0,0,0.36);
       --blue:         #0A84FF;
